@@ -19,11 +19,6 @@ addons:
       - python-serial
       - python-yaml
       - wkhtmltopdf  
-      
-before_install:
- - "export DISPLAY=:99.0"
- - "sh -e /etc/init.d/xvfb start"
-
 env:
   global:
   - VERSION="9.0" TESTS="0" LINT_CHECK="0" TRANSIFEX="0"
