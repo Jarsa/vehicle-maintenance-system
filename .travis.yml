@@ -1,0 +1,78 @@
+language: python
+sudo: false
+cache:
+  apt: true
+  directories:
+    - $HOME/.cache/pip
+
+python:
+  - "2.7"
+
+addons:
+  apt:
+# only add the two lines below if you need wkhtmltopdf for your tests
+    sources:
+      - pov-wkhtmltopdf
+#    Search your sources alias here:
+#      https://github.com/travis-ci/apt-source-whitelist/blob/master/ubuntu.json
+    packages:
+      - expect-dev  # provides unbuffer utility
+      - python-lxml  # because pip installation is slow
+      - python-simplejson
+      - python-serial
+      - python-yaml
+#     Search your packages here:
+#       https://github.com/travis-ci/apt-package-whitelist/blob/master/ubuntu-precise
+      - wkhtmltopdf  # only add if needed and check the before_install section below
+
+# set up an X server to run wkhtmltopdf.
+#before_install:
+#  - "export DISPLAY=:99.0"
+#  - "sh -e /etc/init.d/xvfb start"
+
+env:
+  global:
+  - VERSION="9.0" TESTS="0" LINT_CHECK="0" TRANSIFEX="0"
+  - TRANSIFEX_USER='info@jarsa.com.mx'
+  # This line contains the encrypted transifex password
+  # To encrypt transifex password, install travis ruby utils with:
+  #   $ gem install travis --user-install
+  # and use:
+  #   $ travis encrypt TRANSIFEX_PASSWORD=your-password -r owner/project
+  # Secure list for current OCA projects is in https://github.com/OCA/maintainer-quality-tools/issues/194
+  - secure: "yjlRq8y9By4/+gxbNBSgVH6GtGE292/e9IxjBpzZ95DHxD6+QbxJJhH3vriZk7fIqoZggkpSQOurPwv0NA5ozA0DsdyP8kXyFoPB2oBgL14jkI6hrJbFtOwQzDnSqzj1CfZ4exIYy/TGq4zh4s4i4qpnnYjKSPJcNnapAyVk1Gi80L9DLL71+BUN4Q9F0wCmzklTiSAbi9alHLLpeoON//F+Y6N7KZID0G89CJJaOx+Yu/yN38oM3aaN1ImIWH5cExDxc2Yf62H9q2Xiua16tfh+fr+Q/V/Wb7v6SDLNhAqFzHFEz95aK9Sp9id6DgX/j0Dh1kZtBA1RxQT8TVzK2k5PcCOK1Cshd5raHDltgBUn7Zq6Jn73gl+shMdfIoZXPWBoNeYwvzFDN6rxHaBSzhpmvEe8w4/GnF0D7olroDaFNvSSJu8+c1IyB7K9h6iGr7kC4ZQrvtUFGoufL4iC0u37jZQBeRJ1y8R8KV7iH0OcWIGJWOcR7LV3PNL5Fh88fe7vI8KflspJM/c2FJkXFb9gpg4o4T02bHj+eLKgcZLBXk15cVa9RY9BGhYYu86aTBLADxQLbmiA5/nJjMAOg92tt+1cxPHjqDCxxAhp1VpCp49qlbPTHi6ZsD4NZw+tCYueYptY3830rP87CVRQPjXZ+3XncsGFILXpdfbI3Fc="
+  # Use the following lines if you need to manually change the transifex project slug or/and the transifex organization.
+  # The default project slug is owner-repo_name-version (with dash in the version string).
+  # The default organization is the owner of the repo.
+  # The default fill up resources (TM) is True.
+  # The default team is 23907. https://www.transifex.com/organization/oca/team/23907/
+  - TRANSIFEX_PROJECT_SLUG='Jarsa-vehicle-maintenance-system-9-0'
+  - TRANSIFEX_ORGANIZATION='jarsa'
+  # - TRANSIFEX_FILL_UP_RESOURCES=
+  - TRANSIFEX_TEAM='62171'
+
+  matrix:
+  - LINT_CHECK="1"
+  - TRANSIFEX="1"
+  - TESTS="1" ODOO_REPO="odoo/odoo"
+  - TESTS="1" ODOO_REPO="OCA/OCB"
+# either use the two lines above or the two below. Don't change the default if
+# it's not necessary (it is only necessary if modules in your repository can't
+# be installed in the same database. And you get a huge speed penalty in your
+# tests)
+#  - TESTS="1.0" ODOO_REPO="odoo/odoo" UNIT_TEST="1"
+#  - TESTS="1.0" ODOO_REPO="OCA/OCB" UNIT_TEST="1"
+
+virtualenv:
+  system_site_packages: true
+
+install:
+  - git clone --depth=1 https://github.com/OCA/maintainer-quality-tools.git ${HOME}/maintainer-quality-tools
+  - export PATH=${HOME}/maintainer-quality-tools/travis:${PATH}
+  - travis_install_nightly
+
+script:
+  - travis_run_tests
+
+after_success:
+  - travis_after_tests_success
