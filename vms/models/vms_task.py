@@ -6,11 +6,13 @@ from openerp import fields, models
 
 
 class Task(models.Model):
-    _name = 'vms.tasks'
+    _name = 'vms.task'
     _order = 'name asc'
 
     cycle_ids = fields.Many2many(
         'vms.cycle', required=True)
     name = fields.Char(required=True)
-    spare_part_ids = fields.One2many('vms.product.line')
+    spare_part_ids = fields.One2many(
+        'vms.product.line',
+        'task_id')
     active = fields.Boolean(default=True)

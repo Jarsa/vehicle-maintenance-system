@@ -10,14 +10,13 @@
     "author":  "Jarsa Sistemas",
     "license": "AGPL-3",
     "installable": True,
+    "application": True,
     "depends": [
-        "base",
         "stock",
         "hr",
         "fleet"
     ],
     "data": [
-        "security/ir.model.access.csv",
     ],
     "demo": [
     ]

@@ -16,3 +16,4 @@ class VmsActivityTime(models.Model):
          ('end', 'End')],
         required=True)
     date = fields.Datetime(default=fields.Datetime.now)
+    activity_id = fields.Many2one('vms.activity', string='Activity')
