@@ -4,6 +4,7 @@
 {
     "name": "Vehicle Maintenance System",
     "summary": "Module summary",
+    "description": "System made for manage maintenance programs",
     "version": "9.0.0.1.0",
     "category": "Maintenance",
     "website": "https://jarsa/.com.mx",
@@ -14,7 +15,8 @@
     "depends": [
         "stock",
         "hr",
-        "fleet"
+        "fleet",
+        "account"
     ],
     "data": [
         "security/ir.model.access.csv"
