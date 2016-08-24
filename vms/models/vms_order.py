@@ -50,7 +50,7 @@ class VmsOrder(models.Model):
         string='Real end date'
         )
     order_line_ids = fields.One2many(
-        'vms_order_line',
+        'vms.order.line',
         'order_id',
         string='Activities')
     program_id = fields.Many2one(
@@ -60,7 +60,7 @@ class VmsOrder(models.Model):
         'vms.cycle',
         string='Cycle')
     sequence = fields.Integer()
-    report_ids = fields.Many2Many(
+    report_ids = fields.Many2many(
         'vms.report',
         domain=[('state', '=', 'confirmed')],
         string='Report(s)')

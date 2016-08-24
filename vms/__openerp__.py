@@ -4,20 +4,23 @@
 {
     "name": "Vehicle Maintenance System",
     "summary": "Module summary",
+    "description": "System made for manage maintenance programs",
     "version": "9.0.0.1.0",
     "category": "Maintenance",
     "website": "https://jarsa/.com.mx",
     "author":  "Jarsa Sistemas",
     "license": "AGPL-3",
     "installable": True,
+    "application": True,
     "depends": [
-        "base",
         "stock",
         "hr",
-        "fleet"
+        "fleet",
+        "account"
     ],
     "data": [
         "security/ir.model.access.csv",
+        'views/vms_view.xml',
     ],
     "demo": [
     ]

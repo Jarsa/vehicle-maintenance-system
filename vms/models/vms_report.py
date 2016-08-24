@@ -10,7 +10,7 @@ class VmsReport(models.Model):
     _description = 'VMS Reports'
     _name = 'vms.report'
 
-    name = fields.char(required=True, readonly=True, string='Report Sequence')
+    name = fields.Char(required=True, readonly=True, string='Report Sequence')
     date = fields.Datetime(required=True, default=fields.Datetime.now)
     unit_id = fields.Many2one(
         'fleet.vehicle',
@@ -28,7 +28,7 @@ class VmsReport(models.Model):
     state = fields.Selection(
         [('draft', 'Draft'),
          ('confirmed', 'Confirmed'),
-         ('close', 'Close')
+         ('close', 'Close'),
          ('cancel', 'Cancel')],
         string='State',
         readonly=True)

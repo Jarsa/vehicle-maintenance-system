@@ -1,0 +1,18 @@
+<record model='ir.ui.view' id='cycle_id_form'>
+	<field name='name'>vms_cycle_view.form</field>
+	<field name='model'>vms.cycle</field>
+	<field name='arch' type='xml'>
+		<form string='description'>
+			<header>
+			</header>
+			<sheet>
+				<h1>
+					<label string='description'/>
+				</h1>
+				<group>
+					<field name='field_name'/>
+				</group>
+			</sheet>
+		</form>
+	</field>
+</record>

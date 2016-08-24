@@ -13,7 +13,7 @@ class OrderLine(models.Model):
         'vms.task', string='Task',
         required=True)
     start_date = fields.Datetime(
-        fields.Datetime.now(),
+        default=fields.Datetime.now(),
         string='Schedule start',
         required=True)
     end_date = fields.Datetime(
@@ -25,7 +25,7 @@ class OrderLine(models.Model):
     end_date_real = fields.Datetime(
         string='Real start date', readonly=True)
     scheduled_hours = fields.Float(
-        string='Schedule hours',
+        string='Schedule hours'
         # compute=_compute_scheduled_hours
         )
     supplier_id = fields.Many2one(
@@ -39,7 +39,7 @@ class OrderLine(models.Model):
         ('cancel', 'Cancel'),
         ], default='pending', readonly=True)
     spare_part_ids = fields.One2many(
-        'vms.product_line',
+        'vms.product.line',
         'order_line_id')
     responsible_ids = fields.Many2many(
         'hr.employee',
@@ -50,3 +50,4 @@ class OrderLine(models.Model):
     paid = fields.Boolean(
         # compute=_compute_paid
         )
+    order_id = fields.Many2one('vms.order', string='Order')

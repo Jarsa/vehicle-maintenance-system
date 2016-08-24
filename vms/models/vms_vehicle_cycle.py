@@ -22,3 +22,7 @@ class VmsVehicleCycle(models.Model):
         string='Order')
     date = fields.Datetime(default=fields.Datetime.now)
     distance = fields.Float(default=0.0)
+    unit_id = fields.Many2one(
+        'fleet.vehicle',
+        string="Unit",
+        required=True)
