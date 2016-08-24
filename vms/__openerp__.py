@@ -17,6 +17,7 @@
         "fleet"
     ],
     "data": [
+        "security/ir.model.access.csv"
     ],
     "demo": [
     ]
