@@ -12,7 +12,7 @@
                                 <field name="name" readonly="1"/>
                             </h1>
                         </div>
-                        <group string='Cycles'>
+                        <group>
                             <group>
                             	<field name='name'/>
                             	<field name='cycle_id'/>
@@ -22,13 +22,13 @@
                             	<field name='active'/>
                             </group>
                         </group>
-                        <group string='Tasks'>  
-	                		<field name="task_ids" nolabel="1">
-	                          <tree>
-	                          	<field name='name'/>
-	                          	<field name='active'/>
-	                          </tree>
-	                        </field>
+                        <group string='Tasks'>
+                		<field name="task_ids" nolabel="1">
+                          <tree>
+                          	<field name='name'/>
+                          	<field name='active'/>
+                          </tree>
+                        </field>
                         </group>
                     </sheet>
                 </form>
@@ -40,7 +40,6 @@
             <field name="view_type">form</field>
             <field name="view_mode">form</field>
         </record>
-
         <menuitem id="cycle_menu" name="Cycles"
                   parent="menu_vms_settings_cycle"
                   action="vms_open_view_cycle_list"/>
