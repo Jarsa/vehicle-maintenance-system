@@ -5,7 +5,7 @@
 from openerp import fields, models
 
 
-class Program(models.Model):
+class VmsProgram(models.Model):
     _name = 'vms.program'
     _order = 'name asc'
 
