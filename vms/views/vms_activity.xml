@@ -80,6 +80,7 @@
         		</form>
         	</field>
         </record>
+        <!-- Action --> 
         <record id='action_vms_activity_form' model='ir.actions.act_window'>
         	<field name='name'>Mechanic's Activities</field>
         	<field name='res_model'>vms.activity</field>
@@ -87,6 +88,7 @@
         	<field name='view_type'>form</field>
         	<field name='view_mode'>tree,form</field>
         </record>
+        <!-- Menu Item  --> 
         <menuitem id="vms_activity_menu" name="Mechanic's Activities" parent="menu_vms" action="action_vms_activity_form"/>
     </data>
 </odoo>
