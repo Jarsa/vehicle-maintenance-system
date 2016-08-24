@@ -19,7 +19,8 @@
         "account"
     ],
     "data": [
-        "security/ir.model.access.csv"
+        "security/ir.model.access.csv",
+        'views/vms_view.xml',
     ],
     "demo": [
     ]
