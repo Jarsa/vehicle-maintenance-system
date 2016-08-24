@@ -21,6 +21,7 @@
     "data": [
         "security/ir.model.access.csv",
         'views/vms_view.xml',
+        'views/vms_activity.xml'
     ],
     "demo": [
     ]
