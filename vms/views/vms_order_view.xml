@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <record id="vms_order_tree_view" model="ir.ui.view">
+            <field name="name">vms.order.tree</field>
+            <field name="priority">2</field>
+            <field name="model">vms.order</field>
+            <field name="arch" type="xml">
+                <tree string="order">
+                    <field name="name" />
+                    <field name="base_id" />
+                    <field name="supervisor_id" />
+                    <field name="date" />
+                    <field name="current_odometer" />
+                    <field name="stock_location_id" />
+                    <field name="start_date" />
+                    <field name="end_date" />
+                    <field name="start_date_real" />
+                    <field name="end_date_real" />
+                    <field name="order_line_ids" />
+                    <field name="program_id" />
+                    <field name="cycle_id" />
+                    <field name="sequence" />
+                    <field name="report_ids" />
+                    <field name="state" />
+                </tree>
+            </field>
+        </record>
+        <record id="vms_order_form_view" model="ir.ui.view">
+            <field name="name">vms.order.form</field>
+            <field name="priority">3</field>
+            <field name="model">vms.order</field>
+            <field name="arch" type="xml">
+                <form string="Order of Maintenance">
+                    <header>
+                      <button string="Open" name="action_open" states="draft" icon="gtk-go-forward" type="object"/> 
+                      <button string="Released" name="action_released" states="open" icon="gtk-apply" type="object"/> 
+                      <button string="Done" name="action_done" states="released" icon="gtk-apply" type="object"/> 
+                      <button string="Cancel" name="action_cancel" states="draft" icon="gtk-cancel" type="object"/>
+                      <field name="state" widget="statusbar" statusbar_visible="draft,open,released"/> 
+                    </header>
+                    <sheet>
+                        <group string="Service Order">
+                            <field name="name" readonly="1" nolabel="1"/>
+                        </group>
+                        <notebook>
+                            <page string="Service Order Detail">
+                                <group col="4">
+                                    <field name="base_id"/>
+                                    <field name="date"/>
+                                    <field name="supervisor_id"/>
+                                    <field name="start_date"/>
+                                    <field name="start_date_real"/>
+                                    <field name="end_date"/>
+                                    <field name="end_date_real"/>
+                                </group>
+                            </page>
+                            <page string="MRO Program Details">
+                                <group>
+                                    <field name="current_odometer"/>
+                                    <newline/>
+                                    <field name='stock_location_id'/>
+                                    <newline/>
+                                    <field name="program_id"/>
+                                    <newline/>
+                                    <field name="cycle_id"/>
+                                    <newline/>
+                                    <field name="sequence"/>
+                                </group>
+                            </page>
+                            <page string="Driver Reports Solved">
+                                <field name="report_ids" nolabel="1"/>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="message_ids" widget="mail_thread"/> 
+                    </div>
+                </form>
+            </field>
+        </record>
+|       <record id="action_vms_order" model="ir.actions.act_window">
+            <field name="name">Order</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">vms.order</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+        <menuitem action="action_vms_order" id="vms_order_menu" parent="menu_vms_maintenance"/>
+    </data>
+</odoo>

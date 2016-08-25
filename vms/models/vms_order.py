@@ -8,9 +8,10 @@ from openerp import fields, models
 
 class VmsOrder(models.Model):
     _description = 'VMS Orders'
+    _inherit = ['mail.thread', 'ir.needaction_mixin']
     _name = 'vms.order'
 
-    name = fields.Char(string='Order Number', required=True, readonly=True)
+    name = fields.Char(string='Order Number', readonly=True)
     base_id = fields.Char(
         required=True,
         string='Base')
@@ -41,11 +42,9 @@ class VmsOrder(models.Model):
         string='Schedule end'
         )
     start_date_real = fields.Datetime(
-        required=True,
         readonly=True,
         string='Real start date')
     end_date_real = fields.Datetime(
-        required=True,
         readonly=True,
         string='Real end date'
         )

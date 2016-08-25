@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <record id="vms_task_tree_view" model="ir.ui.view">
+            <field name="name">vms.task.tree</field>
+            <field name="priority">2</field>
+            <field name="model">vms.task</field>
+            <field name="arch" type="xml">
+                <tree string="task">
+                    <field name='name'/>
+                    <field name='cycle_ids'/>
+                    <field name='spare_part_ids'/>
+                    <field name='active'/>
+                </tree>
+            </field>
+        </record>
+        <record id="vms_task_form_view" model="ir.ui.view">
+            <field name="name">vms.task.form</field>
+            <field name="priority">3</field>
+            <field name="model">vms.task</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <field name="name"/>
+                        <field name='active'/>
+                        <group>
+                            <group>
+                                <separator string="Cycles" nolabel="1" colspan='4'/>
+                                <field name='cycle_ids' nolabel="1"/>
+                            </group>
+                            <group>
+                                <separator string="Spare Part" nolabel="1" colspan='4'/>
+                                <field name='spare_part_ids' nolabel="1"/>
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+|       <record id="action_vms_task" model="ir.actions.act_window">
+            <field name="name">Task</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">vms.task</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+        <menuitem action="action_vms_task" id="vms_task_menu" parent="menu_vms_maintenance"/>
+    </data>
+</odoo>
