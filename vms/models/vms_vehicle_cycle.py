@@ -8,6 +8,7 @@ from openerp import fields, models
 
 class VmsVehicleCycle(models.Model):
     _description = 'Vms Vehicle Cycle'
+    _inherit = ['mail.thread', 'ir.needaction_mixin']
     _name = 'vms.vehicle.cycle'
 
     cycle_id = fields.Many2one(
