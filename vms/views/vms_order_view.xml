@@ -48,6 +48,7 @@
                                 <group col="4">
                                     <field name="base_id"/>
                                     <field name="date"/>
+                                    <field name="stock_location_id"/>
                                     <field name="supervisor_id"/>
                                     <field name="start_date"/>
                                     <field name="start_date_real"/>
@@ -58,8 +59,6 @@
                             <page string="MRO Program Details">
                                 <group>
                                     <field name="current_odometer"/>
-                                    <newline/>
-                                    <field name='stock_location_id'/>
                                     <newline/>
                                     <field name="program_id"/>
                                     <newline/>

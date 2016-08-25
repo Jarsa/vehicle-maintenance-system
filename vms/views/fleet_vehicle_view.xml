@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <record id="vms_fleet_maintenance_form_view" model="ir.ui.view">
+            <field name="name">VMS Fleet Maintenance Form View</field>
+            <field name="model">fleet.vehicle</field>
+            <field name="type">form</field>
+            <field name="inherit_id" ref="fleet.fleet_vehicle_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//sheet/group[2]" position="after">
+                    <group>
+                        <group string="Maintenance Program">
+                            <field name="program_id"/>
+                            <field name="last_order_id"/>
+                            <field name="next_cycle_id"/>
+                            <field name="next_service_date"/>
+                            <field name="next_service_odometer"/>
+                            <field name="cycle_ids"/>
+                        </group>
+                    </group>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

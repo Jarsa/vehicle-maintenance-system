@@ -12,12 +12,7 @@
     "license": "AGPL-3",
     "installable": True,
     "application": True,
-    "depends": [
-        "stock",
-        "hr",
-        "fleet",
-        "account"
-    ],
+    "depends": ["account", "stock", "hr", "fleet"],
     "data": [
         "security/ir.model.access.csv",
         'views/vms_view.xml',
@@ -30,6 +25,7 @@
         'views/wms_report_view.xml',
         'views/vms_task_view.xml',
         'views/vms_order_view.xml',
+        'views/fleet_vehicle_view.xml',
     ],
     "demo": [
     ]
