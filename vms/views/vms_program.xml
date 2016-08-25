@@ -18,7 +18,7 @@
         	<field name='name'>vms.program.form</field>
         	<field name='model'>vms.program</field>
         	<field name='arch' type='xml'>
-        		<form string='description'>
+        		<form>
         			<header></header>
         			<sheet>
         				<group string="Maintenance Program">
@@ -33,11 +33,11 @@
         					<field name="cycle_ids" nolabel="1"/>
         				</group>
         			</sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="message_ids" placeholder="Share a message..." widget="mail_thread"/>
+                    </div>
         		</form>
-                 <div class="oe_chatter">
-                    <field name="message_follower_ids" widget="mail_followers"/>
-                    <field name="message_ids" placeholder="Share a message..." widget="mail_thread"/>
-                </div>
         	</field>
         </record>
         <!-- Action --> 

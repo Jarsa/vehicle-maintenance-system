@@ -12,16 +12,6 @@
                                 <field name="name" readonly="1"/>
                             </h1>
                         </div>
-                       <!-- <group>
-                            <group>
-                            	<field name='name'/>
-                            	<field name='cycle_id'/>
-                            </group>
-                            <group>
-                            	<field name='frecuency'/>
-                            	<field name='active'/>
-                            </group>
-                        </group> -->
                         <group string='Tasks'>
 	                		<field name="task_ids" nolabel="1">
 	                          <tree>

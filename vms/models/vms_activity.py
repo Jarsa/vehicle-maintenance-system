@@ -8,7 +8,7 @@ from openerp import fields, models
 class VmsActivity(models.Model):
     _name = 'vms.activity'
     _inherit = ['mail.thread', 'ir.needaction_mixin']
-    _order = 'order_id asc'
+    _order = 'order_id desc'
 
     order_id = fields.Many2one(
         'vms.order',

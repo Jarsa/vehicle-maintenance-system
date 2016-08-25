@@ -31,7 +31,7 @@
         	<field name='name'>vms.activity.tree</field>
         	<field name='model'>vms.activity</field>
         	<field name='arch' type='xml'>
-        		<tree string='description'>
+        		<tree>
         			<field name="order_id"/>
 					<field name="task_id"/>
         			<field name="unit_id"/>
@@ -46,9 +46,9 @@
         	<field name='name'>vms.activity.form</field>
         	<field name='model'>vms.activity</field>
         	<field name='arch' type='xml'>
-        		<form string='description'>
+        		<form>
         			<header>
-        				 <button name="action_cancel_draft" states="cancel" string="Set to Draft" type="object"/>
+        				<button name="action_cancel_draft" states="cancel" string="Set to Draft" type="object"/>
                         <button name="action_cancel" states="draft,process,pause" string="Cancel" type="object"/>
                         <button name="action_process" class="oe_highlight" states="draft" string="Start" type="object"/>
                         <button name="action_pause" class="oe_highlight" states="process" string="Pause" type="object"/>
@@ -77,11 +77,11 @@
                              </field>
         				</group>
         			</sheet>
+                     <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="message_ids" placeholder="Share a message..." widget="mail_thread"/>
+                    </div>
         		</form>
-                <div class="oe_chatter">
-                    <field name="message_follower_ids" widget="mail_followers"/>
-                    <field name="message_ids" placeholder="Share a message..." widget="mail_thread"/>
-                </div>
         	</field>
         </record>
         <!-- Action --> 
