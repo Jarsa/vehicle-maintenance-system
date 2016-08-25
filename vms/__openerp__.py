@@ -13,14 +13,15 @@
     "installable": True,
     "application": True,
     "depends": [
+        "account",
         "stock",
         "hr",
-        "fleet",
-        "account"
+        "fleet"
     ],
     "data": [
         "security/ir.model.access.csv",
         'views/vms_view.xml',
+        'views/vms_vehicle_cycle.xml'
     ],
     "demo": [
     ]
