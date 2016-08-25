@@ -5,7 +5,7 @@
 from openerp import fields, models
 
 
-class Cycle(models.Model):
+class VmsCycle(models.Model):
     _name = 'vms.cycle'
     _order = 'name asc'
 

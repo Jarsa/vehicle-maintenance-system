@@ -5,7 +5,7 @@
 from openerp import fields, models
 
 
-class Task(models.Model):
+class VmsTask(models.Model):
     _name = 'vms.task'
     _order = 'name asc'
 
