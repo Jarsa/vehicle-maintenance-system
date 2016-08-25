@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <record id="vms_report_tree_view" model="ir.ui.view">
+            <field name="name">vms.report.tree</field>
+            <field name="priority">2</field>
+            <field name="model">vms.report</field>
+            <field name="arch" type="xml">
+                <tree string="Report">
+                    <field name="name"/>
+                    <field name="date"/>
+                    <field name="unit_id"/>
+                    <field name="order_id"/>
+                    <field name="base_id"/>
+                    <field name="employee_id"/>
+                    <field name="end_date"/>
+                    <field name="state"/>
+                    <field name="notes"/>
+                </tree>
+            </field>
+        </record>
+        <record id="vms_report_form_view" model="ir.ui.view">
+            <field name="name">vms.report.form</field>
+            <field name="priority">3</field>
+            <field name="model">vms.report</field>
+            <field name="arch" type="xml">
+                <form>
+                    <header>
+                        <field name="state" statusbar_visible="draft,confirmed,close,cancel" widget="statusbar"/>
+                    </header>
+                    <sheet>
+                        <h1 class="oe_title">
+                            <field name="name" readonly="1"/>
+                        </h1>
+                        <group string='Details'>
+                            <group>
+                                <field name="base_id"/>
+                                <field name="order_id"/>
+                                <field name="unit_id"/>
+                                <field name="employee_id"/>
+                            </group>
+                            <group>
+                                <field name="date"/>
+                                <field name="end_date"/>
+                            </group>
+                        </group>
+                        <group string='Notes'>
+                            <field name="notes" nolabel='1'/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+|       <record id="action_vms_report" model="ir.actions.act_window">
+            <field name="name">Report</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">vms.report</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+        <menuitem action="action_vms_report" id="vms_report_menu" parent="menu_vms_maintenance"/>
+    </data>
+</odoo>
