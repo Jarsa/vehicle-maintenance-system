@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+     <data>
+     	<!-- SEARCH View  --> 
+     	<record model="ir.ui.view" id="view_vms_activity_search">
+     	    <field name="name">vms.activity.search</field>
+     	    <field name="model">vms.activity</field>
+     	    <field name="arch" type="xml">
+     	        <search string="Search Activities">
+ 					<filter string="Draft" domain="[('state','=','draft')]" name="state_draft"/>
+ 					<filter string="Process" domain="[('state','=','process')]" name="state_process"/>
+ 					<filter string="Paused" domain="[('state','=','pause')]" name="state_pause"/>
+ 					<filter string="Ended" domain="[('state','=','end')]"/>
+ 					<filter string="Cancel" domain="[('state','=','cancel')]"/>
+ 					<newline/>
+ 					<filter string="This month"  domain="[('start_date','&gt;=', time.strftime('%%Y-%%m-01 00:00:00'))]" name="this_month" />
+ 					<newline/>
+ 				    <filter string="Service Order" context="{'group_by':'order_id'}" name="groupby_order_id"/>
+ 				    <filter string="Vehicle" context="{'group_by':'unit_id'}" name="groupby_unit_id"/>
+ 				    <filter string="Mechanic" context="{'group_by':'responsible_id'}" name="groupby_employee_id"/>
+ 				    <field name="responsible_id"/>
+ 					<field name="order_id"/>
+ 					<field name="unit_id"/>
+ 				    <filter string="State" context="{'group_by':'state'}"/>
+ 				    <filter string="Period" context="{'group_by':'date'}"/>
+    	    		</search>
+     	    </field>
+     	</record>
+     	<!-- TREE View  --> 
+         <record model='ir.ui.view' id='view_vms_activity_tree'>
+         	<field name='name'>vms.activity.tree</field>
+         	<field name='model'>vms.activity</field>
+         	<field name='arch' type='xml'>
+         		<tree string='description'>
+         			<field name="order_id"/>
+ 					<field name="task_id"/>
+         			<field name="unit_id"/>
+         			<field name="responsible_id"/>
+         			<field name="total_hours"/>
+         			<field name="activity_time_ids"/>
+         		</tree>
+         	</field>
+         </record>
+         <!-- FORM View  --> 
+         <record model='ir.ui.view' id='view_vms_activity_form'>
+         	<field name='name'>vms.activity.form</field>
+         	<field name='model'>vms.activity</field>
+         	<field name='arch' type='xml'>
+         		<form string='description'>
+         			<header>
+         				 <button name="action_cancel_draft" states="cancel" string="Set to Draft" type="object"/>
+                         <button name="action_cancel" states="draft,process,pause" string="Cancel" type="object"/>
+                         <button name="action_process" class="oe_highlight" states="draft" string="Start" type="object"/>
+                         <button name="action_pause" class="oe_highlight" states="process" string="Pause" type="object"/>
+                         <field name="state" statusbar_visible="draft,approved,confirmed,cancel" widget="statusbar"/>
+         			</header>
+         			<sheet>
+         				<group string="Details">
+         					<group>
+         						<field name="order_id"/>
+         						<field name="task_id"/>
+ 			        			<field name="unit_id"/>
+ 			        			<field name="responsible_id"/>
+ 			        			<field name="total_hours"/>
+         					</group>
+         					<group>
+         						<field name="start_date"/>
+ 		        				<field name="end_date"/>
+         					</group>
+         				</group>
+         				<group string="Activities">
+ 		        			<field name="activity_time_ids" nolabel="1" context="{'default_activity_id:':active_id}">
+ 		        				<tree colors="red:status=='pause'; green:status=='process';blue:status=='end';">
+                                     <field name="status"/>
+                                     <field name="date"/>
+                                 </tree>
+                              </field>
+         				</group>
+         			</sheet>
+         		</form>
+         	</field>
+         </record>
+         <record id='action_vms_activity_form' model='ir.actions.act_window'>
+         	<field name='name'>Mechanic's Activities</field>
+         	<field name='res_model'>vms.activity</field>
+         	<field name="context">{'search_default_this_month': 1}</field>
+         	<field name='view_type'>form</field>
+         	<field name='view_mode'>tree,form</field>
+         </record>
+         <menuitem id="vms_activity_menu" name="Mechanic's Activities" parent="menu_vms" action="action_vms_activity_form"/>
+     </data>
+ </odoo> 
