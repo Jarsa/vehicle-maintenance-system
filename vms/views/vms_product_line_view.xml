@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <odoo>
     <data>
-         <record id="view_vms_cycle_form" model="ir.ui.view">
+         <record id="view_vms_product_form" model="ir.ui.view">
             <field name="name">vms.product.line.form</field>
             <field name="model">vms.product.line</field>
             <field name="arch" type="xml">
@@ -23,9 +23,9 @@
                 </form>
             </field>
         </record>
-        <record id="vms_open_view_cycle_list" model="ir.actions.act_window">
-            <field name="name">Cycles</field>
-            <field name="res_model">vms.cycle</field>
+        <record id="vms_open_view_product_list" model="ir.actions.act_window">
+            <field name="name">Product line</field>
+            <field name="res_model">vms.product.line</field>
             <field name="view_type">form</field>
             <field name="view_mode">form</field>
         </record>
