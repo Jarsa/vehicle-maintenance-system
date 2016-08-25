@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <record model='ir.ui.view' id='vms_vehicle_cycle_form'>
+        	<field name='name'>vms.vehicle.cycle.form</field>
+        	<field name='model'>vms.vehicle.cycle</field>
+        	<field name='arch' type='xml'>
+        		<form>
+        			<header>
+        			</header>
+        			<sheet>
+        				<group string="Details">
+	        				<field name="order_id"/>
+	        				<field name="cycle_id"/>
+	        				<field name="unit_id"/>
+	        				<field name="distance"/>
+	        				<field name="schedule"/>
+	        				<field name="sequence"/>
+	        				<field name="date"/>
+        				</group>
+        			</sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="message_ids" placeholder="Share a message..." widget="mail_thread"/>
+                    </div>
+        		</form>
+        	</field>
+        </record>
+    </data>
+</odoo>
