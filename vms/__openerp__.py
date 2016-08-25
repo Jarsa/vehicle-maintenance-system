@@ -21,6 +21,9 @@
     "data": [
         "security/ir.model.access.csv",
         'views/vms_view.xml',
+        'views/hr_employee_view.xml',
+        'views/vms_cycle_view.xml',
+        'views/vms_product_line_view.xml',
     ],
     "demo": [
     ]
