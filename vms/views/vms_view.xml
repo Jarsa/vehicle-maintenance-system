@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <odoo>
     <data>
-        <menuitem id="menu_vms" name="Maintenance" sequence="10" web_icon="vms,static/description/icon.png"/>
-        <menuitem id="menu_vms_settings" name="Maintenance" parent="menu_vms" sequence="10"/>
-            <menuitem id="menu_vms_settings_repair_orders" name="Repair orders" parent="menu_vms_settings" sequence="30"/>
-            <menuitem id="menu_vms_settings_cycle" name="Cycle" parent="menu_vms_settings" sequence="40"/>
-            <menuitem id="menu_vms_settings_activitys" name="Activitys" parent="menu_vms_settings" sequence="60"/>
-            <menuitem id="menu_vms_settings_customers" name="Customers" parent="menu_vms_settings" sequence="10"/>
+        <menuitem icon="fa-truck" id="menu_vms" name="Maintenance" sequence="10" web_icon="vms,static/description/icon.png"/>
+        <menuitem id="menu_vms_maintenance" name="Maintenance" parent="menu_vms" sequence="10"/>
+
+        <menuitem id="menu_vms_report" name="Report" parent="menu_vms" sequence="20"/>
+        <menuitem id="menu_vms_settings" name="Settings" parent="menu_vms" sequence="30"/>s      
     </data>
 </odoo>

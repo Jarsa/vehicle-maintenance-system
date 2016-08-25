@@ -1,18 +1,47 @@
-<record model='ir.ui.view' id='cycle_id_form'>
-	<field name='name'>vms_cycle_view.form</field>
-	<field name='model'>vms.cycle</field>
-	<field name='arch' type='xml'>
-		<form string='description'>
-			<header>
-			</header>
-			<sheet>
-				<h1>
-					<label string='description'/>
-				</h1>
-				<group>
-					<field name='field_name'/>
-				</group>
-			</sheet>
-		</form>
-	</field>
-</record>
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+         <record id="view_vms_cycle_form" model="ir.ui.view">
+            <field name="name">vms.cycle.form</field>
+            <field name="model">vms.cycle</field>
+            <field name="arch" type="xml">
+                <form string="Cycles">
+                    <sheet>
+                        <div class="oe_title">
+                            <h1>
+                                <field name="name" readonly="1"/>
+                            </h1>
+                        </div>
+                       <!-- <group>
+                            <group>
+                            	<field name='name'/>
+                            	<field name='cycle_id'/>
+                            </group>
+                            <group>
+                            	<field name='frecuency'/>
+                            	<field name='active'/>
+                            </group>
+                        </group> -->
+                        <group string='Tasks'>
+	                		<field name="task_ids" nolabel="1">
+	                          <tree>
+	                          	<field name='name'/>
+	                          	<field name='active'/>
+	                          </tree>
+	                        </field>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+        <record id="vms_open_view_cycle_list" model="ir.actions.act_window">
+            <field name="name">Cycles</field>
+            <field name="res_model">vms.cycle</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+        </record>
+        <menuitem id="cycle_menu" name="Cycles"
+                  parent="menu_vms_settings"
+                  action="vms_open_view_cycle_list"/>
+    </data>
+</odoo>

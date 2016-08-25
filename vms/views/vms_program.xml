@@ -42,12 +42,12 @@
         </record>
         <!-- Action --> 
         <record id='action_vms_program_form' model='ir.actions.act_window'>
-        	<field name='name'>Maintenance Programs</field>
+        	<field name='name'>Maintenance Program</field>
         	<field name='res_model'>vms.program</field>
         	<field name='view_type'>form</field>
         	<field name='view_mode'>tree,form</field>
         </record>
         <!-- Menu Item  --> 
-        <menuitem id="vms_program_menu" name="Maintenance Programs" parent="menu_vms_settings" action="action_vms_program_form"/>
+        <menuitem id="vms_program_menu" name="Maintenance Program" parent="menu_vms_settings" action="action_vms_program_form"/>
     </data>
 </odoo>

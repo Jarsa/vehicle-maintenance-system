@@ -20,10 +20,11 @@
             <field name="res_model">hr.employee</field>
             <field name="view_type">form</field>
             <field name="view_mode">kanban,tree,form</field>
-            <field name="domain">[('tms_category','=','mechanic')]</field>
             <field eval="False" name="view_id"/>
             <field name="search_view_id" ref="hr.view_employee_filter"/>
         </record>
-        <menuitem action="vms_open_view_employee_list" id="menu_vms_open_view_employee_list" name="Mechanics"/>
+        <menuitem id="mechanic_menu" name="Mechanics"
+                  parent="menu_vms_settings"
+                  action="vms_open_view_employee_list"/>
     </data>
 </odoo>
