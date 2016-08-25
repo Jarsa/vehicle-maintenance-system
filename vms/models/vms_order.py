@@ -51,7 +51,7 @@ class VmsOrder(models.Model):
     order_line_ids = fields.One2many(
         'vms.order.line',
         'order_id',
-        string='Activities')
+        string='Order Lines')
     program_id = fields.Many2one(
         'vms.program',
         string='Program')

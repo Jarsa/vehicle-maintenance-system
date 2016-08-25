@@ -36,8 +36,10 @@ class VmsOrderLine(models.Model):
         ('pending', 'Pending'),
         ('process', 'Process'),
         ('done', 'Done'),
-        ('cancel', 'Cancel'),
-        ], default='pending', readonly=True)
+        ('cancel', 'Cancel')])
+    real_hours = fields.Float(
+        # compute="_compute_real_hours",
+        string="Real Hours")
     spare_part_ids = fields.One2many(
         'vms.product.line',
         'order_line_id')
