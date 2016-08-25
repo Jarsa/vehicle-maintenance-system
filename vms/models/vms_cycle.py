@@ -10,15 +10,12 @@ class VmsCycle(models.Model):
     _order = 'name asc'
 
     name = fields.Char(required=True, string='Name')
-    task_ids = fields.Many2many(
-        'vms.task')
-    cycle_ids = fields.One2many(
-        'vms.cycle',
-        'cycle_id',)
-    cycle_id = fields.Many2one(
-        'vms.cycle',
+    task_ids = fields.Many2many('vms.task')
+    cycle_ids = fields.Many2many(
+        comodel_name='vms.cycle',
+        relation='vms_cycle_rel',
+        column1='cycle',
+        column2='other_cycle',
         string='Cycles')
-    frecuency = fields.Float(
-        required=True, string='Frecuency')
-    active = fields.Boolean(
-        default=True, string='Is active?')
+    frecuency = fields.Float(required=True)
+    active = fields.Boolean(default=True)

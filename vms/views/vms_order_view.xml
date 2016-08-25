@@ -55,6 +55,9 @@
                                     <field name="end_date"/>
                                     <field name="end_date_real"/>
                                 </group>
+                                <group string="Order Lines">
+                                    <field nolabel="1" name="order_line_ids" />
+                                </group>
                             </page>
                             <page string="MRO Program Details">
                                 <group>
