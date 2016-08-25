@@ -13,10 +13,10 @@
     "installable": True,
     "application": True,
     "depends": [
+        "account",
         "stock",
         "hr",
-        "fleet",
-        "account"
+        "fleet"
     ],
     "data": [
         "security/ir.model.access.csv",
