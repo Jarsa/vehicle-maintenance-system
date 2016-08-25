@@ -24,7 +24,7 @@
             <field name="search_view_id" ref="hr.view_employee_filter"/>
         </record>
         <menuitem id="mechanic_menu" name="Mechanics"
-                  parent="menu_vms_settings_employees"
+                  parent="menu_vms_settings"
                   action="vms_open_view_employee_list"/>
     </data>
 </odoo>

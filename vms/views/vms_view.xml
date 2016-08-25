@@ -2,20 +2,9 @@
 <odoo>
     <data>
         <menuitem icon="fa-truck" id="menu_vms" name="Maintenance" sequence="10" web_icon="vms,static/description/icon.png"/>
-        <menuitem id="menu_vms_settings" name="Maintenance" parent="menu_vms" sequence="10"/>
-        <menuitem id="menu_vms_settings_repair_orders" name="Repair orders" parent="menu_vms_settings" sequence="30"/>
-        <menuitem id="menu_vms_settings_cycle" name="Cycle" parent="menu_vms_settings" sequence="40"/>
-        <menuitem id="menu_vms_settings_activitys" name="Activitys" parent="menu_vms_settings" sequence="60"/>
-        <menuitem id="menu_vms_settings_customers" name="Customers" parent="menu_vms_settings" sequence="20"/>
-        <menuitem id="menu_vms_settings_employees" name="Employees" parent="menu_vms_settings" sequence="10"/>
-        
-        <menuitem action="base.action_partner_category_form" groups="base.group_no_one" id="menu_vms_partner_categories_in_form" name="Partner Categories" parent="menu_vms_settings_customers"/>
-        <menuitem action="base.action_partner_customer_form" id="menu_vms_account_customer" name="Customers" parent="menu_vms_settings_customers" sequence="15"/>
-        <menuitem id="menu_vms_settings_suppliers" name="Suppliers" parent="menu_vms_settings" sequence="20"/>
-        <menuitem action="base.action_partner_category_form" groups="base.group_no_one" id="menu_tm_partner_categories_in_form" name="Partner Categories" parent="menu_vms_settings_suppliers"/>
-        <menuitem action="base.action_partner_supplier_form" id="menu_vms_procurement_management_supplier_name" name="Suppliers" parent="menu_vms_settings_suppliers" sequence="15"/>
-        <menuitem id="menu_vms_settings_drivers" name="Drivers" parent="menu_vms_settings" sequence="20"/>
-        <menuitem action="hr.open_view_categ_form" groups="base.group_no_one" id="menu_vms_view_employee_category_form" name="Employee Category" parent="menu_vms_settings_drivers" sequence="10"/>
+        <menuitem id="menu_vms_maintenance" name="Maintenance" parent="menu_vms" sequence="10"/>
 
+        <menuitem id="menu_vms_report" name="Report" parent="menu_vms" sequence="20"/>
+        <menuitem id="menu_vms_settings" name="Settings" parent="menu_vms" sequence="30"/>s      
     </data>
 </odoo>
