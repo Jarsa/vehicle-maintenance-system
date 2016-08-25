@@ -22,7 +22,8 @@
         "security/ir.model.access.csv",
         'views/vms_view.xml',
         'views/vms_activity.xml',
-        'views/vms_program.xml'
+        'views/vms_program.xml',
+        'views/vms_vehicle_cycle.xml'
     ],
     "demo": [
     ]
