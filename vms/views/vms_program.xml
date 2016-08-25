@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+    	<!-- TREE View  --> 
+        <record model='ir.ui.view' id='view_vms_program_tree'>
+        	<field name='name'>vms.program.tree</field>
+        	<field name='model'>vms.program</field>
+        	<field name='arch' type='xml'>
+        		<tree>
+        			<field name="name"/>
+        			<field name="cycle_ids"/>
+        			<field name="active"/>
+        		</tree>
+        	</field>
+        </record>
+        <!-- FORM View  --> 
+        <record model='ir.ui.view' id='view_vms_program_form'>
+        	<field name='name'>vms.program.form</field>
+        	<field name='model'>vms.program</field>
+        	<field name='arch' type='xml'>
+        		<form string='description'>
+        			<header></header>
+        			<sheet>
+        				<group string="Maintenance Program">
+        					<group>
+        						<field name="name"/>
+        					</group>
+        					<group>
+        						<field name="active"/>
+        					</group>		        			
+        				</group>
+        				<group string="Cycle(s)">
+        					<field name="cycle_ids" nolabel="1"/>
+        				</group>
+        			</sheet>
+        		</form>
+        	</field>
+        </record>
+        <!-- Action --> 
+        <record id='action_vms_program_form' model='ir.actions.act_window'>
+        	<field name='name'>Maintenance Programs</field>
+        	<field name='res_model'>vms.program</field>
+        	<field name='view_type'>form</field>
+        	<field name='view_mode'>tree,form</field>
+        </record>
+        <!-- Menu Item  --> 
+        <menuitem id="vms_program_menu" name="Maintenance Programs" parent="menu_vms_settings" action="action_vms_program_form"/>
+    </data>
+</odoo>
