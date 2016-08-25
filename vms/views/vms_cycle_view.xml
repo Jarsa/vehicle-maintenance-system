@@ -15,7 +15,6 @@
                        <group>
                             <group>
                             	<field name='name'/>
-                            	<field name='cycle_id'/>
                             </group>
                             <group>
                             	<field name='frecuency'/>
@@ -26,9 +25,17 @@
 	                		<field name="task_ids" nolabel="1">
 	                          <tree>
 	                          	<field name='name'/>
-	                          	<field name='active'/>
+	                          	<field name='duration'/>
 	                          </tree>
 	                        </field>
+                        </group>
+                        <group string='Cycles'>
+                            <field name='cycle_ids' nolabel="1">
+                                <tree>
+                                    <field name='name'/>
+                                    <field name='frecuency'/>
+                                </tree>
+                            </field>
                         </group>
                     </sheet>
                 </form>

@@ -12,6 +12,7 @@ class VmsTask(models.Model):
     cycle_ids = fields.Many2many(
         'vms.cycle', required=True)
     name = fields.Char(required=True)
+    duration = fields.Float(required=True)
     spare_part_ids = fields.One2many(
         'vms.product.line',
         'task_id')
