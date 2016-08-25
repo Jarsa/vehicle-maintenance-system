@@ -5,7 +5,7 @@
 from openerp import fields, models
 
 
-class OrderLine(models.Model):
+class VmsOrderLine(models.Model):
     _name = 'vms.order.line'
     _order = 'name asc'
 
