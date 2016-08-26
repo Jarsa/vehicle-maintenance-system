@@ -2,7 +2,7 @@
 # © <2016> <Jarsa Sistemas, S.A. de C.V.>
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
-from datetime import datetime, timedelta, time
+from datetime import datetime
 from openerp import _, api, fields, models
 
 
@@ -56,7 +56,7 @@ class VmsActivity(models.Model):
             for activity in self.activity_time_ids:
                 if activity.status in 'process':
                     temp_begin = activity.date
-                elif activity.status in ('pause','end'):
+                elif activity.status in ('pause', 'end'):
                     sum_time += self.calculate_diference_time(
                         temp_begin, activity.date)
             rec.total_hours = sum_time
@@ -133,8 +133,7 @@ class VmsActivity(models.Model):
                 })
             rec.write({
                 'state': 'end',
-                'end_date': fields.Datetime.now(),
-                'total_hours': time_total_mechanic
+                'end_date': fields.Datetime.now()
                 })
             rec.message_post(_(
                 '<strong>Activity Ended.</strong><ul>'
