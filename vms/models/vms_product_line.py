@@ -28,9 +28,7 @@ class VmsProductLine(models.Model):
     state = fields.Selection(
         [('draft', 'Draft'),
          ('open', 'Open'),
-         ('released', 'Released')],
-        string='State',
-        readonly=True)
+         ('released', 'Released')])
     stock_move_id = fields.Many2one(
         'stock.move',
         'Stock move reference.',

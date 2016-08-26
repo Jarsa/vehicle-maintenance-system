@@ -23,4 +23,5 @@ class FleetVehicle(models.Model):
     next_service_date = fields.Datetime()
     next_service_odometer = fields.Float()
     next_service_sequence = fields.Integer()
-    cycle_ids = fields.One2many('vms.vehicle.cycle', 'unit_id')
+    cycle_ids = fields.One2many(
+        'vms.vehicle.cycle', 'unit_id', string="Cycles")
