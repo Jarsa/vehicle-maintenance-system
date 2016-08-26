@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <odoo>
     <data>
-<<<<<<< Updated upstream
         <!-- SEARCH View  --> 
         <record model="ir.ui.view" id="view_vms_activity_search">
             <field name="name">vms.activity.search</field>
