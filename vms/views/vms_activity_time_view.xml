@@ -12,7 +12,7 @@
                         <button icon="gtk-media-pause" name="" states="process" string="Pause" type="object"/>
                         <button icon="gtk-redo" name="" states="pause" string="Continue" type="object"/>
                         <button icon="gtk-quit" name="" states="process" string="End" type="object"/>
-                        <field name="state" statusbar_visible="process,pause,end" widget="statusbar"/>
+                        <field name="status" statusbar_visible="process,pause,end" widget="statusbar"/>
                     </header>
                     <sheet>
                         <group col="4">
@@ -23,4 +23,5 @@
                 </form>
             </field>
         </record>
+    </data>
 </openerp>
