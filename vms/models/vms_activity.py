@@ -9,38 +9,43 @@ from openerp import _, api, fields, models
 class VmsActivity(models.Model):
     _name = 'vms.activity'
     _inherit = ['mail.thread', 'ir.needaction_mixin']
-    _order = 'order_id desc'
+    _order = 'order_id asc'
 
     order_id = fields.Many2one(
         'vms.order',
         required=True,
-        string='Maintenance Order')
+        string='Maintenance Order',
+        readonly=True)
     unit_id = fields.Many2one(
         'fleet.vehicle',
         required=True,
-        string='Unit')
+        string='Unit',
+        readonly=True)
     total_hours = fields.Float(
         compute='_compute_total_hours')
     activity_time_ids = fields.One2many(
         'vms.activity.time',
         'activity_id',
-        string='Activities')
+        string='Activities',
+        readonly=True)
     task_id = fields.Many2one(
         'vms.task',
-        string='Task')
+        string='Task',
+        readonly=True)
     responsible_id = fields.Many2one(
         'hr.employee',
         domain=[('mechanic', '=', True)],
-        string='Responsible')
+        string='Responsible',
+        readonly=True)
     state = fields.Selection([
         ('draft', 'Draft'),
         ('process', 'Process'),
         ('pause', 'Pause'),
         ('end', 'End'),
         ('cancel', 'Cancel'),
-        ], default='draft', )
-    start_date = fields.Datetime()
-    end_date = fields.Datetime()
+        ], default='draft', readonly=True)
+    start_date = fields.Datetime(readonly=True)
+    end_date = fields.Datetime(readonly=True)
 
     @api.depends('activity_time_ids')
     def calculate_diference_time(self, date_begin, date_end):
@@ -53,13 +58,14 @@ class VmsActivity(models.Model):
     def _compute_total_hours(self):
         sum_time = 0.0
         for rec in self:
-            for activity in self.activity_time_ids:
+            for activity in rec.activity_time_ids:
                 if activity.status in 'process':
                     temp_begin = activity.date
                 elif activity.status in ('pause', 'end'):
                     sum_time += self.calculate_diference_time(
                         temp_begin, activity.date)
-            rec.total_hours = sum_time
+            total = (sum_time*60)/100
+            rec.total_hours = total
 
     @api.multi
     def action_start(self):
