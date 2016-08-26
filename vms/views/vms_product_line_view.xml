@@ -1,33 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <odoo>
     <data>
-         <record id="view_vms_product_form" model="ir.ui.view">
+        <record id="view_vms_product_form" model="ir.ui.view">
             <field name="name">vms.product.line.form</field>
             <field name="model">vms.product.line</field>
             <field name="arch" type="xml">
                 <form string="Product lines">
+                    <header>
+                        <field name="state" statusbar_visible="draft,open,released" widget="statusbar"/>
+                    </header>
                     <sheet>
-                        <group string='Product line'>
+                        <group string="Product line">
                             <group>
-                            	<field name='product_id'/>
-                            	<field name='product_qty'/>
-                                <field name='state'/>
+                                <field name="product_id"/>
+                                <field name="product_qty"/>
                             </group>
                             <group>
-                            	<field name='task_id'/>
-                            	<field name='order_line_id'/>
-                                <field name='stock_move_id'/>
+                                <field name="task_id"/>
+                                <field name="order_line_id"/>
+                                <field name="stock_move_id"/>
                             </group>
                         </group>
                     </sheet>
                 </form>
             </field>
-        </record>
-        <record id="vms_open_view_product_list" model="ir.actions.act_window">
-            <field name="name">Product line</field>
-            <field name="res_model">vms.product.line</field>
-            <field name="view_type">form</field>
-            <field name="view_mode">form</field>
         </record>
     </data>
 </odoo>
