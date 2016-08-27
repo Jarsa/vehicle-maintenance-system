@@ -19,10 +19,11 @@
             <field name="priority">3</field>
             <field name="model">vms.task</field>
             <field name="arch" type="xml">
-                <form>
+                <form string='Task'>
                     <sheet>
                         <field name="name"/>
-                        <field name='active'/>
+                        <field name="active"/>
+                        <field name="duration" widget='float_time'/>
                         <group>
                             <group>
                                 <separator string="Cycles" nolabel="1" colspan='4'/>
