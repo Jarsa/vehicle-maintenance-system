@@ -16,7 +16,10 @@ class FleetVehicle(models.Model):
         string='Maintenance Program')
     last_order_id = fields.Many2one(
         'vms.order',
-        string='Last Clycle')
+        string='Last Order')
+    last_cycle_id = fields.Many2one(
+        'vms.cycle',
+        string='Last Cycle')
     next_cycle_id = fields.Many2one(
         'vms.cycle',
         string='Next Cycle')

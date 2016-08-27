@@ -8,13 +8,10 @@ from openerp import fields, models
 
 class VmsOrder(models.Model):
     _description = 'VMS Orders'
-    _inherit = ['mail.thread', 'ir.needaction_mixin']
+    _inherit = 'mail.thread'
     _name = 'vms.order'
 
     name = fields.Char(string='Order Number', readonly=True)
-    base_id = fields.Char(
-        required=True,
-        string='Base')
     supervisor_id = fields.Many2one(
         'hr.employee',
         required=True,
@@ -23,13 +20,14 @@ class VmsOrder(models.Model):
     date = fields.Datetime(
         required=True,
         default=fields.Datetime.now)
-    current_odometer = fields.Float(default=0.0)
+    current_odometer = fields.Float()
     type = fields.Selection(
         [('preventive', 'Preventive'),
          ('corrective', 'Corrective')],
         required=True)
     stock_location_id = fields.Many2one(
         'stock.location',
+        domain="[('usage', '=', 'internal')]",
         required=True,
         string='Stock Location')
     start_date = fields.Datetime(
@@ -69,3 +67,4 @@ class VmsOrder(models.Model):
          ('released', 'Released')],
         string='State',
         readonly=True)
+    unit_id = fields.Many2one('fleet.vehicle', string='Unit', required=True)

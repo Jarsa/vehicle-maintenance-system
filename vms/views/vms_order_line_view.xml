@@ -15,30 +15,58 @@
                             <group>
                                 <field name="task_id"/>
                                 <field name="order_id"/>
-                                <field name="start_date"/>
-                                <field name="end_date"/>
-                                <field name="scheduled_hours" widget='float_time'/>
-                                <field name="real_hours"/>
                             </group>
                             <group>
                                 <field name="external"/>
-                                <field name="supplier_id" attrs="{'invisible':[('external','=',True)]}"/>
-                                <field name="start_date_real"/>
-                                <field name="end_date_real"/>
-                                <field name="invoice_id"/>
-                                <field name="paid"/>
+                                <field name="supplier_id" attrs="{'invisible':[('external','=',False)], 'required':[('external','=',True)]}"/>
+                                <field name="purchase_order_id" attrs="{'invisible':[('external','=',False)]}"/>
                             </group>
                         </group>
-                        <notebook>
-                                <page string="Mechanics">
-                                    <field name="responsible_ids"/>
-                                </page>
-                                <page string="Spare Parts">
-                                    <field name="spare_part_ids"/>
-                                </page>
-                            </notebook>
+                        <group>
+                            <group string="Schedule">
+                                <field name="start_date"/>
+                                <field name="end_date"/>
+                                <field name="duration" widget='float_time'/>
+                            </group>
+                            <group string="Real">
+                                <field name="start_date_real"/>
+                                <field name="end_date_real"/>
+                                <field name="real_duration" widget='float_time'/>
+                            </group>
+                        </group>
+                        <group string="Mechanics" attrs="{'invisible':[('external','=',True)]}">
+                            <field name="responsible_ids" nolabel="1">
+                                <tree>
+                                    <field name="name"/>
+                                    <field name="job_id"/>
+                                    <field name="parent_id"/>
+                                </tree>
+                            </field>
+                        </group>
+                        <group string="Spare Parts">
+                            <field name="spare_part_ids" nolabel="1">
+                                <tree editable="bottom">
+                                    <field name="product_id"/>
+                                    <field name="product_qty"/>
+                                    <field name="product_uom_id"/>
+                                    <field name="state"/>
+                                </tree>
+                            </field>
+                        </group>
                     </sheet>
                 </form>
+            </field>
+        </record>
+        <record model='ir.ui.view' id='vms_order_line_tree'>
+            <field name='name'>VMS Order Line Tree View</field>
+            <field name='model'>vms.order.line</field>
+            <field name='arch' type='xml'>
+                <tree>
+                    <field name='task_id'/>
+                    <field name='duration' widget='float_time'/>
+                    <field name='real_duration' widget='float_time'/>
+                    <field name='state'/>
+                </tree>
             </field>
         </record>
     </data>

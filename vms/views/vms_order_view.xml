@@ -7,22 +7,21 @@
             <field name="model">vms.order</field>
             <field name="arch" type="xml">
                 <tree string="order">
-                    <field name="name" />
-                    <field name="base_id" />
-                    <field name="supervisor_id" />
-                    <field name="date" />
-                    <field name="current_odometer" />
-                    <field name="stock_location_id" />
-                    <field name="start_date" />
-                    <field name="end_date" />
-                    <field name="start_date_real" />
-                    <field name="end_date_real" />
-                    <field name="order_line_ids" />
-                    <field name="program_id" />
-                    <field name="cycle_id" />
-                    <field name="sequence" />
-                    <field name="report_ids" />
-                    <field name="state" />
+                    <field name="name"/>
+                    <field name="supervisor_id"/>
+                    <field name="date"/>
+                    <field name="current_odometer"/>
+                    <field name="stock_location_id"/>
+                    <field name="start_date"/>
+                    <field name="end_date"/>
+                    <field name="start_date_real"/>
+                    <field name="end_date_real"/>
+                    <field name="order_line_ids"/>
+                    <field name="program_id"/>
+                    <field name="cycle_id"/>
+                    <field name="sequence"/>
+                    <field name="report_ids"/>
+                    <field name="state"/>
                 </tree>
             </field>
         </record>
@@ -33,31 +32,33 @@
             <field name="arch" type="xml">
                 <form string="Order of Maintenance">
                     <header>
-                      <button string="Open" name="action_open" states="draft" icon="gtk-go-forward" type="object"/> 
-                      <button string="Released" name="action_released" states="open" icon="gtk-apply" type="object"/> 
-                      <button string="Done" name="action_done" states="released" icon="gtk-apply" type="object"/> 
-                      <button string="Cancel" name="action_cancel" states="draft" icon="gtk-cancel" type="object"/>
-                      <field name="state" widget="statusbar" statusbar_visible="draft,open,released"/> 
+                        <button icon="gtk-go-forward" name="action_open" states="draft" string="Open" type="object"/>
+                        <button icon="gtk-apply" name="action_released" states="open" string="Released" type="object"/>
+                        <button icon="gtk-apply" name="action_done" states="released" string="Done" type="object"/>
+                        <button icon="gtk-cancel" name="action_cancel" states="draft" string="Cancel" type="object"/>
+                        <field name="state" statusbar_visible="draft,open,released" widget="statusbar"/>
                     </header>
                     <sheet>
                         <group string="Service Order">
-                            <field name="name" readonly="1" nolabel="1"/>
+                            <field name="name" nolabel="1" readonly="1"/>
                         </group>
                         <notebook>
                             <page string="Service Order Detail">
                                 <group col="4">
-                                    <field name="base_id"/>
+                                    <field name="unit_id"/>
                                     <field name="date"/>
                                     <field name="stock_location_id"/>
-                                    <field name="supervisor_id"/>
+                                    <field context="{'default_mechanic': True}" name="supervisor_id"/>
                                     <field name="type"/>
-                                    <field name="start_date"/>
-                                    <field name="start_date_real"/>
-                                    <field name="end_date"/>
-                                    <field name="end_date_real"/>
                                 </group>
-                                <group string="Order Lines">
-                                    <field nolabel="1" name="order_line_ids"/>
+                                <group col="4" string="Times">
+                                    <field name="start_date"/>
+                                    <field attrs="{'invisible': [('start_date_real', '=', False)]}" name="start_date_real"/>
+                                    <field name="end_date"/>
+                                    <field attrs="{'invisible': [('start_date_real', '=', False)]}" name="end_date_real"/>
+                                </group>
+                                <group string="Tasks">
+                                    <field context="{'default_order_id': active_id}" name="order_line_ids" nolabel="1"/>
                                 </group>
                             </page>
                             <page string="MRO Program Details">
@@ -78,18 +79,37 @@
                     </sheet>
                     <div class="oe_chatter">
                         <field name="message_follower_ids" widget="mail_followers"/>
-                        <field name="message_ids" widget="mail_thread"/> 
+                        <field name="message_ids" widget="mail_thread"/>
                     </div>
                 </form>
             </field>
         </record>
-|       <record id="action_vms_order" model="ir.actions.act_window">
+        <record model='ir.ui.view' id='vms_order_calendar_view'>
+            <field name='name'>VMS Order Calendar View</field>
+            <field name='model'>vms.order</field>
+            <field name='arch' type='xml'>
+                <calendar string="Orders Calendar" date_start="start_date" date_stop="end_date" color="unit_id">
+                    <field name="name"/>
+                    <field name="unit_id"/>
+                </calendar>
+            </field>
+        </record>
+        <record model='ir.ui.view' id='vms_order_gantt_view'>
+            <field name='name'>VMS Order Gantt View</field>
+            <field name='model'>vms.order</field>
+            <field name='arch' type='xml'>
+                <gantt string="Orders Gantt" date_start="start_date" date_stop="end_date" color="unit_id" default_group_by="unit_id">
+                    <field name="name"/>
+                </gantt>
+            </field>
+        </record>
+        <record id="action_vms_order" model="ir.actions.act_window">
             <field name="name">Order</field>
             <field name="type">ir.actions.act_window</field>
             <field name="res_model">vms.order</field>
             <field name="view_type">form</field>
-            <field name="view_mode">tree,form</field>
+            <field name="view_mode">tree,form,calendar,gantt</field>
         </record>
-        <menuitem action="action_vms_order" id="vms_order_menu" parent="menu_vms_maintenance"/>
+        <menuitem action="action_vms_order" id="vms_order_menu" parent="menu_vms_maintenance" sequence="10"/>
     </data>
 </odoo>
