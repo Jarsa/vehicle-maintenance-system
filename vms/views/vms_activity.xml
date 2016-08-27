@@ -41,7 +41,7 @@
                 </tree>
             </field>
         </record>
-        <!-- FORM View  --> 
+        <!-- FORM View  -->
         <record model='ir.ui.view' id='view_vms_activity_form'>
             <field name='name'>vms.activity.form</field>
             <field name='model'>vms.activity</field>
@@ -50,8 +50,10 @@
                     <header>
                         <button name="action_cancel_draft" states="cancel" string="Set to Draft" type="object"/>
                         <button name="action_cancel" states="draft,process,pause" string="Cancel" type="object"/>
-                        <button name="action_process" class="oe_highlight" states="draft" string="Start" type="object"/>
+                        <button name="action_start" class="oe_highlight" states="draft" string="Start" type="object"/>
+                        <button name="action_resume" class="oe_highlight" states="pause" string="Continue" type="object"/>
                         <button name="action_pause" class="oe_highlight" states="process" string="Pause" type="object"/>
+                        <button name="action_end" class="oe_highlight" states="process" string="End" type="object"/>
                         <field name="state" statusbar_visible="draft,approved,confirmed,cancel" widget="statusbar"/>
                     </header>
                     <sheet>
@@ -84,7 +86,7 @@
                 </form>
             </field>
         </record>
-        <!-- Action --> 
+        <!-- Action -->
         <record id='action_vms_activity_form' model='ir.actions.act_window'>
             <field name='name'>Mechanic's Tasks</field>
             <field name='res_model'>vms.activity</field>
@@ -92,7 +94,7 @@
             <field name='view_type'>form</field>
             <field name='view_mode'>tree,form</field>
         </record>
-        <!-- Menu Item  --> 
+        <!-- Menu Item  -->
         <menuitem id="vms_activity_menu" name="Mechanic's Tasks" parent="menu_vms_maintenance" action="action_vms_activity_form"/>
     </data>
 </odoo>

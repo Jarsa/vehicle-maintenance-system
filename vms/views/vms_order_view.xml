@@ -50,6 +50,7 @@
                                     <field name="date"/>
                                     <field name="stock_location_id"/>
                                     <field name="supervisor_id"/>
+                                    <field name="type"/>
                                     <field name="start_date"/>
                                     <field name="start_date_real"/>
                                     <field name="end_date"/>

@@ -15,5 +15,5 @@ class VmsActivityTime(models.Model):
          ('pause', 'Pause'),
          ('end', 'End')],
         required=True)
-    date = fields.Datetime(default=fields.Datetime.now)
+    date = fields.Datetime()
     activity_id = fields.Many2one('vms.activity', string='Activity')

@@ -20,6 +20,7 @@
             <field name="res_model">hr.employee</field>
             <field name="view_type">form</field>
             <field name="view_mode">kanban,tree,form</field>
+            <field name="domain">[('mechanic','=', True)]</field>
             <field eval="False" name="view_id"/>
             <field name="search_view_id" ref="hr.view_employee_filter"/>
         </record>
