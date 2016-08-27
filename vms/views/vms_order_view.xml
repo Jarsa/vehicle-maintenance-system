@@ -39,7 +39,7 @@
                       <button string="Cancel" name="action_cancel" states="draft" icon="gtk-cancel" type="object"/>
                       <field name="state" widget="statusbar" statusbar_visible="draft,open,released"/> 
                     </header>
-                    <stringheet>
+                    <sheet>
                         <group string="Service Order">
                             <field name="name" readonly="1" nolabel="1"/>
                         </group>
