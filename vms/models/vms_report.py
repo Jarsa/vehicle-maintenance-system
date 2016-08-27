@@ -10,7 +10,7 @@ class VmsReport(models.Model):
     _description = 'VMS Reports'
     _name = 'vms.report'
 
-    name = fields.Char(required=True, readonly=True, string='Report Sequence')
+    name = fields.Char(string='Number', readonly=True)
     date = fields.Datetime(required=True, default=fields.Datetime.now)
     unit_id = fields.Many2one(
         'fleet.vehicle',
@@ -18,10 +18,11 @@ class VmsReport(models.Model):
         string='Unit')
     order_id = fields.Many2one(
         'vms.order',
+        readonly=True,
         string='Order')
-    base_id = fields.Char()
     employee_id = fields.Many2one(
         'hr.employee',
+        required=True,
         domain=[('driver', '=', 'True')],
         string='Driver')
     end_date = fields.Datetime()
@@ -30,6 +31,5 @@ class VmsReport(models.Model):
          ('confirmed', 'Confirmed'),
          ('close', 'Close'),
          ('cancel', 'Cancel')],
-        string='State',
         readonly=True)
     notes = fields.Text(required=True)
