@@ -2,12 +2,14 @@
 # © <2016> <Jarsa Sistemas, S.A. de C.V.>
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
-from openerp import fields, models
+from datetime import datetime
+from datetime import timedelta
+from openerp import api, fields, models
 
 
 class VmsOrderLine(models.Model):
     _name = 'vms.order.line'
-    _order = 'name asc'
+    _description = 'VMS Order Line'
 
     task_id = fields.Many2one(
         'vms.task', string='Task',
@@ -17,39 +19,57 @@ class VmsOrderLine(models.Model):
         string='Schedule start',
         required=True)
     end_date = fields.Datetime(
-        # compute = _compute_end_date_
         string='Schedule end',
         required=True)
     start_date_real = fields.Datetime(
         string='Real start date', readonly=True)
     end_date_real = fields.Datetime(
         string='Real start date', readonly=True)
-    scheduled_hours = fields.Float(
-        string='Schedule hours'
-        # compute=_compute_scheduled_hours
-        )
+    duration = fields.Float()
     supplier_id = fields.Many2one(
         'res.partner',
+        string='Supplier',
         domain=[('supplier', '=', True)])
     external = fields.Boolean()
     state = fields.Selection([
         ('pending', 'Pending'),
         ('process', 'Process'),
         ('done', 'Done'),
-        ('cancel', 'Cancel')])
-    real_hours = fields.Float(
-        # compute="_compute_real_hours",
-        string="Real Hours")
+        ('cancel', 'Cancel')],
+        default='pending')
+    real_duration = fields.Float()
     spare_part_ids = fields.One2many(
         'vms.product.line',
-        'order_line_id')
+        'order_line_id',
+        string='Spare Parts')
     responsible_ids = fields.Many2many(
         'hr.employee',
+        string='Mechanics',
         domain=[('mechanic', '=', True)])
-    invoice_id = fields.Many2one(
-        'account.invoice',
+    purchase_order_id = fields.Many2one(
+        'purchase.order',
+        string='Purchase Order',
         readonly=True)
-    paid = fields.Boolean(
-        # compute=_compute_paid
-        )
-    order_id = fields.Many2one('vms.order', string='Order')
+
+    order_id = fields.Many2one('vms.order', string='Order', readonly=True)
+    real_time_total = fields.Integer()
+
+    @api.onchange('task_id')
+    def _onchange_task(self):
+        self.duration = self.task_id.duration
+        self.spare_part_ids = self.task_id.spare_part_ids
+        strp_date = datetime.strptime(self.start_date, "%Y-%m-%d %H:%M:%S")
+        self.end_date = strp_date + timedelta(hours=self.duration)
+
+    @api.onchange('duration')
+    def _onchange_duration(self):
+        strp_date = datetime.strptime(self.start_date, "%Y-%m-%d %H:%M:%S")
+        self.end_date = strp_date + timedelta(hours=self.duration)
+
+    @api.depends('start_date_real', 'end_date_real')
+    def _compute_real_time_total(self):
+        for rec in self:
+            start_date = datetime.strptime(rec.start_date_real, '%Y-%m-%d')
+            end_date = datetime.strptime(rec.end_date_real, '%Y-%m-%d')
+            total_days = start_date - end_date
+            rec.real_time_total = total_days.days

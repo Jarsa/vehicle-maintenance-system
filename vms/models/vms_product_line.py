@@ -3,7 +3,7 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
 
-from openerp import fields, models
+from openerp import api, fields, models
 
 
 class VmsProductLine(models.Model):
@@ -19,6 +19,10 @@ class VmsProductLine(models.Model):
         required=True,
         default=0.0,
         string='Quantity')
+    product_uom_id = fields.Many2one(
+        'product.uom',
+        string='Unit of Measure',
+        required=True)
     task_id = fields.Many2one(
         'vms.task',
         string='Task')
@@ -28,8 +32,13 @@ class VmsProductLine(models.Model):
     state = fields.Selection(
         [('draft', 'Draft'),
          ('open', 'Open'),
-         ('released', 'Released')])
+         ('released', 'Released')],
+        readonly=True, default='draft')
     stock_move_id = fields.Many2one(
         'stock.move',
-        'Stock move reference.',
+        string='Stock Move',
         readonly=True)
+
+    @api.onchange('product_id')
+    def _onchange_product_id(self):
+        self.product_uom_id = self.product_id.uom_id
