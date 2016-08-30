@@ -12,6 +12,7 @@ class VmsProductLine(models.Model):
 
     product_id = fields.Many2one(
         'product.product',
+        domain=[('type', '=', 'product')],
         required=True,
         string='Spare Part')
     product_qty = fields.Float(
@@ -29,7 +30,7 @@ class VmsProductLine(models.Model):
         string='Task',
         )
     order_line_id = fields.Many2one(
-        'vms.order',
+        'vms.order.line',
         string='Activity')
     state = fields.Selection(
         [('draft', 'Draft'),

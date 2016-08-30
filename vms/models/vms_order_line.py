@@ -33,16 +33,17 @@ class VmsOrderLine(models.Model):
         domain=[('supplier', '=', True)])
     external = fields.Boolean()
     state = fields.Selection([
-        ('pending', 'Pending'),
+        ('draft', 'Draft'),
         ('process', 'Process'),
         ('done', 'Done'),
         ('cancel', 'Cancel')],
-        default='pending')
+        default='draft')
     real_duration = fields.Float()
     spare_part_ids = fields.One2many(
         'vms.product.line',
         'order_line_id',
-        string='Spare Parts')
+        string='Spare Parts',
+        store=True)
     responsible_ids = fields.Many2many(
         'hr.employee',
         string='Mechanics',
@@ -57,17 +58,17 @@ class VmsOrderLine(models.Model):
 
     @api.model
     def create(self, values):
-        order_line = super(VmsOrderLine, self).create(values)
-        for rec in order_line:
-            import ipdb; ipdb.set_trace()
-            print "hola"
+        for spare in values['spare_part_ids']:
+            spare[0] = 0
+            spare[1] = False
+        return super(VmsOrderLine, self).create(values)
 
     @api.multi
     @api.onchange('task_id')
     def _onchange_task(self):
         for rec in self:
             rec.duration = rec.task_id.duration
-            rec.spare_part_ids += rec.task_id.spare_part_ids
+            rec.spare_part_ids = rec.task_id.spare_part_ids
             strp_date = datetime.strptime(rec.start_date, "%Y-%m-%d %H:%M:%S")
             rec.end_date = strp_date + timedelta(hours=rec.duration)
 
