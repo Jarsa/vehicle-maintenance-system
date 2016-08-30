@@ -18,7 +18,7 @@
                             <group>
                                 <field name="task_id"/>
                                 <field name="order_line_id"/>
-                                <field name="stock_move_id"/>
+                                <field name="stock_picking_id"/>
                             </group>
                         </group>
                     </sheet>

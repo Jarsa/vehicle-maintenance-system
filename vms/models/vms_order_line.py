@@ -54,6 +54,15 @@ class VmsOrderLine(models.Model):
     order_id = fields.Many2one('vms.order', string='Order', readonly=True)
     real_time_total = fields.Integer()
 
+    @api.multi
+    def action_confirm(self):
+        for rec in self:
+            for product in rec.spare_part_ids:
+                product.create_stock_picking(
+                    rec.order_id.stock_location_id.id,
+                    product.product_id.id,
+                    product.product_uom_id)
+
     @api.onchange('task_id')
     def _onchange_task(self):
         self.duration = self.task_id.duration
