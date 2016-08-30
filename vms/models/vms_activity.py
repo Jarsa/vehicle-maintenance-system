@@ -3,7 +3,7 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
 from datetime import datetime
-from openerp import _, api, fields, models
+from openerp import _, api, exceptions, fields, models
 
 
 class VmsActivity(models.Model):
@@ -70,20 +70,25 @@ class VmsActivity(models.Model):
     @api.multi
     def action_start(self):
         for rec in self:
-            rec.activity_time_ids.create({
-                'status': 'process',
-                'date': fields.Datetime.now(),
-                'activity_id': rec.id
-                })
-            rec.write({
-                'state': 'process',
-                'start_date': fields.Datetime.now()
-                })
-            rec.message_post(_(
-                '<strong>Activity Started.</strong><ul>'
-                '<li><strong>Started by: </strong>%s</li>'
-                '<li><strong>Started at: </strong>%s</li>'
-                '</ul>') % (self.env.user.name, fields.Datetime.now()))
+            for product in rec.order_id.order_line_ids.spare_part_ids:
+                if product.state == 'done':
+                    rec.activity_time_ids.create({
+                        'status': 'process',
+                        'date': fields.Datetime.now(),
+                        'activity_id': rec.id
+                        })
+                    rec.write({
+                        'state': 'process',
+                        'start_date': fields.Datetime.now()
+                        })
+                    rec.message_post(_(
+                        '<strong>Activity Started.</strong><ul>'
+                        '<li><strong>Started by: </strong>%s</li>'
+                        '<li><strong>Started at: </strong>%s</li>'
+                        '</ul>') % (self.env.user.name, fields.Datetime.now()))
+                else:
+                    raise exceptions.ValidationError(
+                        _('The spare parts must be in status done.'))
 
     @api.multi
     def action_pause(self):

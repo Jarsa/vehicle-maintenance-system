@@ -20,12 +20,13 @@ class VmsOrderLine(models.Model):
         required=True)
     end_date = fields.Datetime(
         string='Schedule end',
-        required=True)
+        required=True,
+        store=True)
     start_date_real = fields.Datetime(
         string='Real start date', readonly=True)
     end_date_real = fields.Datetime(
         string='Real start date', readonly=True)
-    duration = fields.Float()
+    duration = fields.Float(store=True)
     supplier_id = fields.Many2one(
         'res.partner',
         string='Supplier',
@@ -54,12 +55,21 @@ class VmsOrderLine(models.Model):
     order_id = fields.Many2one('vms.order', string='Order', readonly=True)
     real_time_total = fields.Integer()
 
+    @api.model
+    def create(self, values):
+        order_line = super(VmsOrderLine, self).create(values)
+        for rec in order_line:
+            import ipdb; ipdb.set_trace()
+            print "hola"
+
+    @api.multi
     @api.onchange('task_id')
     def _onchange_task(self):
-        self.duration = self.task_id.duration
-        self.spare_part_ids = self.task_id.spare_part_ids
-        strp_date = datetime.strptime(self.start_date, "%Y-%m-%d %H:%M:%S")
-        self.end_date = strp_date + timedelta(hours=self.duration)
+        for rec in self:
+            rec.duration = rec.task_id.duration
+            rec.spare_part_ids += rec.task_id.spare_part_ids
+            strp_date = datetime.strptime(rec.start_date, "%Y-%m-%d %H:%M:%S")
+            rec.end_date = strp_date + timedelta(hours=rec.duration)
 
     @api.onchange('duration')
     def _onchange_duration(self):

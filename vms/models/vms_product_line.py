@@ -12,20 +12,22 @@ class VmsProductLine(models.Model):
 
     product_id = fields.Many2one(
         'product.product',
-        domain=[('type', '=', 'product')],
         required=True,
         string='Spare Part')
     product_qty = fields.Float(
         required=True,
         default=0.0,
-        string='Quantity')
+        string='Quantity',
+        )
     product_uom_id = fields.Many2one(
         'product.uom',
         string='Unit of Measure',
-        required=True)
+        required=True,
+        )
     task_id = fields.Many2one(
         'vms.task',
-        string='Task')
+        string='Task',
+        )
     order_line_id = fields.Many2one(
         'vms.order',
         string='Activity')

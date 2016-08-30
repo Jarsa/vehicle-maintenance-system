@@ -3,7 +3,7 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
 
-from openerp import fields, models
+from openerp import api, fields, models
 
 
 class VmsOrder(models.Model):
@@ -65,6 +65,23 @@ class VmsOrder(models.Model):
         [('draft', 'Draft'),
          ('open', 'Open'),
          ('released', 'Released')],
-        string='State',
-        readonly=True)
+        readonly=True,
+        default='draft')
     unit_id = fields.Many2one('fleet.vehicle', string='Unit', required=True)
+
+    @api.multi
+    def action_open(self):
+        for rec in self:
+            obj_activity = self.env['vms.activity']
+            for line in rec.order_line_ids:
+                for mechanic in line.responsible_ids:
+                    obj_activity.create({
+                        'order_id': rec.id,
+                        'task_id': line.task_id.id,
+                        'unit_id': rec.unit_id.id,
+                        'responsible_id': mechanic.id
+                        })
+                line.state = 'process'
+                for product in line.spare_part_ids:
+                    product.state = 'open'
+            rec.state = 'open'
