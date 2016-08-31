@@ -11,6 +11,7 @@ class VmsActivity(models.Model):
     _inherit = ['mail.thread', 'ir.needaction_mixin']
     _order = 'order_id asc'
 
+    name = fields.Char(required=True)
     order_id = fields.Many2one(
         'vms.order',
         required=True,
@@ -61,16 +62,21 @@ class VmsActivity(models.Model):
         return diference
 
     def _compute_total_hours(self):
-        sum_time = 0.0
         for rec in self:
+            sum_time = 0.0
             for activity in rec.activity_time_ids:
                 if activity.status in 'process':
                     temp_begin = activity.date
                 elif activity.status in ('pause', 'end'):
                     sum_time += self.calculate_diference_time(
                         temp_begin, activity.date)
-            total = (sum_time*60)/100
-            rec.total_hours = total
+
+            if sum_time > 1.0:
+                rec.total_hours = (
+                    sum_time - (abs(sum_time) - abs(int(sum_time)))) + (
+                    (abs(sum_time) - abs(int(sum_time)))*60/100)
+            else:
+                rec.total_hours = (sum_time*60)/100
 
     @api.multi
     def action_start(self):
