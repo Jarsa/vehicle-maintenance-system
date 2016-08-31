@@ -83,3 +83,5 @@ class VmsOrderLine(models.Model):
             end_date = datetime.strptime(rec.end_date_real, '%Y-%m-%d')
             total_days = start_date - end_date
             rec.real_time_total = total_days.days
+
+    

@@ -3,7 +3,7 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
 
-from openerp import _, api, fields, models
+from openerp import _, api, exceptions, fields, models
 
 
 class VmsOrder(models.Model):
@@ -68,6 +68,29 @@ class VmsOrder(models.Model):
         readonly=True,
         default='draft')
     unit_id = fields.Many2one('fleet.vehicle', string='Unit', required=True)
+
+    @api.model
+    def create(self, values):
+        order = super(VmsOrder, self).create(values)
+        order.sequence = (len(self.search([])))
+        return order
+
+    @api.onchange('unit_id')
+    def onchange_unit_id(self):
+        for rec in self:
+            order = self.search([('unit_id', '=', rec.unit_id.id)])
+            for vehicle in order:
+                if vehicle.state != 'released':
+                    raise exceptions.ValidationError(
+                        'Unit not available, is active another order')
+
+    @api.onchange('order_line_ids')
+    def onchange_order_line(self):
+        for order in self:
+            if len(order.order_line_ids) > 0:
+                if len(order.order_line_ids.responsible_ids) == 0:
+                    raise exceptions.ValidationError(
+                        'Order Line must have at least one mechanical')
 
     @api.multi
     def action_open(self):

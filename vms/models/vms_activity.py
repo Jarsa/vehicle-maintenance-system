@@ -3,7 +3,7 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
 from datetime import datetime
-from openerp import _, api, exceptions, fields, models
+from openerp import _, api, fields, models
 
 
 class VmsActivity(models.Model):
@@ -75,6 +75,7 @@ class VmsActivity(models.Model):
     @api.multi
     def action_start(self):
         for rec in self:
+            rec.order_line_id.start_date_real = rec.start_date
             rec.activity_time_ids.create({
                 'status': 'process',
                 'date': fields.Datetime.now(),
@@ -137,6 +138,7 @@ class VmsActivity(models.Model):
     @api.multi
     def action_end(self):
         for rec in self:
+            rec.order_line_id.end_date_real = rec.end_date
             rec.activity_time_ids.create({
                 'status': 'end',
                 'date': fields.Datetime.now(),
