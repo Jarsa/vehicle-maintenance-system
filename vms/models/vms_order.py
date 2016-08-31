@@ -101,6 +101,7 @@ class VmsOrder(models.Model):
                     obj_activity.create({
                         'order_id': rec.id,
                         'task_id': line.task_id.id,
+                        'name': line.task_id.name,
                         'unit_id': rec.unit_id.id,
                         'order_line_id': line.id,
                         'responsible_id': mechanic.id
