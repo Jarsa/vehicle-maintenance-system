@@ -56,21 +56,20 @@ class VmsOrderLine(models.Model):
     order_id = fields.Many2one('vms.order', string='Order', readonly=True)
     real_time_total = fields.Integer()
 
-    @api.model
-    def create(self, values):
-        for spare in values['spare_part_ids']:
-            spare[0] = 0
-            spare[1] = False
-        return super(VmsOrderLine, self).create(values)
-
     @api.multi
     @api.onchange('task_id')
     def _onchange_task(self):
         for rec in self:
             rec.duration = rec.task_id.duration
-            rec.spare_part_ids = rec.task_id.spare_part_ids
             strp_date = datetime.strptime(rec.start_date, "%Y-%m-%d %H:%M:%S")
             rec.end_date = strp_date + timedelta(hours=rec.duration)
+            for spare_part in rec.task_id.spare_part_ids:
+                spare_part = rec.spare_part_ids.new({
+                    'product_id': spare_part.product_id.id,
+                    'product_qty': spare_part.product_qty,
+                    'product_uom_id': spare_part.product_uom_id.id,
+                    'state': 'draft'})
+                rec.spare_part_ids += spare_part
 
     @api.onchange('duration')
     def _onchange_duration(self):

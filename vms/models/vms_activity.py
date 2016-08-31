@@ -16,6 +16,11 @@ class VmsActivity(models.Model):
         required=True,
         string='Maintenance Order',
         readonly=True)
+    order_line_id = fields.Many2one(
+        'vms.order.line',
+        required=True,
+        string='Activity',
+        readonly=True)
     unit_id = fields.Many2one(
         'fleet.vehicle',
         required=True,

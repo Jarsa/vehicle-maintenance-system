@@ -72,6 +72,7 @@ class VmsOrder(models.Model):
     @api.multi
     def action_open(self):
         for rec in self:
+            import ipdb; ipdb.set_trace()
             obj_activity = self.env['vms.activity']
             for line in rec.order_line_ids:
                 for mechanic in line.responsible_ids:
@@ -79,9 +80,11 @@ class VmsOrder(models.Model):
                         'order_id': rec.id,
                         'task_id': line.task_id.id,
                         'unit_id': rec.unit_id.id,
+                        'order_line_id': line.id,
                         'responsible_id': mechanic.id
                         })
                 line.state = 'process'
-                for product in line.spare_part_ids:
-                    product.state = 'open'
+                if(line.spare_part_ids):
+                    for product in line.spare_part_ids:
+                        product.state = 'open'
             rec.state = 'open'
