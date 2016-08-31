@@ -75,25 +75,20 @@ class VmsActivity(models.Model):
     @api.multi
     def action_start(self):
         for rec in self:
-            for product in rec.order_id.order_line_ids.spare_part_ids:
-                if product.state == 'done':
-                    rec.activity_time_ids.create({
-                        'status': 'process',
-                        'date': fields.Datetime.now(),
-                        'activity_id': rec.id
-                        })
-                    rec.write({
-                        'state': 'process',
-                        'start_date': fields.Datetime.now()
-                        })
-                    rec.message_post(_(
-                        '<strong>Activity Started.</strong><ul>'
-                        '<li><strong>Started by: </strong>%s</li>'
-                        '<li><strong>Started at: </strong>%s</li>'
-                        '</ul>') % (self.env.user.name, fields.Datetime.now()))
-                else:
-                    raise exceptions.ValidationError(
-                        _('The spare parts must be in status done.'))
+            rec.activity_time_ids.create({
+                'status': 'process',
+                'date': fields.Datetime.now(),
+                'activity_id': rec.id
+                })
+            rec.write({
+                'state': 'process',
+                'start_date': fields.Datetime.now()
+                })
+            rec.message_post(_(
+                '<strong>Activity Started.</strong><ul>'
+                '<li><strong>Started by: </strong>%s</li>'
+                '<li><strong>Started at: </strong>%s</li>'
+                '</ul>') % (self.env.user.name, fields.Datetime.now()))
 
     @api.multi
     def action_pause(self):

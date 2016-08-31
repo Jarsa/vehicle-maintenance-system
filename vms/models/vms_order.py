@@ -3,7 +3,7 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
 
-from openerp import api, fields, models
+from openerp import _, api, fields, models
 
 
 class VmsOrder(models.Model):
@@ -72,7 +72,6 @@ class VmsOrder(models.Model):
     @api.multi
     def action_open(self):
         for rec in self:
-            import ipdb; ipdb.set_trace()
             obj_activity = self.env['vms.activity']
             for line in rec.order_line_ids:
                 for mechanic in line.responsible_ids:
@@ -88,3 +87,8 @@ class VmsOrder(models.Model):
                     for product in line.spare_part_ids:
                         product.state = 'open'
             rec.state = 'open'
+            rec.message_post(_(
+                '<strong>Order Opened.</strong><ul>'
+                '<li><strong>Opened by: </strong>%s</li>'
+                '<li><strong>Opened at: </strong>%s</li>'
+                '</ul>') % (self.env.user.name, fields.Datetime.now()))
