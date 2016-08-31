@@ -64,12 +64,12 @@ class VmsOrderLine(models.Model):
             strp_date = datetime.strptime(rec.start_date, "%Y-%m-%d %H:%M:%S")
             rec.end_date = strp_date + timedelta(hours=rec.duration)
             for spare_part in rec.task_id.spare_part_ids:
-                spare_part = rec.spare_part_ids.new({
+                spare = rec.spare_part_ids.new({
                     'product_id': spare_part.product_id.id,
                     'product_qty': spare_part.product_qty,
                     'product_uom_id': spare_part.product_uom_id.id,
                     'state': 'draft'})
-                rec.spare_part_ids += spare_part
+                rec.spare_part_ids += spare
 
     @api.onchange('duration')
     def _onchange_duration(self):
