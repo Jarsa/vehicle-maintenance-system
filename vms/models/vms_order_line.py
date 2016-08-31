@@ -32,11 +32,11 @@ class VmsOrderLine(models.Model):
         domain=[('supplier', '=', True)])
     external = fields.Boolean()
     state = fields.Selection([
-        ('pending', 'Pending'),
+        ('draft', 'Draft'),
         ('process', 'Process'),
         ('done', 'Done'),
         ('cancel', 'Cancel')],
-        default='pending')
+        default='draft')
     real_duration = fields.Float()
     spare_part_ids = fields.One2many(
         'vms.product.line',
@@ -54,6 +54,7 @@ class VmsOrderLine(models.Model):
     order_id = fields.Many2one('vms.order', string='Order', readonly=True)
     real_time_total = fields.Integer()
 
+    
     @api.onchange('task_id')
     def _onchange_task(self):
         self.duration = self.task_id.duration

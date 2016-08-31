@@ -3,7 +3,7 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
 
-from openerp import fields, models
+from openerp import api, exceptions, fields, models
 
 
 class VmsOrder(models.Model):
@@ -66,5 +66,26 @@ class VmsOrder(models.Model):
          ('open', 'Open'),
          ('released', 'Released')],
         string='State',
-        readonly=True)
+        readonly=True, default='draft')
     unit_id = fields.Many2one('fleet.vehicle', string='Unit', required=True)
+
+    @api.multi
+    def action_released(self):
+        for order in self:
+            activitys = self.env['vms.activity'].search(
+                [('order_id', '=', order.id)])
+
+            for activity in activitys:
+                for line in order.order_line_ids:
+                    if (activity.state is 'end' and
+                            activity.order_line_id is line.id):
+                        line.state = 'done'
+                    else:
+                        raise exceptions.ValidationError(
+                            'Verify that all activities are in '
+                            'end state to continue')
+                order.message_post(body=(
+                    "<h5><strong>Released</strong></h5>"
+                    "<p><strong>Released by: </strong> %s <br>"
+                    "<strong>Released at: </strong> %s</p") % (
+                    order.supervisor_id.name, fields.Datetime.now()))

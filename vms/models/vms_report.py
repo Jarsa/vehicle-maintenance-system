@@ -23,13 +23,13 @@ class VmsReport(models.Model):
     employee_id = fields.Many2one(
         'hr.employee',
         required=True,
-        domain=[('driver', '=', 'True')],
+        # domain=[('driver', '=', 'True')],
         string='Driver')
     end_date = fields.Datetime()
     state = fields.Selection(
         [('draft', 'Draft'),
-         ('confirmed', 'Confirmed'),
+         ('open', 'Open'),
          ('close', 'Close'),
          ('cancel', 'Cancel')],
-        readonly=True)
+        readonly=True, default='draft')
     notes = fields.Text(required=True)

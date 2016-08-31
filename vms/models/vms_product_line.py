@@ -27,7 +27,7 @@ class VmsProductLine(models.Model):
         'vms.task',
         string='Task')
     order_line_id = fields.Many2one(
-        'vms.order',
+        'vms.order.line',
         string='Activity')
     state = fields.Selection(
         [('draft', 'Draft'),
