@@ -38,7 +38,7 @@ class VmsOrderLine(models.Model):
         ('done', 'Done'),
         ('cancel', 'Cancel')],
         default='draft')
-    real_duration = fields.Float()
+    real_duration = fields.Float(readonly=True)
     spare_part_ids = fields.One2many(
         'vms.product.line',
         'order_line_id',
@@ -83,5 +83,3 @@ class VmsOrderLine(models.Model):
             end_date = datetime.strptime(rec.end_date_real, '%Y-%m-%d')
             total_days = start_date - end_date
             rec.real_time_total = total_days.days
-
-    

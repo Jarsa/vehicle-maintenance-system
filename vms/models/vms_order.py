@@ -81,14 +81,16 @@ class VmsOrder(models.Model):
             order = self.search([('unit_id', '=', rec.unit_id.id)])
             for vehicle in order:
                 if vehicle.state != 'released':
-                    raise exceptions.ValidationError(
-                        'Unit not available, is active another order')
+                    raise exceptions.ValidationError(_(
+                        'Unit not available because it has more'
+                        'open order(s).'))
 
     @api.onchange('order_line_ids')
     def onchange_order_line(self):
         for order in self:
             if len(order.order_line_ids) > 0:
-                if len(order.order_line_ids.responsible_ids) == 0:
+                if (len(order.order_line_ids.responsible_ids) == 0 and
+                        not order.order_line_ids.external):
                     raise exceptions.ValidationError(
                         'Order Line must have at least one mechanical')
 

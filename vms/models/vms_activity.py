@@ -144,8 +144,7 @@ class VmsActivity(models.Model):
     @api.multi
     def action_end(self):
         for rec in self:
-            rec.order_line_id.end_date_real = rec.end_date
-            rec.activity_time_ids.create({
+            rec.activity_time_ids.createn({
                 'status': 'end',
                 'date': fields.Datetime.now(),
                 'activity_id': rec.id
@@ -154,6 +153,7 @@ class VmsActivity(models.Model):
                 'state': 'end',
                 'end_date': fields.Datetime.now()
                 })
+            rec.order_line_id.end_date_real = rec.end_date
             rec.message_post(_(
                 '<strong>Activity Ended.</strong><ul>'
                 '<li><strong>Ended by: </strong>%s</li>'
