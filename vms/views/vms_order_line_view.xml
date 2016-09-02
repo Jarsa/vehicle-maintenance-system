@@ -35,7 +35,7 @@
                             </group>
                         </group>
                         <group string="Mechanics" attrs="{'invisible':[('external','=',True)]}">
-                            <field name="responsible_ids" nolabel="1">
+                            <field name="responsible_ids" attrs="{'readonly':[('order_id', '=', False)]}"  nolabel="1">
                                 <tree>
                                     <field name="name"/>
                                     <field name="job_id"/>

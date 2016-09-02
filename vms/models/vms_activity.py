@@ -81,7 +81,6 @@ class VmsActivity(models.Model):
     @api.multi
     def action_start(self):
         for rec in self:
-            rec.order_line_id.start_date_real = rec.start_date
             rec.activity_time_ids.create({
                 'status': 'process',
                 'date': fields.Datetime.now(),
@@ -91,6 +90,7 @@ class VmsActivity(models.Model):
                 'state': 'process',
                 'start_date': fields.Datetime.now()
                 })
+            rec.order_line_id.start_date_real = rec.start_date
             rec.message_post(_(
                 '<strong>Activity Started.</strong><ul>'
                 '<li><strong>Started by: </strong>%s</li>'
@@ -135,6 +135,7 @@ class VmsActivity(models.Model):
     def action_cancel(self):
         for rec in self:
             rec.state = 'cancel'
+            rec.order_line_id.state = 'done'
         rec.message_post(_(
             '<strong>Activity Canceled.</strong><ul>'
             '<li><strong>Canceled by: </strong>%s</li>'
@@ -144,7 +145,7 @@ class VmsActivity(models.Model):
     @api.multi
     def action_end(self):
         for rec in self:
-            rec.activity_time_ids.createn({
+            rec.activity_time_ids.create({
                 'status': 'end',
                 'date': fields.Datetime.now(),
                 'activity_id': rec.id
@@ -154,6 +155,8 @@ class VmsActivity(models.Model):
                 'end_date': fields.Datetime.now()
                 })
             rec.order_line_id.end_date_real = rec.end_date
+            rec.order_line_id.real_duration = rec.total_hours
+            rec.order_line_id.state = 'done'
             rec.message_post(_(
                 '<strong>Activity Ended.</strong><ul>'
                 '<li><strong>Ended by: </strong>%s</li>'

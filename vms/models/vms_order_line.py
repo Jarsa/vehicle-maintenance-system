@@ -25,7 +25,7 @@ class VmsOrderLine(models.Model):
     start_date_real = fields.Datetime(
         string='Real start date', readonly=True)
     end_date_real = fields.Datetime(
-        string='Real start date', readonly=True)
+        string='Real end date', readonly=True)
     duration = fields.Float(store=True)
     supplier_id = fields.Many2one(
         'res.partner',

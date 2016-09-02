@@ -5,6 +5,8 @@
 
 from openerp import _, api, exceptions, fields, models
 
+from datetime import datetime, timedelta
+
 
 class VmsOrder(models.Model):
     _description = 'VMS Orders'
@@ -49,7 +51,8 @@ class VmsOrder(models.Model):
     order_line_ids = fields.One2many(
         'vms.order.line',
         'order_id',
-        string='Order Lines')
+        string='Order Lines',
+        store=True)
     program_id = fields.Many2one(
         'vms.program',
         string='Program')
@@ -67,54 +70,93 @@ class VmsOrder(models.Model):
          ('released', 'Released')],
         readonly=True,
         default='draft')
-    unit_id = fields.Many2one('fleet.vehicle', string='Unit', required=True)
+    unit_id = fields.Many2one(
+        'fleet.vehicle',
+        string='Unit', required=True, store=True)
 
-    @api.model
-    def create(self, values):
-        order = super(VmsOrder, self).create(values)
-        order.sequence = (len(self.search([])))
-        return order
-
-    @api.onchange('unit_id')
-    def onchange_unit_id(self):
+    @api.multi
+    @api.onchange('type')
+    def _onchange_unit_id(self):
         for rec in self:
             order = self.search([('unit_id', '=', rec.unit_id.id)])
-            for vehicle in order:
-                if vehicle.state != 'released':
-                    raise exceptions.ValidationError(_(
-                        'Unit not available because it has more'
-                        'open order(s).'))
+            if len(order) > 0:
+                for vehicle in order:
+                    if vehicle.state != 'released':
+                        raise exceptions.ValidationError(_(
+                            'Unit not available because it has more'
+                            'open order(s).'))
+            else:
+                if (rec.type == 'preventive'):
+                    spares = []
+                    rec.program_id = rec.unit_id.program_id
+                    rec.current_odometer = rec.unit_id.odometer
+                    rec.sequence = rec.unit_id.cycle_ids.sequence
+                    for cycle in rec.unit_id.program_id.cycle_ids:
+                        rec.cycle_id = cycle.id
+
+                    for task in rec.cycle_id.task_ids:
+                        duration = task.duration
+                        start_date = datetime.now()
+                        end_date = start_date + timedelta(
+                            hours=duration)
+                        for spare_part in task.spare_part_ids:
+                            spares.append((0, False, {
+                                'product_id': spare_part.product_id.id,
+                                'product_qty': spare_part.product_qty,
+                                'product_uom_id': (
+                                    spare_part.product_uom_id.id),
+                                'state': 'draft'
+                                }))
+                        order_line = rec.order_line_ids.create({
+                            'task_id': task.id,
+                            'start_date': start_date,
+                            'duration': duration,
+                            'end_date': end_date,
+                            'spare_part_ids': [line for line in spares],
+                            'order_id': rec.id
+                            })
+                        rec.order_line_ids += order_line
+                else:
+                    rec.program_id = False
+                    rec.current_odometer = False
+                    rec.sequence = False
+                    rec.order_line_ids = False
 
     @api.onchange('order_line_ids')
     def onchange_order_line(self):
-        for order in self:
-            if len(order.order_line_ids) > 0:
-                if (len(order.order_line_ids.responsible_ids) == 0 and
-                        not order.order_line_ids.external):
-                    raise exceptions.ValidationError(
-                        'Order Line must have at least one mechanical')
+        for rec in self:
+            sum_time = 0.0
+            for line in rec.order_line_ids:
+                sum_time += line.duration
+            strp_date = datetime.strptime(rec.start_date, "%Y-%m-%d %H:%M:%S")
+            rec.end_date = strp_date + timedelta(hours=sum_time)
 
     @api.multi
     def action_open(self):
         for rec in self:
             obj_activity = self.env['vms.activity']
             for line in rec.order_line_ids:
-                for mechanic in line.responsible_ids:
-                    obj_activity.create({
-                        'order_id': rec.id,
-                        'task_id': line.task_id.id,
-                        'name': line.task_id.name,
-                        'unit_id': rec.unit_id.id,
-                        'order_line_id': line.id,
-                        'responsible_id': mechanic.id
-                        })
-                line.state = 'process'
-                if(line.spare_part_ids):
-                    for product in line.spare_part_ids:
-                        product.state = 'open'
-            rec.state = 'open'
-            rec.message_post(_(
-                '<strong>Order Opened.</strong><ul>'
-                '<li><strong>Opened by: </strong>%s</li>'
-                '<li><strong>Opened at: </strong>%s</li>'
-                '</ul>') % (self.env.user.name, fields.Datetime.now()))
+                if line.responsible_ids:
+                    for mechanic in line.responsible_ids:
+                        obj_activity.create({
+                            'order_id': rec.id,
+                            'task_id': line.task_id.id,
+                            'name': line.task_id.name,
+                            'unit_id': rec.unit_id.id,
+                            'order_line_id': line.id,
+                            'responsible_id': mechanic.id
+                            })
+                    line.state = 'process'
+                    if(line.spare_part_ids):
+                        for product in line.spare_part_ids:
+                            product.state = 'open'
+                    rec.state = 'open'
+                    rec.start_date_real = fields.Datetime.now()
+                    rec.message_post(_(
+                        '<strong>Order Opened.</strong><ul>'
+                        '<li><strong>Opened by: </strong>%s</li>'
+                        '<li><strong>Opened at: </strong>%s</li>'
+                        '</ul>') % (self.env.user.name, fields.Datetime.now()))
+                else:
+                    raise exceptions.ValidationError(
+                        _('The tasks must have almost one mechanic.'))
