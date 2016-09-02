@@ -43,7 +43,7 @@ class VmsOrderLine(models.Model):
         'vms.product.line',
         'order_line_id',
         string='Spare Parts',
-        store=True)
+        help='You must save the order to select the mechanic(s).')
     responsible_ids = fields.Many2many(
         'hr.employee',
         string='Mechanics',

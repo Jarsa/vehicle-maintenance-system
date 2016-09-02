@@ -134,30 +134,47 @@ class VmsOrder(models.Model):
                             'Unit not available for maintenance '
                             'because it has more open order(s).'))
             else:
-                obj_activity = self.env['vms.activity']
-                for line in rec.order_line_ids:
-                    if line.responsible_ids:
-                        for mechanic in line.responsible_ids:
-                            obj_activity.create({
-                                'order_id': rec.id,
-                                'task_id': line.task_id.id,
-                                'name': line.task_id.name,
-                                'unit_id': rec.unit_id.id,
-                                'order_line_id': line.id,
-                                'responsible_id': mechanic.id
-                                })
-                        line.state = 'process'
-                        if(line.spare_part_ids):
-                            for product in line.spare_part_ids:
-                                product.state = 'open'
-                        rec.state = 'open'
-                        rec.start_date_real = fields.Datetime.now()
-                        rec.message_post(_(
-                            '<strong>Order Opened.</strong><ul>'
-                            '<li><strong>Opened by: </strong>%s</li>'
-                            '<li><strong>Opened at: </strong>%s</li>'
-                            '</ul>') % (
-                            self.env.user.name, fields.Datetime.now()))
-                    else:
-                        raise exceptions.ValidationError(
-                            _('The tasks must have almost one mechanic.'))
+                if not rec.external:
+                    obj_activity = self.env['vms.activity']
+                    for line in rec.order_line_ids:
+                        if line.responsible_ids:
+                            for mechanic in line.responsible_ids:
+                                obj_activity.create({
+                                    'order_id': rec.id,
+                                    'task_id': line.task_id.id,
+                                    'name': line.task_id.name,
+                                    'unit_id': rec.unit_id.id,
+                                    'order_line_id': line.id,
+                                    'responsible_id': mechanic.id
+                                    })
+                            line.state = 'process'
+                            if(line.spare_part_ids):
+                                for product in line.spare_part_ids:
+                                    product.state = 'open'
+                            rec.state = 'open'
+                            rec.start_date_real = fields.Datetime.now()
+                            rec.message_post(_(
+                                '<strong>Order Opened.</strong><ul>'
+                                '<li><strong>Opened by: </strong>%s</li>'
+                                '<li><strong>Opened at: </strong>%s</li>'
+                                '</ul>') % (
+                                self.env.user.name, fields.Datetime.now()))
+                        else:
+                            raise exceptions.ValidationError(
+                                _('The tasks must have almost one mechanic.'))
+
+    @api.multi
+    def action_cancel(self):
+        for rec in self:
+            import ipdb; ipdb.set_trace()
+            for line in rec.order_line_ids:
+                activities = (
+                    self.env['vms.activity'].browse(
+                        [('order_line_id', '=', line.id)]))
+        rec.state = 'cancel'
+        rec.message_post(_(
+            '<strong>Order Closed.</strong><ul>'
+            '<li><strong>Closed by: </strong>%s</li>'
+            '<li><strong>Closed at: </strong>%s</li>'
+            '</ul>') % (
+            self.env.user.name, fields.Datetime.now()))
