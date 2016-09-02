@@ -166,15 +166,14 @@ class VmsOrder(models.Model):
     @api.multi
     def action_cancel(self):
         for rec in self:
-            import ipdb; ipdb.set_trace()
-            for line in rec.order_line_ids:
-                activities = (
-                    self.env['vms.activity'].browse(
-                        [('order_line_id', '=', line.id)]))
-        rec.state = 'cancel'
-        rec.message_post(_(
-            '<strong>Order Closed.</strong><ul>'
-            '<li><strong>Closed by: </strong>%s</li>'
-            '<li><strong>Closed at: </strong>%s</li>'
-            '</ul>') % (
-            self.env.user.name, fields.Datetime.now()))
+            # for line in rec.order_line_ids:
+            #     activities = (
+            #         self.env['vms.activity'].browse(
+            #             [('order_line_id', '=', line.id)]))
+            rec.state = 'cancel'
+            rec.message_post(_(
+                '<strong>Order Closed.</strong><ul>'
+                '<li><strong>Closed by: </strong>%s</li>'
+                '<li><strong>Closed at: </strong>%s</li>'
+                '</ul>') % (
+                self.env.user.name, fields.Datetime.now()))
