@@ -32,10 +32,11 @@
             <field name="arch" type="xml">
                 <form string="Order of Maintenance">
                     <header>
-                        <button icon="gtk-go-forward" name="action_open" states="draft" string="Open" type="object"/>
-                        <button icon="gtk-apply" name="action_released" states="open" string="Released" type="object"/>
-                        <button icon="gtk-apply" name="action_done" states="released" string="Done" type="object"/>
-                        <button icon="gtk-cancel" name="action_cancel" states="draft" string="Cancel" type="object"/>
+                        <button name="action_cancel_draft" states="cancel" string="Set to Draft" type="object"/>
+                        <button icon="fa-arrow-right" class="oe_highlight" name="action_open" states="draft" string="Open" type="object"/>
+                        <button icon="fa-check-square-o" class="oe_highlight" name="action_released" states="open" string="Released" type="object"/>
+                        <button icon="fa-thumbs-up" class="oe_highlight" name="action_done" states="released" string="Done" type="object"/>
+                        <button icon="fa-times" name="action_cancel" states="draft,open" string="Cancel" type="object" confirm="Are you sure to cancel this order? All the task(s) will cancel too."/>
                         <field name="state" statusbar_visible="draft,open,released" widget="statusbar"/>
                     </header>
                     <sheet>
@@ -48,9 +49,9 @@
                                     <field name='base_id'/>
                                     <field name="unit_id"/>
                                     <field name="date"/>
+                                    <field name="type"/>
                                     <field name="stock_location_id"/>
                                     <field context="{'default_mechanic': True}" name="supervisor_id"/>
-                                    <field name="type"/>
                                 </group>
                                 <group col="4" string="Times">
                                     <field name="start_date"/>
@@ -62,7 +63,7 @@
                                     <field context="{'default_order_id': active_id}" name="order_line_ids" nolabel="1"/>
                                 </group>
                             </page>
-                            <page string="MRO Program Details">
+                            <page string="MRO Program Details" attrs="{'invisible':[('type','in',(False,'corrective'))]}">
                                 <group>
                                     <field name="current_odometer"/>
                                     <newline/>
@@ -73,7 +74,7 @@
                                     <field name="sequence"/>
                                 </group>
                             </page>
-                            <page string="Driver Reports Solved">
+                            <page string="Driver Reports Solved" attrs="{'invisible':[('type','in',(False,'preventive'))]}">
                                 <field name="report_ids" nolabel="1"/>
                             </page>
                         </notebook>

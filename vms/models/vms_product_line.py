@@ -18,21 +18,25 @@ class VmsProductLine(models.Model):
     product_qty = fields.Float(
         required=True,
         default=0.0,
-        string='Quantity')
+        string='Quantity',
+        )
     product_uom_id = fields.Many2one(
         'product.uom',
         string='Unit of Measure',
-        required=True)
+        required=True,
+        )
     task_id = fields.Many2one(
         'vms.task',
-        string='Task')
+        string='Task',
+        )
     order_line_id = fields.Many2one(
         'vms.order.line',
         string='Activity')
     state = fields.Selection(
         [('draft', 'Draft'),
          ('open', 'Open'),
-         ('released', 'Released')],
+         ('released', 'Released'),
+         ('cancel', 'Cancel')],
         readonly=True, default='draft')
     stock_move_id = fields.Many2one(
         'stock.move',
