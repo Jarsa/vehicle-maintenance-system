@@ -3,7 +3,7 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
 from datetime import datetime
-from openerp import _, api, fields, models
+from openerp import _, api, exceptions, fields, models
 
 
 class VmsActivity(models.Model):
@@ -70,17 +70,14 @@ class VmsActivity(models.Model):
                 elif activity.status in ('pause', 'end'):
                     sum_time += self.calculate_diference_time(
                         temp_begin, activity.date)
-
-            if sum_time > 1.0:
-                rec.total_hours = (
-                    sum_time - (abs(sum_time) - abs(int(sum_time)))) + (
-                    (abs(sum_time) - abs(int(sum_time)))*60/100)
-            else:
-                rec.total_hours = (sum_time*60)/100
+            rec.total_hours = sum_time
 
     @api.multi
     def action_start(self):
         for rec in self:
+            if rec.order_line_id.state != 'process':
+                raise exceptions.ValidationError(
+                    _('The order line task must be open.'))
             rec.activity_time_ids.create({
                 'status': 'process',
                 'date': fields.Datetime.now(),
@@ -90,7 +87,6 @@ class VmsActivity(models.Model):
                 'state': 'process',
                 'start_date': fields.Datetime.now()
                 })
-            rec.order_line_id.start_date_real = rec.start_date
             rec.message_post(_(
                 '<strong>Activity Started.</strong><ul>'
                 '<li><strong>Started by: </strong>%s</li>'
@@ -154,9 +150,6 @@ class VmsActivity(models.Model):
                 'state': 'end',
                 'end_date': fields.Datetime.now()
                 })
-            rec.order_line_id.end_date_real = rec.end_date
-            rec.order_line_id.real_duration = rec.total_hours
-            rec.order_line_id.state = 'done'
             rec.message_post(_(
                 '<strong>Activity Ended.</strong><ul>'
                 '<li><strong>Ended by: </strong>%s</li>'

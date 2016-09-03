@@ -4,7 +4,7 @@
 
 from datetime import datetime
 from datetime import timedelta
-from openerp import api, fields, models
+from openerp import _, api, exceptions, fields, models
 
 
 class VmsOrderLine(models.Model):
@@ -83,3 +83,90 @@ class VmsOrderLine(models.Model):
             end_date = datetime.strptime(rec.end_date_real, '%Y-%m-%d')
             total_days = start_date - end_date
             rec.real_time_total = total_days.days
+
+    @api.multi
+    def action_process(self):
+        for rec in self:
+            if rec.order_id.state != 'open':
+                raise exceptions.ValidationError(
+                    _('The order must be open.'))
+            else:
+                if rec.responsible_ids and not rec.external:
+                    activities = self.env['vms.activity'].search(
+                        [('order_line_id', '=', rec.id)])
+                    if len(activities) > 0:
+                        for activity in activities:
+                            activity.state = 'draft'
+                    else:
+                        for mechanic in rec.responsible_ids:
+                            self.env['vms.activity'].create({
+                                'order_id': rec.order_id.id,
+                                'task_id': rec.task_id.id,
+                                'name': rec.task_id.name,
+                                'unit_id': rec.order_id.unit_id.id,
+                                'order_line_id': rec.id,
+                                'responsible_id': mechanic.id
+                                })
+                    rec.state = 'process'
+                    rec.start_date_real = fields.Datetime.now()
+                    if(rec.spare_part_ids):
+                        for product in rec.spare_part_ids:
+                            product.state = 'open'
+                    rec.state = 'process'
+                else:
+                    raise exceptions.ValidationError(
+                        _('The tasks must have almost one mechanic.'))
+
+    @api.multi
+    def action_done(self):
+        act_state_validator = True
+        # spare_validator = True
+        sum_time = 0.0
+        for rec in self:
+            activities = rec.env['vms.activity'].search(
+                [('order_line_id', '=', rec.id)])
+            for activity in activities:
+                if activity.state != 'end':
+                    act_state_validator = False
+                elif activity.state == 'end':
+                    sum_time += activity.total_hours
+            if not act_state_validator:
+                raise exceptions.ValidationError(
+                    _('The activities of the mechanics(s) must be finished.'))
+            # for spare in rec.spare_part_ids:
+            #     if spare.state != 'released':
+            #         spare_validator = False
+            # if not spare_validator:
+            #     raise exceptions.ValidationError(
+            #         _('The spare parts must be delivered.'))
+            rec.end_date_real = fields.Datetime.now()
+            rec.real_duration = sum_time
+            rec.state = 'done'
+
+    @api.multi
+    def action_cancel(self):
+        for rec in self:
+            if not rec.external:
+                activities = rec.env['vms.activity'].search(
+                    [('order_line_id', '=', rec.id)])
+                if len(activities) > 0:
+                    for activity in activities:
+                        activity.state = 'cancel'
+                for spare in rec.spare_part_ids:
+                    spare.state = 'cancel'
+                    if spare.stock_move_id:
+                        spare.stock_move_id.state = 'cancel'
+            else:
+                rec.purchase_order_id.unlink()
+                if rec.spare_part_ids:
+                    for spare in rec.spare_part_ids:
+                        if spare.stock_move_id:
+                            spare.stock_move_id.state = 'cancel'
+                        spare.state = 'cancel'
+            rec.state = 'cancel'
+            rec.start_date_real = False
+
+    @api.multi
+    def action_cancel_draft(self):
+        for rec in self:
+            rec.state = 'draft'
