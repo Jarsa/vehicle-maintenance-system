@@ -86,23 +86,30 @@ class VmsOrder(models.Model):
     @api.multi
     def action_released(self):
         for order in self:
-            activitys = self.env['vms.activity'].search(
-                [('order_id', '=', order.id)])
-
-            for activity in activitys:
-                for line in order.order_line_ids:
-                    if (activity.state is 'end' and
-                            activity.order_line_id is line.id):
-                        line.state = 'done'
-                    else:
-                        raise exceptions.ValidationError(
-                            'Verify that all activities are in '
-                            'end state to continue')
-                order.message_post(body=(
-                    "<h5><strong>Released</strong></h5>"
-                    "<p><strong>Released by: </strong> %s <br>"
-                    "<strong>Released at: </strong> %s</p") % (
-                    order.supervisor_id.name, fields.Datetime.now()))
+            for line in order.order_line_ids:
+                if line.state != 'done':
+                    raise exceptions.ValidationError(
+                        'Verify that all activities are in '
+                        'end state to continue')
+            cycles = order.unit_id.cycle_ids.search(
+                [('sequence', '=', order.sequence)])
+            cycles.write({
+                'order_id': order.id,
+                'date': fields.Datetime.now(),
+                'distance': order.current_odometer
+            })
+            order.unit_id.last_order_id = order.id
+            order.unit_id.last_cycle_id = order.cycle_id.id
+            order.unit_id.sequence += 1
+            next_cycle = order.unit_id.cycle_ids.search(
+                [('sequence', '=', order.unit_id.sequence)])
+            order.unit_id.write({'next_cycle_id': next_cycle.id})
+            order.state = 'released'
+            order.message_post(body=(
+                "<h5><strong>Released</strong></h5>"
+                "<p><strong>Released by: </strong> %s <br>"
+                "<strong>Released at: </strong> %s</p") % (
+                order.supervisor_id.name, fields.Datetime.now()))
 
     @api.multi
     @api.onchange('type')
@@ -112,7 +119,7 @@ class VmsOrder(models.Model):
                 spares = []
                 rec.program_id = rec.unit_id.program_id
                 rec.current_odometer = rec.unit_id.odometer
-                rec.sequence = rec.unit_id.next_service_sequence
+                rec.sequence = rec.unit_id.sequence
                 for cycle in rec.unit_id.next_cycle_id:
                     rec.cycle_id = cycle.id
 
@@ -165,6 +172,9 @@ class VmsOrder(models.Model):
                     'Unit not available for maintenance '
                     'because it has more open order(s).'))
             else:
+                if not rec.order_line_ids:
+                    raise exceptions.ValidationError(
+                        _('The order must have at least one task'))
                 for line in rec.order_line_ids:
                     if line.responsible_ids and not line.external:
                         obj_activity = self.env['vms.activity']

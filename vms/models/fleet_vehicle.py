@@ -19,7 +19,7 @@ class FleetVehicle(models.Model):
         string='Last Order')
     last_cycle_id = fields.Many2one(
         'vms.cycle',
-        string='Last Cycle')
+        string='Last Cycle', default=False)
     next_cycle_id = fields.Many2one(
         'vms.cycle',
         string='Next Cycle')
@@ -28,19 +28,27 @@ class FleetVehicle(models.Model):
     next_service_sequence = fields.Integer()
     cycle_ids = fields.One2many(
         'vms.vehicle.cycle', 'unit_id', string="Cycles")
+    sequence = fields.Integer()
 
     @api.multi
     def program_mtto(self):
-        prog_ids = self.cycle_ids.search([('unit_id', '=', self.id)])
-        if len(prog_ids):
-            prog_ids.unlink()
-        for cycle in self.program_id.cycle_ids:
-            seq = 1
-            for x in range(cycle.frequency, 4000000, cycle.frequency):
-                self.cycle_ids.create({
-                    'cycle_id': cycle.id,
-                    'schedule': x,
-                    'sequence': seq,
-                    'unit_id': self.id,
-                })
-                seq += 1
+        for vehicle in self:
+            prog_ids = vehicle.cycle_ids.search([('unit_id', '=', vehicle.id)])
+            if len(prog_ids):
+                prog_ids.unlink()
+            for cycle in vehicle.program_id.cycle_ids:
+                seq = 1
+                for x in range(cycle.frequency, 4000000, cycle.frequency):
+                    vehicle.cycle_ids.create({
+                        'cycle_id': cycle.id,
+                        'schedule': x,
+                        'sequence': seq,
+                        'unit_id': vehicle.id,
+                    })
+                    seq += 1
+
+            for cycle in vehicle.cycle_ids:
+                    vehicle.last_cycle_id = vehicle.cycle_ids.search(
+                        [('sequence', '=', vehicle.sequence)]).id
+                    vehicle.next_cycle_id = cycle.cycle_id.id
+            return True

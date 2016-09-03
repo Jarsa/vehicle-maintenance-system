@@ -10,6 +10,7 @@
                 <xpath expr="//sheet/group[2]" position="after">
                         <group string="Maintenance Program" coslpan="2">
                             <field name="program_id"/>
+                            <field name='sequence' attrs="{'readonly': [('next_cycle_id', '!=', False)]}" required="1"/>
                             <field name="last_order_id"/>
                             <field name="last_cycle_id"/>
                             <field name="next_cycle_id"/>
@@ -21,7 +22,7 @@
                                 name="program_mtto"
                                 string="Program Mtto"
                                 type="object"
-                                attrs="{'invisible': [('program_id', '=', False)],}"
+                                attrs="{'invisible': [('program_id', '=', False)]}"
                                 class="oe_highlight"
                                 confirm="Are you sure you want to create Program Sequence for this record? All previous records will be deleted !!!" />
                         </group>
