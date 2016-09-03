@@ -8,17 +8,34 @@
             <field name="inherit_id" ref="fleet.fleet_vehicle_form"/>
             <field name="arch" type="xml">
                 <xpath expr="//sheet/group[2]" position="after">
-                    <group>
-                        <group string="Maintenance Program">
+                        <group string="Maintenance Program" coslpan="2">
                             <field name="program_id"/>
                             <field name="last_order_id"/>
                             <field name="last_cycle_id"/>
                             <field name="next_cycle_id"/>
                             <field name="next_service_date"/>
                             <field name="next_service_odometer"/>
-                            <field name="cycle_ids"/>
                         </group>
-                    </group>
+                        <group style="text-align: center;">
+                            <button 
+                                name="program_mtto"
+                                string="Program Mtto"
+                                type="object"
+                                attrs="{'invisible': [('program_id', '=', False)],}"
+                                class="oe_highlight"
+                                confirm="Are you sure you want to create Program Sequence for this record? All previous records will be deleted !!!" />
+                        </group>
+                        <separator colspan="4" string="Cycles"/>
+                        <field name="cycle_ids" nolabel="1">
+                            <tree  delete="false" create="false">
+                                <field name="order_id"/>
+                                <field name="unit_id"/>
+                                <field name="distance"/>
+                                <field name="schedule"/>
+                                <field name="sequence"/>
+                                <field name="date"/>
+                            </tree>
+                        </field>
                 </xpath>
             </field>
         </record>

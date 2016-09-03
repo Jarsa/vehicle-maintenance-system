@@ -54,7 +54,6 @@ class VmsOrderLine(models.Model):
     order_id = fields.Many2one('vms.order', string='Order', readonly=True)
     real_time_total = fields.Integer()
 
-    
     @api.onchange('task_id')
     def _onchange_task(self):
         self.duration = self.task_id.duration

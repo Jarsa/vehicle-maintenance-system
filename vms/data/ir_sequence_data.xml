@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <record model="ir.sequence" id="order_sequence">
+            <field name="name">Order Sequence</field>
+            <field name="implementation">no_gap</field>
+            <field name="code">O</field>
+            <field name="prefix">O</field>
+            <field name="padding">4</field>
+            <field name="number_increment">1</field>
+        </record>
+    </data>
+</odoo>

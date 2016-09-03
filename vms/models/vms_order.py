@@ -12,6 +12,8 @@ class VmsOrder(models.Model):
     _name = 'vms.order'
 
     name = fields.Char(string='Order Number', readonly=True)
+    base_id = fields.Many2one(
+        'tms.base', string='Base', required=True)
     supervisor_id = fields.Many2one(
         'hr.employee',
         required=True,
@@ -68,6 +70,13 @@ class VmsOrder(models.Model):
         string='State',
         readonly=True, default='draft')
     unit_id = fields.Many2one('fleet.vehicle', string='Unit', required=True)
+
+    @api.model
+    def create(self, values):
+        order = super(VmsOrder, self).create(values)
+        sequence = order.base_id.order_sequence_id
+        order.name = sequence.next_by_id()
+        return order
 
     @api.multi
     def action_released(self):
