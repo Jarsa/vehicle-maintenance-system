@@ -82,11 +82,11 @@ class VmsOrder(models.Model):
                 spares = []
                 rec.program_id = rec.unit_id.program_id
                 rec.current_odometer = rec.unit_id.odometer
-                rec.sequence = rec.unit_id.cycle_ids.sequence
-                for cycle in rec.unit_id.program_id.cycle_ids:
+                rec.sequence = rec.unit_id.next_service_sequence
+                for cycle in rec.unit_id.next_cycle_id:
                     rec.cycle_id = cycle.id
 
-                for task in rec.cycle_id.task_ids:
+                for task in rec.next_cycle_id.task_ids:
                     duration = task.duration
                     start_date = datetime.now()
                     end_date = start_date + timedelta(
