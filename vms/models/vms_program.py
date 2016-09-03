@@ -13,6 +13,7 @@ class VmsProgram(models.Model):
     cycle_ids = fields.Many2many(
         'vms.cycle',
         required=True,
-        string='Cycle(s)')
+        string='Cycle(s)',
+        store=True)
     name = fields.Char(required=True)
     active = fields.Boolean(default=True)
