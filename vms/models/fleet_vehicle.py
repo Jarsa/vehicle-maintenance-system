@@ -18,10 +18,10 @@ class FleetVehicle(models.Model):
         'vms.order',
         string='Last Order')
     last_cycle_id = fields.Many2one(
-        'vms.cycle',
+        'vms.vehicle.cycle',
         string='Last Cycle', default=False)
     next_cycle_id = fields.Many2one(
-        'vms.cycle',
+        'vms.vehicle.cycle',
         string='Next Cycle')
     next_service_date = fields.Datetime()
     next_service_odometer = fields.Float()
@@ -46,9 +46,17 @@ class FleetVehicle(models.Model):
                         'unit_id': vehicle.id,
                     })
                     seq += 1
-
-            for cycle in vehicle.cycle_ids:
-                    vehicle.last_cycle_id = vehicle.cycle_ids.search(
-                        [('sequence', '=', vehicle.sequence)]).id
-                    vehicle.next_cycle_id = cycle.cycle_id.id
-            return True
+            last_schedule = 0.00
+            for cycles in vehicle.cycle_ids:
+                if (last_schedule < vehicle.odometer < cycles.schedule):
+                    vehicle.sequence = cycles.sequence
+                    vehicle.last_cycle_id = cycles.id
+                    next = cycles.search([
+                        ('sequence', '=', (cycles.sequence + 1)),
+                        ('unit_id', '=', vehicle.id)])
+                    vehicle.next_cycle_id = next.id
+                    vehicle.next_service_odometer = next.schedule
+                    return True
+                else:
+                    last_schedule = cycles.schedule
+                    cycles.unlink()

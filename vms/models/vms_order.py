@@ -58,7 +58,7 @@ class VmsOrder(models.Model):
         'vms.program',
         string='Program')
     cycle_id = fields.Many2one(
-        'vms.cycle',
+        'vms.vehicle.cycle',
         string='Cycle')
     sequence = fields.Integer()
     report_ids = fields.Many2many(
@@ -92,7 +92,8 @@ class VmsOrder(models.Model):
                         'Verify that all activities are in '
                         'end state to continue')
             cycles = order.unit_id.cycle_ids.search(
-                [('sequence', '=', order.sequence)])
+                [('sequence', '=', order.unit_id.sequence),
+                 ('unit_id', '=', order.unit_id.id)])
             cycles.write({
                 'order_id': order.id,
                 'date': fields.Datetime.now(),
@@ -100,9 +101,11 @@ class VmsOrder(models.Model):
             })
             order.unit_id.last_order_id = order.id
             order.unit_id.last_cycle_id = order.cycle_id.id
+            order.unit_id.next_service_odometer = cycles.schedule
             order.unit_id.sequence += 1
             next_cycle = order.unit_id.cycle_ids.search(
-                [('sequence', '=', order.unit_id.sequence)])
+                [('sequence', '=', order.unit_id.sequence),
+                 ('unit_id', '=', order.unit_id.id)])
             order.unit_id.write({'next_cycle_id': next_cycle.id})
             order.state = 'released'
             order.message_post(body=(
@@ -112,7 +115,7 @@ class VmsOrder(models.Model):
                 order.supervisor_id.name, fields.Datetime.now()))
 
     @api.multi
-    @api.onchange('type')
+    @api.onchange('type', 'unit_id')
     def _onchange_type(self):
         for rec in self:
             if (rec.type == 'preventive'):
@@ -123,7 +126,7 @@ class VmsOrder(models.Model):
                 for cycle in rec.unit_id.next_cycle_id:
                     rec.cycle_id = cycle.id
 
-                for task in rec.cycle_id.task_ids:
+                for task in rec.cycle_id.cycle_id.task_ids:
                     duration = task.duration
                     start_date = datetime.now()
                     end_date = start_date + timedelta(
