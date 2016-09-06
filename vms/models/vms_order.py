@@ -39,13 +39,14 @@ class VmsOrder(models.Model):
         string='Schedule start')
     end_date = fields.Datetime(
         required=True,
-        # compute= '_compute_end_date'
+        compute='_compute_end_date',
         string='Schedule end'
         )
     start_date_real = fields.Datetime(
         readonly=True,
         string='Real start date')
     end_date_real = fields.Datetime(
+        compute="_compute_end_date_real",
         readonly=True,
         string='Real end date'
         )
@@ -81,6 +82,18 @@ class VmsOrder(models.Model):
         sequence = order.base_id.order_sequence_id
         order.name = sequence.next_by_id()
         return order
+
+    @api.depends('order_line_ids')
+    def _compute_end_date_real(self):
+        for rec in self:
+            if rec.start_date_real:
+                sum_time = 0.0
+                for line in rec.order_line_ids:
+                    if line.state == 'done':
+                        sum_time += line.real_duration
+                strp_date = datetime.strptime(
+                    rec.start_date_real, "%Y-%m-%d %H:%M:%S")
+                rec.end_date_real = strp_date + timedelta(hours=sum_time)
 
     @api.multi
     def action_released(self):
@@ -162,8 +175,8 @@ class VmsOrder(models.Model):
                 rec.sequence = False
                 rec.order_line_ids = False
 
-    @api.onchange('order_line_ids')
-    def onchange_order_line(self):
+    @api.depends('order_line_ids')
+    def _compute_end_date(self):
         for rec in self:
             sum_time = 0.0
             for line in rec.order_line_ids:
