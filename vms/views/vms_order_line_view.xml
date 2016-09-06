@@ -8,7 +8,8 @@
             <field name="arch" type="xml">
                 <form string="Order lines">
                     <header>
-                        <field name="state" statusbar_visible="pending,process,done,cancel" widget="statusbar"/>
+                        <field name="state" statusbar_visible="pending,process,done,cancel,private" widget="statusbar"/>
+                        <button icon="gtk-apply" name="action_done" string="Confirm" type="object"/>
                     </header>
                     <sheet>
                         <group string="Order line">

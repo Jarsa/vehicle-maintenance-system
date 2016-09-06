@@ -35,8 +35,7 @@ class VmsOrderLine(models.Model):
         ('pending', 'Pending'),
         ('process', 'Process'),
         ('done', 'Done'),
-        ('cancel', 'Cancel')],
-        default='pending')
+        ('cancel', 'Cancel')])
     real_duration = fields.Float()
     spare_part_ids = fields.One2many(
         'vms.product.line',
@@ -53,6 +52,16 @@ class VmsOrderLine(models.Model):
 
     order_id = fields.Many2one('vms.order', string='Order', readonly=True)
     real_time_total = fields.Integer()
+
+    @api.multi
+    def action_done(self):
+        for rec in self:
+            for product in rec.spare_part_ids:
+                product.create_stock_picking(
+                    rec.order_id.stock_location_id.id,
+                    product.product_id.id,
+                    product.product_qty,
+                    product.product_uom_id.id)
 
     @api.onchange('task_id')
     def _onchange_task(self):
