@@ -32,12 +32,16 @@ class VmsOrderLine(models.Model):
         string='Supplier',
         domain=[('supplier', '=', True)])
     external = fields.Boolean()
+    product_id = fields.Many2one(
+        'product.product',
+        string="Product",
+        domain=[('type', '=', 'service'), ('purchase_ok', '=', True)])
+    qty_product = fields.Float(string="Quantity", default="1.0")
     state = fields.Selection([
         ('draft', 'Draft'),
         ('process', 'Process'),
         ('done', 'Done'),
-        ('cancel', 'Cancel')],
-        default='draft')
+        ('cancel', 'Cancel')], default='draft')
     real_duration = fields.Float(readonly=True)
     spare_part_ids = fields.One2many(
         'vms.product.line',
@@ -52,6 +56,9 @@ class VmsOrderLine(models.Model):
         'purchase.order',
         string='Purchase Order',
         readonly=True)
+    purchase_state = fields.Boolean(
+        string="Purchase Order State Done",
+        compute='_compute_purchase_state')
 
     order_id = fields.Many2one('vms.order', string='Order', readonly=True)
     real_time_total = fields.Integer()
@@ -84,6 +91,12 @@ class VmsOrderLine(models.Model):
             total_days = start_date - end_date
             rec.real_time_total = total_days.days
 
+    @api.depends('purchase_order_id')
+    def _compute_purchase_state(self):
+        for rec in self:
+            rec.purchase_state = (rec.purchase_order_id.id and
+                                  rec.purchase_order_id.state == 'done')
+
     @api.multi
     def action_process(self):
         for rec in self:
@@ -109,7 +122,7 @@ class VmsOrderLine(models.Model):
                                 })
                     rec.state = 'process'
                     rec.start_date_real = fields.Datetime.now()
-                    if(rec.spare_part_ids):
+                    if rec.spare_part_ids:
                         for product in rec.spare_part_ids:
                             product.state = 'open'
                     rec.state = 'process'
@@ -170,3 +183,23 @@ class VmsOrderLine(models.Model):
     def action_cancel_draft(self):
         for rec in self:
             rec.state = 'draft'
+
+    @api.multi
+    def create_po(self):
+        "Returns draft PO"
+        purchase_order_id = self.env['purchase.order'].create({
+            'partner_id': self.supplier_id.id,
+            'partner_ref': self.order_id.name,
+            'order_line': [(0, 0, {
+                'product_id': self.product_id.id,
+                'product_qty': self.qty_product,
+                'date_planned': fields.Datetime.now(),
+                'product_uom': self.product_id.uom_po_id.id,
+                'price_unit': self.product_id.standard_price,
+                'taxes_id': [(
+                    6, 0,
+                    [x.id for x in (
+                        self.product_id.supplier_taxes_id)]
+                    )],
+                'name': self.product_id.name})]})
+        self.write({'purchase_order_id': purchase_order_id.id})
