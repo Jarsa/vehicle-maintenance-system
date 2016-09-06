@@ -63,7 +63,6 @@ class VmsOrder(models.Model):
     sequence = fields.Integer()
     report_ids = fields.Many2many(
         'vms.report',
-        domain=[('state', '=', 'confirmed')],
         string='Report(s)')
     state = fields.Selection(
         [('draft', 'Draft'),
@@ -110,7 +109,12 @@ class VmsOrder(models.Model):
                 order.unit_id.write({'next_cycle_id': next_cycle.id})
             elif order.type == 'corrective':
                 for report in order.report_ids:
-                    report.state = 'close'
+                    if report.state == 'confirmed':
+                        report.state = 'close'
+                    else:
+                        raise exceptions.ValidationError(
+                            'Verify that all reports are in '
+                            'confirm state to continue')
             order.state = 'released'
             order.message_post(body=(
                 "<h5><strong>Released</strong></h5>"
@@ -170,65 +174,64 @@ class VmsOrder(models.Model):
     @api.multi
     def action_open(self):
         for rec in self:
-            if (rec.type == 'preventive'):
-                orders = self.search_count(
-                    [('unit_id', '=', rec.unit_id.id),
-                     ('state', '!=', 'released'),
-                     ('id', '!=', rec.id)])
-                if orders > 0:
-                    raise exceptions.ValidationError(_(
-                        'Unit not available for maintenance '
-                        'because it has more open order(s).'))
-                else:
-                    if not rec.order_line_ids:
-                        raise exceptions.ValidationError(
-                            _('The order must have at least one task'))
-                    for line in rec.order_line_ids:
-                        if line.responsible_ids and not line.external:
-                            obj_activity = self.env['vms.activity']
-                            activities = obj_activity.search(
-                                [('order_line_id', '=', line.id)])
-                            if len(activities) > 0:
-                                for activity in activities:
-                                    activity.state = 'draft'
-                            else:
-                                for mechanic in line.responsible_ids:
-                                    obj_activity.create({
-                                        'order_id': rec.id,
-                                        'task_id': line.task_id.id,
-                                        'name': line.task_id.name,
-                                        'unit_id': rec.unit_id.id,
-                                        'order_line_id': line.id,
-                                        'responsible_id': mechanic.id
-                                        })
-                            line.state = 'process'
-                            line.start_date_real = fields.Datetime.now()
-                            if(line.spare_part_ids):
-                                for product in line.spare_part_ids:
-                                    product.state = 'open'
-                            rec.state = 'open'
-
-                            rec.start_date_real = fields.Datetime.now()
-                            rec.message_post(_(
-                                '<strong>Order Opened.</strong><ul>'
-                                '<li><strong>Opened by: </strong>%s</li>'
-                                '<li><strong>Opened at: </strong>%s</li>'
-                                '</ul>') % (
-                                self.env.user.name, fields.Datetime.now()))
+            orders = self.search_count(
+                [('unit_id', '=', rec.unit_id.id),
+                 ('state', '!=', 'released'),
+                 ('id', '!=', rec.id)])
+            if orders > 0:
+                raise exceptions.ValidationError(_(
+                    'Unit not available for maintenance '
+                    'because it has more open order(s).'))
+            else:
+                if not rec.order_line_ids:
+                    raise exceptions.ValidationError(
+                        _('The order must have at least one task'))
+                for line in rec.order_line_ids:
+                    if line.responsible_ids and not line.external:
+                        obj_activity = self.env['vms.activity']
+                        activities = obj_activity.search(
+                            [('order_line_id', '=', line.id)])
+                        if len(activities) > 0:
+                            for activity in activities:
+                                activity.state = 'draft'
                         else:
-                            raise exceptions.ValidationError(
-                                _('The tasks must have almost one mechanic.'))
-            elif rec.type == 'corrective':
-                reports = rec.report_ids.search([('order_id', '=', rec.id)])
-                for report in reports:
-                    report.state = 'open'
+                            for mechanic in line.responsible_ids:
+                                obj_activity.create({
+                                    'order_id': rec.id,
+                                    'task_id': line.task_id.id,
+                                    'name': line.task_id.name,
+                                    'unit_id': rec.unit_id.id,
+                                    'order_line_id': line.id,
+                                    'responsible_id': mechanic.id
+                                    })
+                        line.state = 'process'
+                        line.start_date_real = fields.Datetime.now()
+                        if(line.spare_part_ids):
+                            for product in line.spare_part_ids:
+                                product.state = 'open'
+                        rec.state = 'open'
+                        rec.start_date_real = fields.Datetime.now()
+                        if rec.type == 'corrective':
+                            for report in rec.report_ids:
+                                report.state = 'open'
+                        rec.message_post(_(
+                            '<strong>Order Opened.</strong><ul>'
+                            '<li><strong>Opened by: </strong>%s</li>'
+                            '<li><strong>Opened at: </strong>%s</li>'
+                            '</ul>') % (
+                            self.env.user.name, fields.Datetime.now()))
+                    else:
+                        raise exceptions.ValidationError(
+                            _('The tasks must have almost one mechanic.'))
 
     @api.multi
     def action_cancel(self):
         for rec in self:
             for line in rec.order_line_ids:
                 line.action_cancel()
-
+            if rec.type == 'corrective':
+                for report in rec.report_ids:
+                    report.state = 'cancel'
             rec.state = 'cancel'
             rec.message_post(_(
                 '<strong>Order Closed.</strong><ul>'
@@ -241,6 +244,9 @@ class VmsOrder(models.Model):
     def action_cancel_draft(self):
         for rec in self:
             rec.state = 'draft'
+        if rec.type == 'corrective':
+            for report in rec.report_ids:
+                report.state = 'draft'
         for line in rec.order_line_ids:
             line.state = 'draft'
             for spare in line.spare_part_ids:

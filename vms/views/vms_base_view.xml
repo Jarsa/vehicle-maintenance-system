@@ -8,6 +8,7 @@
             <field name="arch" type="xml">
                 <field name="fuel_log_sequence_id" position="after">
                     <field name='order_sequence_id'/>
+                    <field name='report_sequence_id'/>
                 </field>
             </field>
         </record>
