@@ -47,7 +47,6 @@ class VmsProductLine(models.Model):
     @api.multi
     def create_stock_picking(self, location_id, product_id,
                              product_qty, product_uom_id):
-        import ipdb; ipdb.set_trace()
         for rec in self:
             stock_picking = self.env['stock.picking']
             stock_move = self.env['stock.move']
@@ -60,7 +59,8 @@ class VmsProductLine(models.Model):
             else:
                 date_expected = today
             move = {
-                'name': str(rec.order_line_id.name) + '-' + rec.product_id.name,
+                'name': (str(rec.order_line_id.name) +
+                         '-' + rec.product_id.name),
                 'product_id': product_id,
                 'date': fields.Datetime.now(),
                 'date_expected': date_expected,
@@ -72,10 +72,7 @@ class VmsProductLine(models.Model):
             }
             stock_id = stock_move.create(move)
             stock_picking.move_lines += stock_id
-            values = {
-                'stock_move_id': stock_id.id
-            }
-            self.write(values)
+            rec.write({'stock_move_id': stock_id.id})
 
     @api.multi
     def compute_state(self):
