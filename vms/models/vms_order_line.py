@@ -136,24 +136,31 @@ class VmsOrderLine(models.Model):
         # spare_validator = True
         sum_time = 0.0
         for rec in self:
-            activities = rec.env['vms.activity'].search(
-                [('order_line_id', '=', rec.id)])
-            for activity in activities:
-                if activity.state != 'end':
-                    act_state_validator = False
-                elif activity.state == 'end':
-                    sum_time += activity.total_hours
-            if not act_state_validator:
-                raise exceptions.ValidationError(
-                    _('The activities of the mechanics(s) must be finished.'))
-            # for spare in rec.spare_part_ids:
-            #     if spare.state != 'released':
-            #         spare_validator = False
-            # if not spare_validator:
-            #     raise exceptions.ValidationError(
-            #         _('The spare parts must be delivered.'))
+            if rec.external:
+                if not rec.purchase_state:
+                    raise exceptions.ValidationError(
+                        'Verify that purchase order are in '
+                        'done state to continue')
+            else:
+                activities = rec.env['vms.activity'].search(
+                    [('order_line_id', '=', rec.id)])
+                for activity in activities:
+                    if activity.state != 'end':
+                        act_state_validator = False
+                    elif activity.state == 'end':
+                        sum_time += activity.total_hours
+                if not act_state_validator:
+                    raise exceptions.ValidationError(
+                        _('The activities of the mechanics(s)'
+                            ' must be finished.'))
+                # for spare in rec.spare_part_ids:
+                #     if spare.state != 'released':
+                #         spare_validator = False
+                # if not spare_validator:
+                #     raise exceptions.ValidationError(
+                #         _('The spare parts must be delivered.'))
+                rec.real_duration = sum_time
             rec.end_date_real = fields.Datetime.now()
-            rec.real_duration = sum_time
             rec.state = 'done'
 
     @api.multi
