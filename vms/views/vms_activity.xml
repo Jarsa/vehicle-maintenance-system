@@ -11,9 +11,6 @@
                     <filter string="Paused" domain="[('state','=','pause')]" name="state_pause"/>
                     <filter string="Ended" domain="[('state','=','end')]"/>
                     <filter string="Cancel" domain="[('state','=','cancel')]"/>
-                    <newline/>
-                    <filter string="This month"  domain="[('start_date','&gt;=', time.strftime('%Y-%m-01 00:00:00'))]" name="this_month" />
-                    <newline/>
                     <filter string="Service Order" context="{'group_by':'order_id'}" name="groupby_order_id"/>
                     <filter string="Vehicle" context="{'group_by':'unit_id'}" name="groupby_unit_id"/>
                     <filter string="Mechanic" context="{'group_by':'responsible_id'}" name="groupby_employee_id"/>
@@ -34,7 +31,7 @@
                     <field name="task_id"/>
                     <field name="unit_id"/>
                     <field name="responsible_id"/>
-                    <field name="total_hours"/>
+                    <field name="total_hours" widget="float_time"/>
                     <field name="activity_time_ids"/>
                 </tree>
             </field>
@@ -60,7 +57,7 @@
                                 <field name="task_id"/>
                                 <field name="unit_id"/>
                                 <field name="responsible_id"/>
-                                <field name="total_hours"/>
+                                <field name="total_hours" widget="float_time"/>
                             </group>
                             <group>
                                 <field name="start_date"/>
@@ -86,7 +83,6 @@
         <record id='action_vms_activity_form' model='ir.actions.act_window'>
             <field name='name'>Mechanic's Tasks</field>
             <field name='res_model'>vms.activity</field>
-            <field name="context">{'search_default_this_month': 1}</field>
             <field name='view_type'>form</field>
             <field name='view_mode'>tree,form</field>
         </record>

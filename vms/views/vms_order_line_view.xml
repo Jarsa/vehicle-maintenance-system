@@ -8,8 +8,12 @@
             <field name="arch" type="xml">
                 <form string="Order lines">
                     <header>
-                        <field name="state" statusbar_visible="pending,process,done,cancel,private" widget="statusbar"/>
                         <button icon="gtk-apply" name="action_done" string="Confirm" type="object"/>
+                        <button name="action_cancel_draft" states="cancel" string="Set to Draft" type="object"/>
+                        <button name="action_process" class="oe_highlight" states="draft" string="Start" type="object"/>
+                        <button name="action_cancel" states="draft,process" string="Cancel" type="object" confirm="Are you sure to cancel this task?"/>
+                        <button name="action_done" class="oe_highlight" states="process" string="End" type="object"/>
+                        <field name="state" statusbar_visible="pending,process,done,cancel" widget="statusbar"/>
                     </header>
                     <sheet>
                         <group string="Order line">
@@ -19,17 +23,25 @@
                             </group>
                             <group>
                                 <field name="external"/>
-                                <field name="supplier_id" attrs="{'invisible':[('external','=',False)], 'required':[('external','=',True)]}"/>
-                                <field name="purchase_order_id" attrs="{'invisible':[('external','=',False)]}"/>
                             </group>
                         </group>
                         <group>
-                            <group string="Schedule">
+                            <group string="External Service" attrs="{'invisible':[('external','=',False)]}">
+                                <field name="supplier_id" attrs="{'required':[('external','=',True)]}"/>
+                                <field name="purchase_order_id"/>
+                                <field name="purchase_state"/>
+                                <field name="product_id" attrs="{'required':[('external','=',True)]}"/>
+                                <field name="qty_product"/>
+                                <button name ="create_po" string="Create Invoice" states="draft" type="object"/>
+                            </group>
+                        </group>
+                        <group>
+                            <group string="Schedule" attrs="{'invisible':[('external','=',True)]}">
                                 <field name="start_date"/>
                                 <field name="end_date"/>
                                 <field name="duration" widget='float_time'/>
                             </group>
-                            <group string="Real">
+                            <group string="Real" attrs="{'invisible':[('external','=',True)]}">
                                 <field name="start_date_real"/>
                                 <field name="end_date_real"/>
                                 <field name="real_duration" widget='float_time'/>
@@ -44,7 +56,7 @@
                                 </tree>
                             </field>
                         </group>
-                        <group string="Spare Parts">
+                        <group string="Spare Parts" attrs="{'invisible':[('external','=',True)]}">
                             <field name="spare_part_ids" nolabel="1">
                                 <tree editable="bottom">
                                     <field name="product_id"/>

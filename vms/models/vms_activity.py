@@ -3,7 +3,7 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
 from datetime import datetime
-from openerp import _, api, fields, models
+from openerp import _, api, exceptions, fields, models
 
 
 class VmsActivity(models.Model):
@@ -11,10 +11,16 @@ class VmsActivity(models.Model):
     _inherit = ['mail.thread', 'ir.needaction_mixin']
     _order = 'order_id asc'
 
+    name = fields.Char(required=True)
     order_id = fields.Many2one(
         'vms.order',
         required=True,
         string='Maintenance Order',
+        readonly=True)
+    order_line_id = fields.Many2one(
+        'vms.order.line',
+        required=True,
+        string='Activity',
         readonly=True)
     unit_id = fields.Many2one(
         'fleet.vehicle',
@@ -56,20 +62,22 @@ class VmsActivity(models.Model):
         return diference
 
     def _compute_total_hours(self):
-        sum_time = 0.0
         for rec in self:
+            sum_time = 0.0
             for activity in rec.activity_time_ids:
                 if activity.status in 'process':
                     temp_begin = activity.date
                 elif activity.status in ('pause', 'end'):
                     sum_time += self.calculate_diference_time(
                         temp_begin, activity.date)
-            total = (sum_time*60)/100
-            rec.total_hours = total
+            rec.total_hours = sum_time
 
     @api.multi
     def action_start(self):
         for rec in self:
+            if rec.order_line_id.state != 'process':
+                raise exceptions.ValidationError(
+                    _('The order line task must be open.'))
             rec.activity_time_ids.create({
                 'status': 'process',
                 'date': fields.Datetime.now(),
@@ -123,6 +131,7 @@ class VmsActivity(models.Model):
     def action_cancel(self):
         for rec in self:
             rec.state = 'cancel'
+            rec.order_line_id.state = 'done'
         rec.message_post(_(
             '<strong>Activity Canceled.</strong><ul>'
             '<li><strong>Canceled by: </strong>%s</li>'
