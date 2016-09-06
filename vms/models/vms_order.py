@@ -207,6 +207,7 @@ class VmsOrder(models.Model):
                                 for product in line.spare_part_ids:
                                     product.state = 'open'
                             rec.state = 'open'
+
                             rec.start_date_real = fields.Datetime.now()
                             rec.message_post(_(
                                 '<strong>Order Opened.</strong><ul>'
