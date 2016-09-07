@@ -223,8 +223,9 @@ class VmsOrder(models.Model):
                             if(line.spare_part_ids):
                                 for product in line.spare_part_ids:
                                     product.state = 'pending'
-                                    line.stock_picking_id = (
-                                        product._create_stock_picking())
+                                line.stock_picking_id = (
+                                    line.spare_part_ids.
+                                    _create_stock_picking())
                             if rec.type == 'corrective':
                                 for report in rec.report_ids:
                                     report.state = 'open'

@@ -107,33 +107,35 @@ class VmsOrderLine(models.Model):
                 raise exceptions.ValidationError(
                     _('The order must be open.'))
             else:
-                if rec.responsible_ids and not rec.external:
-                    activities = self.env['vms.activity'].search(
-                        [('order_line_id', '=', rec.id)])
-                    if len(activities) > 0:
-                        for activity in activities:
-                            activity.state = 'draft'
-                    else:
-                        for mechanic in rec.responsible_ids:
-                            self.env['vms.activity'].create({
-                                'order_id': rec.order_id.id,
-                                'task_id': rec.task_id.id,
-                                'name': rec.task_id.name,
-                                'unit_id': rec.order_id.unit_id.id,
-                                'order_line_id': rec.id,
-                                'responsible_id': mechanic.id
-                                })
-                    rec.state = 'process'
-                    rec.start_date_real = fields.Datetime.now()
-                    if rec.spare_part_ids:
-                        for product in rec.spare_part_ids:
-                            product.state = 'pending'
+                if not rec.external:
+                    if rec.responsible_ids:
+                        activities = self.env['vms.activity'].search(
+                            [('order_line_id', '=', rec.id)])
+                        if len(activities) > 0:
+                            for activity in activities:
+                                activity.state = 'draft'
+                        else:
+                            for mechanic in rec.responsible_ids:
+                                self.env['vms.activity'].create({
+                                    'order_id': rec.order_id.id,
+                                    'task_id': rec.task_id.id,
+                                    'name': rec.task_id.name,
+                                    'unit_id': rec.order_id.unit_id.id,
+                                    'order_line_id': rec.id,
+                                    'responsible_id': mechanic.id
+                                    })
+                        rec.state = 'process'
+                        rec.start_date_real = fields.Datetime.now()
+                        if rec.spare_part_ids:
+                            for product in rec.spare_part_ids:
+                                product.state = 'pending'
                             rec.stock_picking_id = (
-                                product._create_stock_picking())
-                    rec.state = 'process'
-                else:
-                    raise exceptions.ValidationError(
-                        _('The tasks must have almost one mechanic.'))
+                                rec.spare_part_ids.
+                                _create_stock_picking())
+                        rec.state = 'process'
+                    else:
+                        raise exceptions.ValidationError(
+                            _('The tasks must have almost one mechanic.'))
 
     @api.multi
     def action_done(self):
