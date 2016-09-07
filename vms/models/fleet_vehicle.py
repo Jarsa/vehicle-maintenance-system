@@ -19,7 +19,7 @@ class FleetVehicle(models.Model):
         string='Last Order')
     last_cycle_id = fields.Many2one(
         'vms.vehicle.cycle',
-        string='Last Cycle', default=False)
+        string='Last Cycle')
     next_cycle_id = fields.Many2one(
         'vms.vehicle.cycle',
         string='Next Cycle')
@@ -38,10 +38,10 @@ class FleetVehicle(models.Model):
                 prog_ids.unlink()
             for cycle in vehicle.program_id.cycle_ids:
                 seq = 1
-                for x in range(cycle.frequency, 4000000, cycle.frequency):
+                for rec in range(cycle.frequency, 4000000, cycle.frequency):
                     vehicle.cycle_ids.create({
                         'cycle_id': cycle.id,
-                        'schedule': x,
+                        'schedule': rec,
                         'sequence': seq,
                         'unit_id': vehicle.id,
                     })

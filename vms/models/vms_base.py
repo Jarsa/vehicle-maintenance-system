@@ -13,6 +13,6 @@ class VmsBase(models.Model):
     _description = 'Base'
 
     order_sequence_id = fields.Many2one(
-        'ir.sequence', string='Order Sequence', required=True)
+        'ir.sequence', string='Order Sequence')
     report_sequence_id = fields.Many2one(
-        'ir.sequence', string='Report Sequence', required=True)
+        'ir.sequence', string='Report Sequence')

@@ -4,7 +4,7 @@
 
 
 from openerp import api, fields, models
-from datetime import datetime, timedelta
+
 
 class VmsProductLine(models.Model):
     _description = 'VMS Product Lines'

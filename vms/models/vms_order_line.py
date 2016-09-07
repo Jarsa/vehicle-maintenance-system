@@ -160,7 +160,7 @@ class VmsOrderLine(models.Model):
                 for spare in rec.spare_part_ids:
                     if rec.stock_picking_id.state != 'done':
                         raise exceptions.ValidationError(
-                            _('The stock move must be in state done.'))
+                            _('The stock move must be in done state.'))
                     else:
                         spare.state = 'delievered'
                 rec.real_duration = sum_time
