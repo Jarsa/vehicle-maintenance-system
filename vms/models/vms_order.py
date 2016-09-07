@@ -139,8 +139,8 @@ class VmsOrder(models.Model):
     @api.onchange('type', 'unit_id')
     def _onchange_type(self):
         for rec in self:
+            order_lines = []
             if (rec.type == 'preventive'):
-                spares = []
                 rec.program_id = rec.unit_id.program_id
                 rec.current_odometer = rec.unit_id.odometer
                 rec.sequence = rec.unit_id.sequence
@@ -148,12 +148,13 @@ class VmsOrder(models.Model):
                     rec.cycle_id = cycle.id
 
                 for task in rec.cycle_id.cycle_id.task_ids:
+                    spares = []
                     duration = task.duration
                     start_date = datetime.now()
                     end_date = start_date + timedelta(
                         hours=duration)
                     for spare_part in task.spare_part_ids:
-                        spares.append((0, False, {
+                        spares.append((0, 0, {
                             'product_id': spare_part.product_id.id,
                             'product_qty': spare_part.product_qty,
                             'product_uom_id': (
@@ -168,7 +169,8 @@ class VmsOrder(models.Model):
                         'spare_part_ids': [line for line in spares],
                         'order_id': rec.id
                         })
-                    rec.order_line_ids += order_line
+                    order_lines.append(order_line)
+                rec.order_line_ids = [task.id for task in order_lines]
             else:
                 rec.program_id = False
                 rec.current_odometer = False

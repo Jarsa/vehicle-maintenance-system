@@ -44,7 +44,6 @@
                                 <field name="start_date_real"/>
                                 <field name="end_date_real"/>
                                 <field name="real_duration" widget='float_time'/>
-                                <field name='stock_picking_id'/>
                             </group>
                         </group>
                         <group string="Mechanics" attrs="{'invisible':[('external','=',True)]}">
@@ -57,14 +56,23 @@
                             </field>
                         </group>
                         <group string="Spare Parts" attrs="{'invisible':[('external','=',True)]}">
-                            <field name="spare_part_ids" nolabel="1">
-                                <tree editable="bottom">
-                                    <field name="product_id"/>
-                                    <field name="product_qty"/>
-                                    <field name="product_uom_id"/>
-                                    <field name="state"/>
-                                </tree>
-                            </field>
+                            <notebook>
+                                <page string="Spare Parts">
+                                    <field name="spare_part_ids" nolabel="1">
+                                        <tree editable="bottom">
+                                            <field name="product_id"/>
+                                            <field name="product_qty"/>
+                                            <field name="product_uom_id"/>
+                                            <field name="state"/>
+                                        </tree>
+                                    </field>
+                                </page>
+                                <page string="Stock Moves">
+                                    <group>
+                                        <field name="stock_picking_id"/>
+                                    </group>
+                                </page>
+                            </notebook>
                         </group>
                     </sheet>
                 </form>
