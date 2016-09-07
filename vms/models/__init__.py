@@ -14,3 +14,4 @@ from . import vms_program
 from . import vms_report
 from . import vms_task
 from . import vms_vehicle_cycle
+from . import vms_base

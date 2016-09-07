@@ -4,7 +4,6 @@
 
 
 from openerp import _, api, exceptions, fields, models
-
 from datetime import datetime, timedelta
 
 
@@ -14,6 +13,8 @@ class VmsOrder(models.Model):
     _name = 'vms.order'
 
     name = fields.Char(string='Order Number', readonly=True)
+    base_id = fields.Many2one(
+        'tms.base', string='Base', required=True)
     supervisor_id = fields.Many2one(
         'hr.employee',
         required=True,
@@ -38,13 +39,14 @@ class VmsOrder(models.Model):
         string='Schedule start')
     end_date = fields.Datetime(
         required=True,
-        # compute= '_compute_end_date'
+        compute='_compute_end_date',
         string='Schedule end'
         )
     start_date_real = fields.Datetime(
         readonly=True,
         string='Real start date')
     end_date_real = fields.Datetime(
+        compute="_compute_end_date_real",
         readonly=True,
         string='Real end date'
         )
@@ -57,12 +59,11 @@ class VmsOrder(models.Model):
         'vms.program',
         string='Program')
     cycle_id = fields.Many2one(
-        'vms.cycle',
+        'vms.vehicle.cycle',
         string='Cycle')
     sequence = fields.Integer()
     report_ids = fields.Many2many(
         'vms.report',
-        domain=[('state', '=', 'confirmed')],
         string='Report(s)')
     state = fields.Selection(
         [('draft', 'Draft'),
@@ -75,19 +76,78 @@ class VmsOrder(models.Model):
         'fleet.vehicle',
         string='Unit', required=True, store=True)
 
+    @api.model
+    def create(self, values):
+        order = super(VmsOrder, self).create(values)
+        sequence = order.base_id.order_sequence_id
+        order.name = sequence.next_by_id()
+        return order
+
+    @api.depends('order_line_ids')
+    def _compute_end_date_real(self):
+        for rec in self:
+            if rec.start_date_real:
+                sum_time = 0.0
+                for line in rec.order_line_ids:
+                    if line.state == 'done':
+                        sum_time += line.real_duration
+                strp_date = datetime.strptime(
+                    rec.start_date_real, "%Y-%m-%d %H:%M:%S")
+                rec.end_date_real = strp_date + timedelta(hours=sum_time)
+
     @api.multi
-    @api.onchange('type')
+    def action_released(self):
+        for order in self:
+            if order.type == 'preventive':
+                for line in order.order_line_ids:
+                    if line.state != 'done':
+                        raise exceptions.ValidationError(
+                            'Verify that all activities are in '
+                            'end state to continue')
+                cycles = order.unit_id.cycle_ids.search(
+                    [('sequence', '=', order.unit_id.sequence),
+                     ('unit_id', '=', order.unit_id.id)])
+                cycles.write({
+                    'order_id': order.id,
+                    'date': fields.Datetime.now(),
+                    'distance': order.current_odometer
+                })
+                order.unit_id.last_order_id = order.id
+                order.unit_id.last_cycle_id = order.cycle_id.id
+                order.unit_id.next_service_odometer = cycles.schedule
+                order.unit_id.sequence += 1
+                next_cycle = order.unit_id.cycle_ids.search(
+                    [('sequence', '=', order.unit_id.sequence),
+                     ('unit_id', '=', order.unit_id.id)])
+                order.unit_id.write({'next_cycle_id': next_cycle.id})
+            elif order.type == 'corrective':
+                for report in order.report_ids:
+                    if report.state == 'confirmed':
+                        report.state = 'close'
+                    else:
+                        raise exceptions.ValidationError(
+                            'Verify that all reports are in '
+                            'confirm state to continue')
+            order.state = 'released'
+            order.message_post(body=(
+                "<h5><strong>Released</strong></h5>"
+                "<p><strong>Released by: </strong> %s <br>"
+                "<strong>Released at: </strong> %s</p") % (
+                order.supervisor_id.name, fields.Datetime.now()))
+
+    @api.multi
+    @api.onchange('type', 'unit_id')
     def _onchange_type(self):
         for rec in self:
             if (rec.type == 'preventive'):
                 spares = []
                 rec.program_id = rec.unit_id.program_id
                 rec.current_odometer = rec.unit_id.odometer
-                rec.sequence = rec.unit_id.next_service_sequence
+                rec.sequence = rec.unit_id.sequence
                 for cycle in rec.unit_id.next_cycle_id:
                     rec.cycle_id = cycle.id
 
-                for task in rec.cycle_id.task_ids:
+                for task in rec.cycle_id.cycle_id.task_ids:
                     duration = task.duration
                     start_date = datetime.now()
                     end_date = start_date + timedelta(
@@ -115,8 +175,8 @@ class VmsOrder(models.Model):
                 rec.sequence = False
                 rec.order_line_ids = False
 
-    @api.onchange('order_line_ids')
-    def onchange_order_line(self):
+    @api.depends('order_line_ids')
+    def _compute_end_date(self):
         for rec in self:
             sum_time = 0.0
             for line in rec.order_line_ids:
@@ -129,13 +189,16 @@ class VmsOrder(models.Model):
         for rec in self:
             orders = self.search_count(
                 [('unit_id', '=', rec.unit_id.id),
-                 ('state', '!=', 'released'),
+                 ('state', '=', 'open'),
                  ('id', '!=', rec.id)])
             if orders > 0:
                 raise exceptions.ValidationError(_(
                     'Unit not available for maintenance '
                     'because it has more open order(s).'))
             else:
+                if not rec.order_line_ids:
+                    raise exceptions.ValidationError(
+                        _('The order must have at least one task'))
                 for line in rec.order_line_ids:
                     if not line.external:
                         if line.responsible_ids:
@@ -155,32 +218,37 @@ class VmsOrder(models.Model):
                                         'order_line_id': line.id,
                                         'responsible_id': mechanic.id
                                         })
-                            line.state = 'process'
-                            line.start_date_real = fields.Datetime.now()
                             if(line.spare_part_ids):
                                 for product in line.spare_part_ids:
-                                    product.state = 'open'
-                            rec.state = 'open'
+                                    product.state = 'pending'
+                                    line.stock_picking_id = (
+                                        product._create_stock_picking())
+                            if rec.type == 'corrective':
+                                for report in rec.report_ids:
+                                    report.state = 'open'
                         else:
                             raise exceptions.ValidationError(
                                 _('The tasks must have almost one mechanic.'))
-                    else:
-                        line.state = 'process'
-                rec.state = 'open'
-                rec.start_date_real = fields.Datetime.now()
-                rec.message_post(_(
-                    '<strong>Order Opened.</strong><ul>'
-                    '<li><strong>Opened by: </strong>%s</li>'
-                    '<li><strong>Opened at: </strong>%s</li>'
-                    '</ul>') % (
-                    self.env.user.name, fields.Datetime.now()))
+
+                    line.state = 'process'
+                    line.start_date_real = fields.Datetime.now()
+                    rec.state = 'open'
+                    rec.start_date_real = fields.Datetime.now()
+                    rec.message_post(_(
+                        '<strong>Order Opened.</strong><ul>'
+                        '<li><strong>Opened by: </strong>%s</li>'
+                        '<li><strong>Opened at: </strong>%s</li>'
+                        '</ul>') % (
+                        self.env.user.name, fields.Datetime.now()))
 
     @api.multi
     def action_cancel(self):
         for rec in self:
             for line in rec.order_line_ids:
                 line.action_cancel()
-
+            if rec.type == 'corrective':
+                for report in rec.report_ids:
+                    report.state = 'cancel'
             rec.state = 'cancel'
             rec.message_post(_(
                 '<strong>Order Closed.</strong><ul>'
@@ -193,6 +261,9 @@ class VmsOrder(models.Model):
     def action_cancel_draft(self):
         for rec in self:
             rec.state = 'draft'
+        if rec.type == 'corrective':
+            for report in rec.report_ids:
+                report.state = 'draft'
         for line in rec.order_line_ids:
             line.state = 'draft'
             for spare in line.spare_part_ids:

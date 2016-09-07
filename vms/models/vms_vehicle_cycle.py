@@ -16,13 +16,13 @@ class VmsVehicleCycle(models.Model):
         string='Cycle')
     schedule = fields.Float(
         required=True,
-        default=True)
-    sequence = fields.Integer(string='Vehicle Cycle Sequence')
+        default=True, string='Distance Schedule')
+    sequence = fields.Integer(string='Sequence')
     order_id = fields.Many2one(
         'vms.order',
         string='Order')
-    date = fields.Datetime(default=fields.Datetime.now)
-    distance = fields.Float(default=0.0)
+    date = fields.Datetime()
+    distance = fields.Float(default=0.0, string='Distance Real')
     unit_id = fields.Many2one(
         'fleet.vehicle',
         string="Unit",

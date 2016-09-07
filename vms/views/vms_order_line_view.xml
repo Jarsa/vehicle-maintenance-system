@@ -26,12 +26,12 @@
                         </group>
                         <group>
                             <group string="External Service" attrs="{'invisible':[('external','=',False)]}">
-                                <field name="supplier_id" attrs="{'required':[('external','=',True)]}"/>
-                                <field name="purchase_order_id"/>
-                                <field name="purchase_state"/>
-                                <field name="product_id" attrs="{'required':[('external','=',True)]}"/>
-                                <field name="qty_product"/>
-                                <button name ="create_po" string="Create Invoice" states="draft" type="object"/>
+                                <field name="supplier_id" attrs="{'required':[('external','=',True)], 'readonly':[('order_id', '=', False)]}"/>
+                                <field name="purchase_order_id" attrs="{'readonly':[('order_id', '=', False)]}"/>
+                                <field name="purchase_state" attrs="{'readonly':[('order_id', '=', False)]}"/>
+                                <field name="product_id" attrs="{'required':[('external','=',True)], 'readonly':[('order_id', '=', False)]}"/>
+                                <field name="qty_product" attrs="{'readonly':[('order_id', '=', False)]}"/>
+                                <button name ="create_po" string="Create Purchase Order" class="oe_highlight" states="draft" attrs="{'readonly':[('order_id', '=', False)]}" type="object" help="You must save the order first to configure the purchase order."/>
                             </group>
                         </group>
                         <group>
@@ -44,10 +44,11 @@
                                 <field name="start_date_real"/>
                                 <field name="end_date_real"/>
                                 <field name="real_duration" widget='float_time'/>
+                                <field name='stock_picking_id'/>
                             </group>
                         </group>
                         <group string="Mechanics" attrs="{'invisible':[('external','=',True)]}">
-                            <field name="responsible_ids" nolabel="1">
+                            <field name="responsible_ids" attrs="{'readonly':[('order_id', '=', False)]}" nolabel="1">
                                 <tree>
                                     <field name="name"/>
                                     <field name="job_id"/>

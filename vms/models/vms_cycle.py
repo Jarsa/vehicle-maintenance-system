@@ -17,5 +17,5 @@ class VmsCycle(models.Model):
         column1='cycle',
         column2='other_cycle',
         string='Cycles')
-    frequency = fields.Float(required=True)
+    frequency = fields.Integer(required=True)
     active = fields.Boolean(default=True)

@@ -59,9 +59,12 @@ class VmsOrderLine(models.Model):
     purchase_state = fields.Boolean(
         string="Purchase Order State Done",
         compute='_compute_purchase_state')
-
     order_id = fields.Many2one('vms.order', string='Order', readonly=True)
     real_time_total = fields.Integer()
+    stock_picking_id = fields.Many2one(
+        'stock.picking',
+        string="Stock Picking",
+        readonly=True)
 
     @api.multi
     @api.onchange('task_id')
@@ -124,7 +127,9 @@ class VmsOrderLine(models.Model):
                     rec.start_date_real = fields.Datetime.now()
                     if rec.spare_part_ids:
                         for product in rec.spare_part_ids:
-                            product.state = 'open'
+                            product.state = 'pending'
+                            rec.stock_picking_id = (
+                                product._create_stock_picking())
                     rec.state = 'process'
                 else:
                     raise exceptions.ValidationError(
@@ -133,27 +138,33 @@ class VmsOrderLine(models.Model):
     @api.multi
     def action_done(self):
         act_state_validator = True
-        # spare_validator = True
         sum_time = 0.0
         for rec in self:
-            activities = rec.env['vms.activity'].search(
-                [('order_line_id', '=', rec.id)])
-            for activity in activities:
-                if activity.state != 'end':
-                    act_state_validator = False
-                elif activity.state == 'end':
-                    sum_time += activity.total_hours
-            if not act_state_validator:
-                raise exceptions.ValidationError(
-                    _('The activities of the mechanics(s) must be finished.'))
-            # for spare in rec.spare_part_ids:
-            #     if spare.state != 'released':
-            #         spare_validator = False
-            # if not spare_validator:
-            #     raise exceptions.ValidationError(
-            #         _('The spare parts must be delivered.'))
+            if rec.external:
+                if not rec.purchase_state:
+                    raise exceptions.ValidationError(
+                        'Verify that purchase order are in '
+                        'done state to continue')
+            else:
+                activities = rec.env['vms.activity'].search(
+                    [('order_line_id', '=', rec.id)])
+                for activity in activities:
+                    if activity.state != 'end':
+                        act_state_validator = False
+                    elif activity.state == 'end':
+                        sum_time += activity.total_hours
+                if not act_state_validator:
+                    raise exceptions.ValidationError(
+                        _('The activities of the mechanics(s)'
+                            ' must be finished.'))
+                for spare in rec.spare_part_ids:
+                    if rec.stock_picking_id.state != 'done':
+                        raise exceptions.ValidationError(
+                            _('The stock move must be in done state.'))
+                    else:
+                        spare.state = 'delievered'
+                rec.real_duration = sum_time
             rec.end_date_real = fields.Datetime.now()
-            rec.real_duration = sum_time
             rec.state = 'done'
 
     @api.multi
