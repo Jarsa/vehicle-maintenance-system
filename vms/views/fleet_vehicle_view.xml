@@ -10,12 +10,13 @@
                 <xpath expr="//sheet/group[2]" position="after">
                         <group string="Maintenance Program" coslpan="2">
                             <field name="program_id"/>
-                            <field name='sequence' attrs="{'readonly': [('next_cycle_id', '!=', False)]}" required="1"/>
-                            <field name="last_order_id"/>
-                            <field name="last_cycle_id"/>
-                            <field name="next_cycle_id"/>
-                            <field name="next_service_date"/>
-                            <field name="next_service_odometer"/>
+                            <field name='sequence' attrs="{'readonly': [('next_cycle_id', '!=', False)], 'invisible': [('sequence', '=', 0)]}" required="1"/>
+                            <field name="last_order_id" attrs="{'invisible': [('last_order_id', '=', False)]}"/>
+                            <field name="last_cycle_id" attrs="{'invisible': [('sequence', '=', 0)]}"/>
+                            <field name="next_cycle_id" attrs="{'invisible': [('last_order_id', '=', False)]}"/>
+                            <field name="next_service_date" attrs="{'invisible': [('last_order_id', '=', False)]}"/>
+                            <field name="next_service_odometer" attrs="{'invisible': [('next_service_odometer', '=', 0.00)]}"/>
+                            <field name="distance"/>
                         </group>
                         <group style="text-align: center;">
                             <button 
