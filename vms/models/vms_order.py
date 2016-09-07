@@ -189,7 +189,7 @@ class VmsOrder(models.Model):
         for rec in self:
             orders = self.search_count(
                 [('unit_id', '=', rec.unit_id.id),
-                 ('state', '!=', 'released'),
+                 ('state', '=', 'open'),
                  ('id', '!=', rec.id)])
             if orders > 0:
                 raise exceptions.ValidationError(_(
@@ -220,7 +220,9 @@ class VmsOrder(models.Model):
                                         })
                             if(line.spare_part_ids):
                                 for product in line.spare_part_ids:
-                                    product.state = 'open'
+                                    product.state = 'pending'
+                                    line.stock_picking_id = (
+                                        product._create_stock_picking())
                             if rec.type == 'corrective':
                                 for report in rec.report_ids:
                                     report.state = 'open'

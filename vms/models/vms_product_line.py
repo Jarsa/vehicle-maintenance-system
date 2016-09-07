@@ -4,7 +4,7 @@
 
 
 from openerp import api, fields, models
-
+from datetime import datetime, timedelta
 
 class VmsProductLine(models.Model):
     _description = 'VMS Product Lines'
@@ -34,15 +34,41 @@ class VmsProductLine(models.Model):
         string='Activity')
     state = fields.Selection(
         [('draft', 'Draft'),
-         ('open', 'Open'),
-         ('released', 'Released'),
+         ('pending', 'Pending'),
+         ('delievered', 'Delievered'),
          ('cancel', 'Cancel')],
         readonly=True, default='draft')
-    stock_move_id = fields.Many2one(
-        'stock.move',
-        string='Stock Move',
-        readonly=True)
 
     @api.onchange('product_id')
     def _onchange_product_id(self):
         self.product_uom_id = self.product_id.uom_id
+
+    @api.multi
+    def _create_stock_picking(self):
+        moves = []
+        for rec in self:
+            today = fields.Datetime.now()
+            move = (0, 0, {
+                'company_id': self.env.user.company_id.id,
+                'date': today,
+                'location_dest_id': (
+                    rec.order_line_id.order_id.stock_location_id.id),
+                'location_id': rec.product_id.property_stock_inventory.id,
+                'name': (
+                    rec.order_line_id.task_id.name +
+                    '-' + rec.product_id.name),
+                'product_id': rec.product_id.id,
+                'product_uom': rec.product_uom_id.id,
+                })
+            moves.append(move)
+        picking = {
+            'min_date': rec.order_line_id.start_date,
+            'company_id': self.env.user.company_id.id,
+            'move_lines': [x for x in moves],
+            'picking_type_id': 1,
+            'location_dest_id': (
+                rec.order_line_id.order_id.stock_location_id.id),
+            'location_id': rec.product_id.property_stock_inventory.id,
+        }
+        pick = self.env['stock.picking'].create(picking)
+        return pick

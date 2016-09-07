@@ -44,6 +44,7 @@
                                 <field name="start_date_real"/>
                                 <field name="end_date_real"/>
                                 <field name="real_duration" widget='float_time'/>
+                                <field name='stock_picking_id'/>
                             </group>
                         </group>
                         <group string="Mechanics" attrs="{'invisible':[('external','=',True)]}">
