@@ -54,7 +54,7 @@ class VmsOrder(models.Model):
         'vms.order.line',
         'order_id',
         string='Order Lines',
-        store=True)
+        )
     program_id = fields.Many2one(
         'vms.program',
         string='Program')
@@ -82,6 +82,15 @@ class VmsOrder(models.Model):
         sequence = order.base_id.order_sequence_id
         order.name = sequence.next_by_id()
         return order
+
+    @api.model
+    def unlink(self, values):
+        activities = self.env['vms.activity'].search(
+            [('order_id', 'in', [values])])
+        if len(activities) > 0:
+            activities.unlink()
+        else:
+            return super(VmsOrder, self).unlink()
 
     @api.depends('order_line_ids')
     def _compute_end_date_real(self):
@@ -139,8 +148,8 @@ class VmsOrder(models.Model):
     @api.onchange('type', 'unit_id')
     def _onchange_type(self):
         for rec in self:
+            order_lines = []
             if (rec.type == 'preventive'):
-                spares = []
                 rec.program_id = rec.unit_id.program_id
                 rec.current_odometer = rec.unit_id.odometer
                 rec.sequence = rec.unit_id.sequence
@@ -148,12 +157,13 @@ class VmsOrder(models.Model):
                     rec.cycle_id = cycle.id
 
                 for task in rec.cycle_id.cycle_id.task_ids:
+                    spares = []
                     duration = task.duration
                     start_date = datetime.now()
                     end_date = start_date + timedelta(
                         hours=duration)
                     for spare_part in task.spare_part_ids:
-                        spares.append((0, False, {
+                        spares.append((0, 0, {
                             'product_id': spare_part.product_id.id,
                             'product_qty': spare_part.product_qty,
                             'product_uom_id': (
@@ -168,7 +178,8 @@ class VmsOrder(models.Model):
                         'spare_part_ids': [line for line in spares],
                         'order_id': rec.id
                         })
-                    rec.order_line_ids += order_line
+                    order_lines.append(order_line)
+                rec.order_line_ids = [task.id for task in order_lines]
             else:
                 rec.program_id = False
                 rec.current_odometer = False
@@ -179,10 +190,12 @@ class VmsOrder(models.Model):
     def _compute_end_date(self):
         for rec in self:
             sum_time = 0.0
-            for line in rec.order_line_ids:
-                sum_time += line.duration
-            strp_date = datetime.strptime(rec.start_date, "%Y-%m-%d %H:%M:%S")
-            rec.end_date = strp_date + timedelta(hours=sum_time)
+            if rec.start_date:
+                for line in rec.order_line_ids:
+                    sum_time += line.duration
+                strp_date = datetime.strptime(
+                    rec.start_date, "%Y-%m-%d %H:%M:%S")
+                rec.end_date = strp_date + timedelta(hours=sum_time)
 
     @api.multi
     def action_open(self):
@@ -221,8 +234,9 @@ class VmsOrder(models.Model):
                             if(line.spare_part_ids):
                                 for product in line.spare_part_ids:
                                     product.state = 'pending'
-                                    line.stock_picking_id = (
-                                        product._create_stock_picking())
+                                line.stock_picking_id = (
+                                    line.spare_part_ids.
+                                    _create_stock_picking())
                             if rec.type == 'corrective':
                                 for report in rec.report_ids:
                                     report.state = 'open'

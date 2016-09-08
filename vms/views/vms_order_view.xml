@@ -47,10 +47,10 @@
                             <page string="Service Order Detail">
                                 <group col="4">
                                     <field name='base_id'/>
-                                    <field name="unit_id"/>
                                     <field name="date"/>
-                                    <field name="type"/>
+                                    <field name="unit_id"/>
                                     <field name="stock_location_id"/>
+                                    <field name="type"/>
                                     <field context="{'default_mechanic': True}" name="supervisor_id"/>
                                 </group>
                                 <group col="4" string="Times">
