@@ -122,7 +122,7 @@ class VmsOrder(models.Model):
                     'distance': order.current_odometer
                 })
                 order.unit_id.last_order_id = order.id
-                order.unit_id.last_cycle_id = order.cycle_id.id
+                order.unit_id.last_cycle_id = cycles.id
                 order.unit_id.next_service_odometer = cycles.schedule
                 order.unit_id.sequence += 1
                 next_cycle = order.unit_id.cycle_ids.search(

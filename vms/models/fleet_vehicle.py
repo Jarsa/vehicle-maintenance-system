@@ -3,6 +3,7 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
 from openerp import api, fields, models
+from datetime import datetime, timedelta
 
 
 class FleetVehicle(models.Model):
@@ -23,12 +24,17 @@ class FleetVehicle(models.Model):
     next_cycle_id = fields.Many2one(
         'vms.vehicle.cycle',
         string='Next Cycle')
-    next_service_date = fields.Datetime()
+    next_service_date = fields.Datetime(
+        compute='_compute_next_service_date'
+    )
     next_service_odometer = fields.Float()
     next_service_sequence = fields.Integer()
     cycle_ids = fields.One2many(
         'vms.vehicle.cycle', 'unit_id', string="Cycles")
     sequence = fields.Integer()
+    distance = fields.Float(
+        'Distance Averange', required=True
+    )
 
     @api.multi
     def program_mtto(self):
@@ -48,7 +54,7 @@ class FleetVehicle(models.Model):
                     seq += 1
             last_schedule = 0.00
             for cycles in vehicle.cycle_ids:
-                if (last_schedule < vehicle.odometer < cycles.schedule):
+                if (last_schedule <= vehicle.odometer <= cycles.schedule):
                     vehicle.sequence = cycles.sequence
                     vehicle.last_cycle_id = cycles.id
                     next = cycles.search([
@@ -60,3 +66,18 @@ class FleetVehicle(models.Model):
                 else:
                     last_schedule = cycles.schedule
                     cycles.unlink()
+
+    @api.depends('distance', 'last_cycle_id')
+    def _compute_next_service_date(self):
+        for vehicle in self:
+            if vehicle.last_order_id.id:
+                date = datetime.strptime(
+                    vehicle.last_cycle_id.date, "%Y-%m-%d %H:%M:%S")
+                days = []
+                for cycle in vehicle.program_id.cycle_ids:
+                    day = (cycle.frequency/vehicle.distance)*24
+                    days.append(day)
+                vehicle.next_service_date = (
+                    date + timedelta(hours=min(days)))
+            else:
+                vehicle.next_service_date = False
