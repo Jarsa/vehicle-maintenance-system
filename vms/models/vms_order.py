@@ -54,7 +54,7 @@ class VmsOrder(models.Model):
         'vms.order.line',
         'order_id',
         string='Order Lines',
-        store=True)
+        )
     program_id = fields.Many2one(
         'vms.program',
         string='Program')
@@ -82,6 +82,15 @@ class VmsOrder(models.Model):
         sequence = order.base_id.order_sequence_id
         order.name = sequence.next_by_id()
         return order
+
+    @api.model
+    def unlink(self, values):
+        activities = self.env['vms.activity'].search(
+            [('order_id', 'in', [values])])
+        if len(activities) > 0:
+            activities.unlink()
+        else:
+            return super(VmsOrder, self).unlink()
 
     @api.depends('order_line_ids')
     def _compute_end_date_real(self):
@@ -181,10 +190,12 @@ class VmsOrder(models.Model):
     def _compute_end_date(self):
         for rec in self:
             sum_time = 0.0
-            for line in rec.order_line_ids:
-                sum_time += line.duration
-            strp_date = datetime.strptime(rec.start_date, "%Y-%m-%d %H:%M:%S")
-            rec.end_date = strp_date + timedelta(hours=sum_time)
+            if rec.start_date:
+                for line in rec.order_line_ids:
+                    sum_time += line.duration
+                strp_date = datetime.strptime(
+                    rec.start_date, "%Y-%m-%d %H:%M:%S")
+                rec.end_date = strp_date + timedelta(hours=sum_time)
 
     @api.multi
     def action_open(self):

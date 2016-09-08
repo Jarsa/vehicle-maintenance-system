@@ -20,8 +20,8 @@ class VmsOrderLine(models.Model):
         required=True)
     end_date = fields.Datetime(
         string='Schedule end',
-        required=True,
-        store=True)
+        store=True,
+        readonly=True)
     start_date_real = fields.Datetime(
         string='Real start date', readonly=True)
     end_date_real = fields.Datetime(
@@ -65,14 +65,39 @@ class VmsOrderLine(models.Model):
         'stock.picking',
         string="Stock Picking",
         readonly=True)
+    activity_ids = fields.One2many(
+        'vms.activity',
+        'order_line_id', string="Activities", readonly=True)
+
+    @api.model
+    def unlink(self, values):
+        for rec in self:
+            rec.spare_part_ids.unlink()
+            rec.activity_ids.unlink()
+        return super(VmsOrderLine, self).unlink()
+
+    @api.onchange('external')
+    def _onchange_external(self):
+        for rec in self:
+            if rec.external:
+                rec.spare_part_ids = False
+            else:
+                for spare_part in rec.task_id.spare_part_ids:
+                    spare = rec.spare_part_ids.new({
+                        'product_id': spare_part.product_id.id,
+                        'product_qty': spare_part.product_qty,
+                        'product_uom_id': spare_part.product_uom_id.id,
+                        'state': 'draft'})
+                    rec.spare_part_ids += spare
 
     @api.multi
     @api.onchange('task_id')
     def _onchange_task(self):
         for rec in self:
-            rec.duration = rec.task_id.duration
-            strp_date = datetime.strptime(rec.start_date, "%Y-%m-%d %H:%M:%S")
-            rec.end_date = strp_date + timedelta(hours=rec.duration)
+            if rec.start_date:
+                strp_date = datetime.strptime(
+                    rec.start_date, "%Y-%m-%d %H:%M:%S")
+                rec.end_date = strp_date + timedelta(hours=rec.duration)
             for spare_part in rec.task_id.spare_part_ids:
                 spare = rec.spare_part_ids.new({
                     'product_id': spare_part.product_id.id,
@@ -83,8 +108,11 @@ class VmsOrderLine(models.Model):
 
     @api.onchange('duration')
     def _onchange_duration(self):
-        strp_date = datetime.strptime(self.start_date, "%Y-%m-%d %H:%M:%S")
-        self.end_date = strp_date + timedelta(hours=self.duration)
+        for rec in self:
+            if rec.start_date:
+                strp_date = datetime.strptime(
+                    rec.start_date, "%Y-%m-%d %H:%M:%S")
+                rec.end_date = strp_date + timedelta(hours=rec.duration)
 
     @api.depends('start_date_real', 'end_date_real')
     def _compute_real_time_total(self):
@@ -180,8 +208,6 @@ class VmsOrderLine(models.Model):
                         activity.state = 'cancel'
                 for spare in rec.spare_part_ids:
                     spare.state = 'cancel'
-                    if spare.stock_move_id:
-                        spare.stock_move_id.state = 'cancel'
             else:
                 rec.purchase_order_id.unlink()
                 if rec.spare_part_ids:
