@@ -41,7 +41,7 @@ class VmsOrderLine(models.Model):
         ('draft', 'Draft'),
         ('process', 'Process'),
         ('done', 'Done'),
-        ('cancel', 'Cancel')], default='draft')
+        ('cancel', 'Cancel')])
     real_duration = fields.Float(readonly=True)
     spare_part_ids = fields.One2many(
         'vms.product.line',
@@ -91,6 +91,15 @@ class VmsOrderLine(models.Model):
                     rec.spare_part_ids += spare
 
     @api.multi
+    def action_done(self):
+        for rec in self:
+            for product in rec.spare_part_ids:
+                product.create_stock_picking(
+                    rec.order_id.stock_location_id.id,
+                    product.product_id.id,
+                    product.product_qty,
+                    product.product_uom_id.id)
+
     @api.onchange('task_id')
     def _onchange_task(self):
         for rec in self:
