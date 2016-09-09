@@ -52,8 +52,8 @@ class VmsProductLine(models.Model):
                 'company_id': self.env.user.company_id.id,
                 'date': today,
                 'location_dest_id': (
-                    rec.order_line_id.order_id.stock_location_id.id),
-                'location_id': rec.product_id.property_stock_inventory.id,
+                    rec.product_id.property_stock_production.id),
+                'location_id': rec.order_line_id.order_id.stock_location_id,
                 'name': (
                     rec.order_line_id.task_id.name +
                     '-' + rec.product_id.name),
@@ -67,8 +67,8 @@ class VmsProductLine(models.Model):
             'move_lines': [x for x in moves],
             'picking_type_id': 1,
             'location_dest_id': (
-                rec.order_line_id.order_id.stock_location_id.id),
-            'location_id': rec.product_id.property_stock_inventory.id,
+                rec.product_id.property_stock_production.id),
+            'location_id': rec.order_line_id.order_id.stock_location_id,
         }
         pick = self.env['stock.picking'].create(picking)
         return pick
