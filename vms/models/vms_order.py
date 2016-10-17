@@ -145,41 +145,48 @@ class VmsOrder(models.Model):
                 order.supervisor_id.name, fields.Datetime.now()))
 
     @api.multi
+    def get_tasks_from_cycle(self, cycle_id, order_id):
+        spares = []
+        for cycle in cycle_id:
+            for task in cycle.task_ids:
+                duration = task.duration
+                start_date = datetime.now()
+                end_date = start_date + timedelta(
+                    hours=duration)
+                for spare_part in task.spare_part_ids:
+                    spares.append((0, False, {
+                        'product_id': spare_part.product_id.id,
+                        'product_qty': spare_part.product_qty,
+                        'product_uom_id': (
+                            spare_part.product_uom_id.id),
+                        'state': 'draft'
+                    }))
+                order_id.order_line_ids += order_id.order_line_ids.create({
+                    'task_id': task.id,
+                    'start_date': start_date,
+                    'duration': duration,
+                    'end_date': end_date,
+                    'spare_part_ids': [line for line in spares],
+                    'order_id': order_id.id
+                })
+            if cycle.cycle_ids:
+                for sub_cycle in cycle.cycle_ids:
+                    order_id.get_tasks_from_cycle(
+                        sub_cycle, order_id)
+            else:
+                break
+
+    @api.multi
     @api.onchange('type', 'unit_id')
     def _onchange_type(self):
         for rec in self:
-            order_lines = []
             if (rec.type == 'preventive'):
                 rec.program_id = rec.unit_id.program_id
                 rec.current_odometer = rec.unit_id.odometer
                 rec.sequence = rec.unit_id.sequence
                 for cycle in rec.unit_id.next_cycle_id:
                     rec.cycle_id = cycle.id
-
-                for task in rec.cycle_id.cycle_id.task_ids:
-                    spares = []
-                    duration = task.duration
-                    start_date = datetime.now()
-                    end_date = start_date + timedelta(
-                        hours=duration)
-                    for spare_part in task.spare_part_ids:
-                        spares.append((0, 0, {
-                            'product_id': spare_part.product_id.id,
-                            'product_qty': spare_part.product_qty,
-                            'product_uom_id': (
-                                spare_part.product_uom_id.id),
-                            'state': 'draft'
-                            }))
-                    order_line = rec.order_line_ids.create({
-                        'task_id': task.id,
-                        'start_date': start_date,
-                        'duration': duration,
-                        'end_date': end_date,
-                        'spare_part_ids': [line for line in spares],
-                        'order_id': rec.id
-                        })
-                    order_lines.append(order_line)
-                rec.order_line_ids = [task.id for task in order_lines]
+                rec.get_tasks_from_cycle(rec.cycle_id.cycle_id, rec)
             else:
                 rec.program_id = False
                 rec.current_odometer = False
