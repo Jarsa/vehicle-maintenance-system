@@ -8,11 +8,13 @@
     "version": "9.0.0.1.0",
     "category": "Maintenance",
     "website": "https://jarsa/.com.mx",
-    "author":  "Jarsa Sistemas",
+    "author": "Jarsa Sistemas",
     "license": "AGPL-3",
     "installable": True,
     "application": True,
-    "depends": ["account", "stock", "hr", "fleet", "purchase", "tms"],
+    "depends": [
+        "account", "stock", "hr", "fleet", "purchase",
+        "operating_unit"],
     "data": [
         "security/ir.model.access.csv",
         'views/vms_view.xml',
@@ -28,7 +30,7 @@
         'views/vms_order_line_view.xml',
         'views/vms_order_view.xml',
         'views/fleet_vehicle_view.xml',
-        'views/vms_base_view.xml',
+        'views/operating_unit_view.xml',
         'data/ir_sequence_data.xml',
     ],
     "demo": [

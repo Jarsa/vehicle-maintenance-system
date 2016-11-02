@@ -14,7 +14,7 @@ class VmsReport(models.Model):
     name = fields.Char(string='Number', readonly=True)
     date = fields.Datetime(required=True, default=fields.Datetime.now)
     base_id = fields.Many2one(
-        'tms.base', string='Base', required=True)
+        'operating.unit', string='Base', required=True)
     unit_id = fields.Many2one(
         'fleet.vehicle',
         required=True,

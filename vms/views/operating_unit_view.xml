@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <record id="operating_unit_form" model="ir.ui.view">
+            <field name="name">Operating Unit</field>
+            <field name="model">operating.unit</field>
+            <field name="inherit_id" ref="operating_unit.view_operating_unit_form"/>
+            <field name="arch" type="xml">
+                <group position="inside">
+                        <group string="Sequences for VMS" >
+                            <field name='order_sequence_id' required="1"/>
+                            <field name='report_sequence_id' required="1"/>
+                        </group>
+                </group>
+            </field>
+        </record>
+    </data>
+</odoo>

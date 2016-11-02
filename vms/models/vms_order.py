@@ -14,7 +14,7 @@ class VmsOrder(models.Model):
 
     name = fields.Char(string='Order Number', readonly=True)
     base_id = fields.Many2one(
-        'tms.base', string='Base', required=True)
+        'operating.unit', string='Base', required=True)
     supervisor_id = fields.Many2one(
         'hr.employee',
         required=True,
