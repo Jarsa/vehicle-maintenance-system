@@ -7,9 +7,8 @@
 from openerp import fields, models
 
 
-class VmsBase(models.Model):
-    _name = 'tms.base'
-    _inherit = 'tms.base'
+class OperatingUnit(models.Model):
+    _inherit = 'operating.unit'
     _description = 'Base'
 
     order_sequence_id = fields.Many2one(
