@@ -1,0 +1,1175 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# * vms
+# 
+# Translators:
+# ougc27 <oscar_garzacordova@hotmail.com>, 2016
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 9.0c\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2016-09-07 15:35+0000\n"
+"PO-Revision-Date: 2016-09-07 15:35+0000\n"
+"Last-Translator: ougc27 <oscar_garzacordova@hotmail.com>, 2016\n"
+"Language-Team: Spanish (https://www.transifex.com/jarsa/teams/62171/es/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Language: es\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#. module: vms
+#: code:addons/vms/models/vms_activity.py:135
+#, python-format
+msgid ""
+"<strong>Activity Canceled.</strong><ul><li><strong>Canceled by: "
+"</strong>%s</li><li><strong>Canceled at: </strong>%s</li></ul>"
+msgstr ""
+"<strong>Actividad Cancelada.</strong><ul><li><strong>Cancelada por: "
+"</strong>%s</li><li><strong>Cancelada el: </strong>%s</li></ul>"
+
+#. module: vms
+#: code:addons/vms/models/vms_activity.py:163
+#, python-format
+msgid ""
+"<strong>Activity Drafted.</strong><ul><li><strong>Drafted by: "
+"</strong>%s</li><li><strong>Drafted at: </strong>%s</li></ul>"
+msgstr ""
+"<strong>Activitad en Borrador.</strong><ul><li><strong>Revertida por: "
+"</strong>%s</li><li><strong>Revertida el: </strong>%s</li></ul>"
+
+#. module: vms
+#: code:addons/vms/models/vms_activity.py:153
+#, python-format
+msgid ""
+"<strong>Activity Ended.</strong><ul><li><strong>Ended by: "
+"</strong>%s</li><li><strong>Ended at: </strong>%s</li></ul>"
+msgstr ""
+"<strong>Actividad Terminada.</strong><ul><li><strong>Terminada por: "
+"</strong>%s</li><li><strong>Terminada el: </strong>%s</li></ul>"
+
+#. module: vms
+#: code:addons/vms/models/vms_activity.py:107
+#, python-format
+msgid ""
+"<strong>Activity Paused.</strong><ul><li><strong>Paused by: "
+"</strong>%s</li><li><strong>Paused at: </strong>%s</li></ul>"
+msgstr ""
+"<strong>Actividad  Pausada.</strong><ul><li><strong>Pausada por: "
+"</strong>%s</li><li><strong>Pausada el: </strong>%s</li></ul>"
+
+#. module: vms
+#: code:addons/vms/models/vms_activity.py:124
+#, python-format
+msgid ""
+"<strong>Activity Resumed.</strong><ul><li><strong>Resumed by: "
+"</strong>%s</li><li><strong>Resumed at: </strong>%s</li></ul>"
+msgstr ""
+"<strong>Actividad Reanudada.</strong><ul><li><strong>Reaunada por: "
+"</strong>%s</li><li><strong>Reaundada el: </strong>%s</li></ul>"
+
+#. module: vms
+#: code:addons/vms/models/vms_activity.py:90
+#, python-format
+msgid ""
+"<strong>Activity Started.</strong><ul><li><strong>Started by: "
+"</strong>%s</li><li><strong>Started at: </strong>%s</li></ul>"
+msgstr ""
+"<strong>Actividad Iniciada.</strong><ul><li><strong>Iniciada por: "
+"</strong>%s</li><li><strong>Iniciada el: </strong>%s</li></ul>"
+
+#. module: vms
+#: code:addons/vms/models/vms_order.py:253
+#, python-format
+msgid ""
+"<strong>Order Closed.</strong><ul><li><strong>Closed by: "
+"</strong>%s</li><li><strong>Closed at: </strong>%s</li></ul>"
+msgstr ""
+"<strong>Orden Cerrada.</strong><ul><li><strong>Cerrada por: "
+"</strong>%s</li><li><strong>Cerrada el: </strong>%s</li></ul>"
+
+#. module: vms
+#: code:addons/vms/models/vms_order.py:237
+#, python-format
+msgid ""
+"<strong>Order Opened.</strong><ul><li><strong>Opened by: "
+"</strong>%s</li><li><strong>Opened at: </strong>%s</li></ul>"
+msgstr ""
+"<strong>Orden Abierta.</strong><ul><li><strong>Abierta por: "
+"</strong>%s</li><li><strong>Abiera el: </strong>%s</li></ul>"
+
+#. module: vms
+#: code:addons/vms/models/vms_report.py:52
+#, python-format
+msgid ""
+"<strong>Report Confirmed.</strong><ul><li><strong>Confirmed by: "
+"</strong>%s</li><li><strong>Confirmed at: </strong>%s</li></ul>"
+msgstr ""
+"<strong>Reporte Confirmado.</strong><ul><li><strong>Confirmado por: "
+"</strong>%s</li><li><strong>Confirmado el: </strong>%s</li></ul>"
+
+#. module: vms
+#: model:ir.model.fields,field_description:vms.field_vms_activity_message_needaction
+#: model:ir.model.fields,field_description:vms.field_vms_order_message_needaction
+#: model:ir.model.fields,field_description:vms.field_vms_program_message_needaction
+#: model:ir.model.fields,field_description:vms.field_vms_report_message_needaction
+#: model:ir.model.fields,field_description:vms.field_vms_vehicle_cycle_message_needaction
+msgid "Action Needed"
+msgstr "Acción Necesaria"
+
+#. module: vms
+#: model:ir.model.fields,field_description:vms.field_vms_cycle_active
+#: model:ir.model.fields,field_description:vms.field_vms_program_active
+#: model:ir.model.fields,field_description:vms.field_vms_task_active
+msgid "Active"
+msgstr "Activo"
+
+#. module: vms
+#: model:ir.model.fields,field_description:vms.field_vms_activity_activity_time_ids
+#: model:ir.ui.view,arch_db:vms.view_vms_activity_form
+msgid "Activities"
+msgstr "Actividades"
+
+#. module: vms
+#: model:ir.model.fields,field_description:vms.field_vms_activity_order_line_id
+#: model:ir.model.fields,field_description:vms.field_vms_activity_time_activity_id
+#: model:ir.model.fields,field_description:vms.field_vms_product_line_order_line_id
+msgid "Activity"
+msgstr "Actividad"
+
+#. module: vms
+#: model:ir.ui.view,arch_db:vms.vms_order_form_view
+msgid "Are you sure to cancel this order? All the task(s) will cancel too."
+msgstr ""
+"¿Está seguro de cancelar está orden?. Todas la(s) actividades se cancelarán "
+"también."
+
+#. module: vms
+#: model:ir.ui.view,arch_db:vms.vms_order_line_form
+msgid "Are you sure to cancel this task?"
+msgstr "¿Está seguro de cancelar esta tarea?"
+
+#. module: vms
+#: model:ir.ui.view,arch_db:vms.vms_fleet_maintenance_form_view
+msgid ""
+"Are you sure you want to create Program Sequence for this record? All "
+"previous records will be deleted !!!"
+msgstr ""
+"¿Está seguro de crear una secuencia para el programa de mantenimiento? Si "
+"tiene otra secuencia del programa ésta será eliminada."
+
+#. module: vms
+#: model:ir.model,name:vms.model_tms_base
+#: model:ir.model.fields,field_description:vms.field_vms_order_base_id
+#: model:ir.model.fields,field_description:vms.field_vms_report_base_id
+msgid "Base"
+msgstr "Base"
+
+#. module: vms
+#: model:ir.ui.view,arch_db:vms.view_vms_activity_form
+#: model:ir.ui.view,arch_db:vms.view_vms_activity_search
+#: model:ir.ui.view,arch_db:vms.vms_order_form_view
+#: model:ir.ui.view,arch_db:vms.vms_order_line_form
+#: selection:vms.activity,state:0 selection:vms.order,state:0
+#: selection:vms.order.line,state:0 selection:vms.product.line,state:0
+#: selection:vms.report,state:0
+msgid "Cancel"
+msgstr "Cancelado"
+
+#. module: vms
+#: selection:vms.report,state:0
+msgid "Close"
+msgstr "Cerrado"
+
+#. module: vms
+#: model:ir.ui.view,arch_db:vms.vms_report_form_view
+msgid "Confirm"
+msgstr "Confirmado"
+
+#. module: vms
+#: selection:vms.report,state:0
+msgid "Confirmed"
+msgstr "Confirmado"
+
+#. module: vms
+#: model:ir.ui.view,arch_db:vms.view_vms_activity_form
+#: model:ir.ui.view,arch_db:vms.vms_activity_time_form
+msgid "Continue"
+msgstr "Continuar"
+
+#. module: vms
+#: selection:vms.order,type:0
+msgid "Corrective"
+msgstr "Correctivo"
+
+#. module: vms
+#: model:ir.ui.view,arch_db:vms.vms_order_line_form
+msgid "Create Purchase Order"
+msgstr "Crear Orden de Compra"
+
+#. module: vms
+#: model:ir.model.fields,field_description:vms.field_vms_activity_create_uid
+#: model:ir.model.fields,field_description:vms.field_vms_activity_time_create_uid
+#: model:ir.model.fields,field_description:vms.field_vms_cycle_create_uid
+#: model:ir.model.fields,field_description:vms.field_vms_order_create_uid
+#: model:ir.model.fields,field_description:vms.field_vms_order_line_create_uid
+#: model:ir.model.fields,field_description:vms.field_vms_product_line_create_uid
+#: model:ir.model.fields,field_description:vms.field_vms_program_create_uid
+#: model:ir.model.fields,field_description:vms.field_vms_report_create_uid
+#: model:ir.model.fields,field_description:vms.field_vms_task_create_uid
+#: model:ir.model.fields,field_description:vms.field_vms_vehicle_cycle_create_uid
+msgid "Created by"
+msgstr "Creado por"
+
+#. module: vms
+#: model:ir.model.fields,field_description:vms.field_vms_activity_create_date
+#: model:ir.model.fields,field_description:vms.field_vms_activity_time_create_date
+#: model:ir.model.fields,field_description:vms.field_vms_cycle_create_date
+#: model:ir.model.fields,field_description:vms.field_vms_order_create_date
+#: model:ir.model.fields,field_description:vms.field_vms_order_line_create_date
+#: model:ir.model.fields,field_description:vms.field_vms_product_line_create_date
+#: model:ir.model.fields,field_description:vms.field_vms_program_create_date
+#: model:ir.model.fields,field_description:vms.field_vms_report_create_date
+#: model:ir.model.fields,field_description:vms.field_vms_task_create_date
+#: model:ir.model.fields,field_description:vms.field_vms_vehicle_cycle_create_date
+msgid "Created on"
+msgstr "Creado el"
+
+#. module: vms
+#: model:ir.model.fields,field_description:vms.field_vms_order_current_odometer
+msgid "Current odometer"
+msgstr "Odómetro Actual"
+
+#. module: vms
+#: model:ir.model.fields,field_description:vms.field_vms_order_cycle_id
+#: model:ir.model.fields,field_description:vms.field_vms_vehicle_cycle_cycle_id
+msgid "Cycle"
+msgstr "Ciclo"
+
+#. module: vms
+#: model:ir.model.fields,field_description:vms.field_vms_program_cycle_ids
+#: model:ir.ui.view,arch_db:vms.view_vms_program_form
+msgid "Cycle(s)"
+msgstr "Ciclo(s)"
+
+#. module: vms
+#: model:ir.actions.act_window,name:vms.vms_open_view_cycle_list
+#: model:ir.model.fields,field_description:vms.field_fleet_vehicle_cycle_ids
+#: model:ir.model.fields,field_description:vms.field_vms_cycle_cycle_ids
+#: model:ir.ui.menu,name:vms.cycle_menu
+#: model:ir.ui.view,arch_db:vms.view_vms_cycle_form
+#: model:ir.ui.view,arch_db:vms.vms_fleet_maintenance_form_view
+msgid "Cycles"
+msgstr "Ciclos"
+
+#. module: vms
+#: model:ir.model.fields,field_description:vms.field_vms_activity_time_date
+#: model:ir.model.fields,field_description:vms.field_vms_order_date
+#: model:ir.model.fields,field_description:vms.field_vms_report_date
+#: model:ir.model.fields,field_description:vms.field_vms_vehicle_cycle_date
+msgid "Date"
+msgstr "Fecha"
+
+#. module: vms
+#: model:ir.model.fields,help:vms.field_vms_activity_message_last_post
+#: model:ir.model.fields,help:vms.field_vms_order_message_last_post
+#: model:ir.model.fields,help:vms.field_vms_program_message_last_post
+#: model:ir.model.fields,help:vms.field_vms_report_message_last_post
+#: model:ir.model.fields,help:vms.field_vms_vehicle_cycle_message_last_post
+msgid "Date of the last message posted on the record."
+msgstr "Fecha del último mensaje publicado en el registro."
+
+#. module: vms
+#: selection:vms.product.line,state:0
+msgid "Delievered"
+msgstr "Entregado"
+
+#. module: vms
+#: model:ir.ui.view,arch_db:vms.view_vms_activity_form
+#: model:ir.ui.view,arch_db:vms.vms_report_form_view
+#: model:ir.ui.view,arch_db:vms.vms_vehicle_cycle_form
+msgid "Details"
+msgstr "Detalles"
+
+#. module: vms
+#: model:ir.model.fields,field_description:vms.field_vms_activity_display_name
+#: model:ir.model.fields,field_description:vms.field_vms_activity_time_display_name
+#: model:ir.model.fields,field_description:vms.field_vms_cycle_display_name
+#: model:ir.model.fields,field_description:vms.field_vms_order_display_name
+#: model:ir.model.fields,field_description:vms.field_vms_order_line_display_name
+#: model:ir.model.fields,field_description:vms.field_vms_product_line_display_name
+#: model:ir.model.fields,field_description:vms.field_vms_program_display_name
+#: model:ir.model.fields,field_description:vms.field_vms_report_display_name
+#: model:ir.model.fields,field_description:vms.field_vms_task_display_name
+#: model:ir.model.fields,field_description:vms.field_vms_vehicle_cycle_display_name
+msgid "Display Name"
+msgstr "Nombre Mostrado"
+
+#. module: vms
+#: model:ir.model.fields,field_description:vms.field_vms_vehicle_cycle_distance
+msgid "Distance Real"
+msgstr "Distancia Real"
+
+#. module: vms
+#: model:ir.model.fields,field_description:vms.field_vms_vehicle_cycle_schedule
+msgid "Distance Schedule"
+msgstr "Distancia Programada"
+
+#. module: vms
+#: model:ir.ui.view,arch_db:vms.vms_order_form_view
+#: selection:vms.order.line,state:0
+msgid "Done"
+msgstr "Hecho"
+
+#. module: vms
+#: model:ir.ui.view,arch_db:vms.view_vms_activity_search
+#: selection:vms.activity,state:0 selection:vms.order,state:0
+#: selection:vms.order.line,state:0 selection:vms.product.line,state:0
+#: selection:vms.report,state:0
+msgid "Draft"
+msgstr "Borrador"
+
+#. module: vms
+#: model:ir.model.fields,field_description:vms.field_vms_report_employee_id
+msgid "Driver"
+msgstr "Operador"
+
+#. module: vms
+#: model:ir.ui.view,arch_db:vms.vms_order_form_view
+msgid "Driver Reports Solved"
+msgstr "Reportes del Operador Resueltos"
+
+#. module: vms
+#: model:ir.model.fields,field_description:vms.field_vms_order_line_duration
+#: model:ir.model.fields,field_description:vms.field_vms_task_duration
+msgid "Duration"
+msgstr "Duración"
+
+#. module: vms
+#: model:ir.model,name:vms.model_vms_activity
+#: model:ir.model,name:vms.model_vms_program
+msgid "Email Thread"
+msgstr "Línea de Email"
+
+#. module: vms
+#: model:ir.model,name:vms.model_hr_employee
+msgid "Employee"
+msgstr "Empleado"
+
+#. module: vms
+#: model:ir.ui.view,arch_db:vms.view_vms_activity_form
+#: model:ir.ui.view,arch_db:vms.vms_activity_time_form
+#: model:ir.ui.view,arch_db:vms.vms_order_line_form
+#: selection:vms.activity,state:0 selection:vms.activity.time,status:0
+msgid "End"
+msgstr "Terminado"
+
+#. module: vms
+#: model:ir.model.fields,field_description:vms.field_vms_activity_end_date
+#: model:ir.model.fields,field_description:vms.field_vms_report_end_date
+msgid "End date"
+msgstr "Fecha de Terminació"
+
+#. module: vms
+#: model:ir.ui.view,arch_db:vms.view_vms_activity_search
+msgid "Ended"
+msgstr "Terminado"
+
+#. module: vms
+#: model:ir.model.fields,field_description:vms.field_vms_order_line_external
+msgid "External"
+msgstr "Externo"
+
+#. module: vms
+#: model:ir.ui.view,arch_db:vms.vms_order_line_form
+msgid "External Service"
+msgstr "Servicio Externo"
+
+#. module: vms
+#: model:ir.model.fields,field_description:vms.field_vms_activity_message_follower_ids
+#: model:ir.model.fields,field_description:vms.field_vms_order_message_follower_ids
+#: model:ir.model.fields,field_description:vms.field_vms_program_message_follower_ids
+#: model:ir.model.fields,field_description:vms.field_vms_report_message_follower_ids
+#: model:ir.model.fields,field_description:vms.field_vms_vehicle_cycle_message_follower_ids
+msgid "Followers"
+msgstr "Seguidores"
+
+#. module: vms
+#: model:ir.model.fields,field_description:vms.field_vms_activity_message_channel_ids
+#: model:ir.model.fields,field_description:vms.field_vms_order_message_channel_ids
+#: model:ir.model.fields,field_description:vms.field_vms_program_message_channel_ids
+#: model:ir.model.fields,field_description:vms.field_vms_report_message_channel_ids
+#: model:ir.model.fields,field_description:vms.field_vms_vehicle_cycle_message_channel_ids
+msgid "Followers (Channels)"
+msgstr "Seguidores (Canales)"
+
+#. module: vms
+#: model:ir.model.fields,field_description:vms.field_vms_activity_message_partner_ids
+#: model:ir.model.fields,field_description:vms.field_vms_order_message_partner_ids
+#: model:ir.model.fields,field_description:vms.field_vms_program_message_partner_ids
+#: model:ir.model.fields,field_description:vms.field_vms_report_message_partner_ids
+#: model:ir.model.fields,field_description:vms.field_vms_vehicle_cycle_message_partner_ids
+msgid "Followers (Partners)"
+msgstr "Seguidores (Socios)"
+
+#. module: vms
+#: model:ir.model.fields,field_description:vms.field_vms_cycle_frequency
+msgid "Frequency"
+msgstr "Frecuencia"
+
+#. module: vms
+#: model:ir.model.fields,field_description:vms.field_vms_activity_id
+#: model:ir.model.fields,field_description:vms.field_vms_activity_time_id
+#: model:ir.model.fields,field_description:vms.field_vms_cycle_id
+#: model:ir.model.fields,field_description:vms.field_vms_order_id
+#: model:ir.model.fields,field_description:vms.field_vms_order_line_id
+#: model:ir.model.fields,field_description:vms.field_vms_product_line_id
+#: model:ir.model.fields,field_description:vms.field_vms_program_id
+#: model:ir.model.fields,field_description:vms.field_vms_report_id
+#: model:ir.model.fields,field_description:vms.field_vms_task_id
+#: model:ir.model.fields,field_description:vms.field_vms_vehicle_cycle_id
+msgid "ID"
+msgstr "INE"
+
+#. module: vms
+#: model:ir.model.fields,help:vms.field_vms_activity_message_unread
+#: model:ir.model.fields,help:vms.field_vms_order_message_unread
+#: model:ir.model.fields,help:vms.field_vms_program_message_unread
+#: model:ir.model.fields,help:vms.field_vms_report_message_unread
+#: model:ir.model.fields,help:vms.field_vms_vehicle_cycle_message_unread
+msgid "If checked new messages require your attention."
+msgstr "Si se selecciona los nuevos mensajes necesitarán su atención"
+
+#. module: vms
+#: model:ir.model.fields,help:vms.field_vms_activity_message_needaction
+#: model:ir.model.fields,help:vms.field_vms_order_message_needaction
+#: model:ir.model.fields,help:vms.field_vms_program_message_needaction
+#: model:ir.model.fields,help:vms.field_vms_report_message_needaction
+#: model:ir.model.fields,help:vms.field_vms_vehicle_cycle_message_needaction
+msgid "If checked, new messages require your attention."
+msgstr "Si se selecciona los nuevos mensajes necesitarán su atención"
+
+#. module: vms
+#: model:ir.model,name:vms.model_fleet_vehicle
+msgid "Information on a vehicle"
+msgstr "Información de la unidad"
+
+#. module: vms
+#. openerp-web
+#: code:addons/vms/static/src/js/module_name.tour.js:38
+#, python-format
+msgid "Instructions for end user."
+msgstr "Instrucciones para el usuario final."
+
+#. module: vms
+#: model:ir.model.fields,field_description:vms.field_vms_activity_message_is_follower
+#: model:ir.model.fields,field_description:vms.field_vms_order_message_is_follower
+#: model:ir.model.fields,field_description:vms.field_vms_program_message_is_follower
+#: model:ir.model.fields,field_description:vms.field_vms_report_message_is_follower
+#: model:ir.model.fields,field_description:vms.field_vms_vehicle_cycle_message_is_follower
+msgid "Is Follower"
+msgstr "Es Seguidor"
+
+#. module: vms
+#: model:ir.model.fields,field_description:vms.field_fleet_vehicle_last_cycle_id
+msgid "Last Cycle"
+msgstr "Último Ciclo"
+
+#. module: vms
+#: model:ir.model.fields,field_description:vms.field_vms_activity_message_last_post
+#: model:ir.model.fields,field_description:vms.field_vms_order_message_last_post
+#: model:ir.model.fields,field_description:vms.field_vms_program_message_last_post
+#: model:ir.model.fields,field_description:vms.field_vms_report_message_last_post
+#: model:ir.model.fields,field_description:vms.field_vms_vehicle_cycle_message_last_post
+msgid "Last Message Date"
+msgstr "Fecha Último Mensaje"
+
+#. module: vms
+#: model:ir.model.fields,field_description:vms.field_vms_activity___last_update
+#: model:ir.model.fields,field_description:vms.field_vms_activity_time___last_update
+#: model:ir.model.fields,field_description:vms.field_vms_cycle___last_update
+#: model:ir.model.fields,field_description:vms.field_vms_order___last_update
+#: model:ir.model.fields,field_description:vms.field_vms_order_line___last_update
+#: model:ir.model.fields,field_description:vms.field_vms_product_line___last_update
+#: model:ir.model.fields,field_description:vms.field_vms_program___last_update
+#: model:ir.model.fields,field_description:vms.field_vms_report___last_update
+#: model:ir.model.fields,field_description:vms.field_vms_task___last_update
+#: model:ir.model.fields,field_description:vms.field_vms_vehicle_cycle___last_update
+msgid "Last Modified on"
+msgstr "Última Modificación el"
+
+#. module: vms
+#: model:ir.model.fields,field_description:vms.field_fleet_vehicle_last_order_id
+msgid "Last Order"
+msgstr "Última Orden"
+
+#. module: vms
+#: model:ir.model.fields,field_description:vms.field_vms_activity_time_write_uid
+#: model:ir.model.fields,field_description:vms.field_vms_activity_write_uid
+#: model:ir.model.fields,field_description:vms.field_vms_cycle_write_uid
+#: model:ir.model.fields,field_description:vms.field_vms_order_line_write_uid
+#: model:ir.model.fields,field_description:vms.field_vms_order_write_uid
+#: model:ir.model.fields,field_description:vms.field_vms_product_line_write_uid
+#: model:ir.model.fields,field_description:vms.field_vms_program_write_uid
+#: model:ir.model.fields,field_description:vms.field_vms_report_write_uid
+#: model:ir.model.fields,field_description:vms.field_vms_task_write_uid
+#: model:ir.model.fields,field_description:vms.field_vms_vehicle_cycle_write_uid
+msgid "Last Updated by"
+msgstr "Última Actualización por"
+
+#. module: vms
+#: model:ir.model.fields,field_description:vms.field_vms_activity_time_write_date
+#: model:ir.model.fields,field_description:vms.field_vms_activity_write_date
+#: model:ir.model.fields,field_description:vms.field_vms_cycle_write_date
+#: model:ir.model.fields,field_description:vms.field_vms_order_line_write_date
+#: model:ir.model.fields,field_description:vms.field_vms_order_write_date
+#: model:ir.model.fields,field_description:vms.field_vms_product_line_write_date
+#: model:ir.model.fields,field_description:vms.field_vms_program_write_date
+#: model:ir.model.fields,field_description:vms.field_vms_report_write_date
+#: model:ir.model.fields,field_description:vms.field_vms_task_write_date
+#: model:ir.model.fields,field_description:vms.field_vms_vehicle_cycle_write_date
+msgid "Last Updated on"
+msgstr "Última Actualización el"
+
+#. module: vms
+#: model:ir.ui.view,arch_db:vms.vms_order_form_view
+msgid "MRO Program Details"
+msgstr "Detalles del Programa de Mantenimiento"
+
+#. module: vms
+#: model:ir.ui.menu,name:vms.menu_vms
+#: model:ir.ui.menu,name:vms.menu_vms_maintenance
+msgid "Maintenance"
+msgstr "Mantenimiento"
+
+#. module: vms
+#: model:ir.model.fields,field_description:vms.field_vms_activity_order_id
+msgid "Maintenance Order"
+msgstr "Orden de Mantenimiento"
+
+#. module: vms
+#: model:ir.actions.act_window,name:vms.action_vms_program_form
+#: model:ir.model.fields,field_description:vms.field_fleet_vehicle_program_id
+#: model:ir.ui.menu,name:vms.vms_program_menu
+#: model:ir.ui.view,arch_db:vms.view_vms_program_form
+#: model:ir.ui.view,arch_db:vms.vms_fleet_maintenance_form_view
+msgid "Maintenance Program"
+msgstr "Programa de Mantenimiento"
+
+#. module: vms
+#: model:ir.model.fields,field_description:vms.field_hr_employee_mechanic
+#: model:ir.ui.view,arch_db:vms.view_vms_activity_search
+msgid "Mechanic"
+msgstr "Mecánico"
+
+#. module: vms
+#: model:ir.actions.act_window,name:vms.action_vms_activity_form
+#: model:ir.ui.menu,name:vms.vms_activity_menu
+msgid "Mechanic's Tasks"
+msgstr "Tareas de los Mecánicos"
+
+#. module: vms
+#: model:ir.actions.act_window,name:vms.vms_open_view_employee_list
+#: model:ir.model.fields,field_description:vms.field_vms_order_line_responsible_ids
+#: model:ir.ui.menu,name:vms.mechanic_menu
+#: model:ir.ui.view,arch_db:vms.vms_order_line_form
+msgid "Mechanics"
+msgstr "Mecánicos "
+
+#. module: vms
+#: model:ir.model.fields,field_description:vms.field_vms_activity_message_ids
+#: model:ir.model.fields,field_description:vms.field_vms_order_message_ids
+#: model:ir.model.fields,field_description:vms.field_vms_program_message_ids
+#: model:ir.model.fields,field_description:vms.field_vms_report_message_ids
+#: model:ir.model.fields,field_description:vms.field_vms_vehicle_cycle_message_ids
+msgid "Messages"
+msgstr "Mensajes"
+
+#. module: vms
+#: model:ir.model.fields,field_description:vms.field_vms_activity_name
+#: model:ir.model.fields,field_description:vms.field_vms_cycle_name
+#: model:ir.model.fields,field_description:vms.field_vms_program_name
+#: model:ir.model.fields,field_description:vms.field_vms_task_name
+msgid "Name"
+msgstr "Nombre"
+
+#. module: vms
+#: model:ir.model.fields,field_description:vms.field_fleet_vehicle_next_cycle_id
+msgid "Next Cycle"
+msgstr "Siguiente Ciclo"
+
+#. module: vms
+#: model:ir.model.fields,field_description:vms.field_fleet_vehicle_next_service_date
+msgid "Next service date"
+msgstr "Fecha Siguiente Servicio"
+
+#. module: vms
+#: model:ir.model.fields,field_description:vms.field_fleet_vehicle_next_service_odometer
+msgid "Next service odometer"
+msgstr "Odómetro Siguiente Servicio"
+
+#. module: vms
+#: model:ir.model.fields,field_description:vms.field_fleet_vehicle_next_service_sequence
+msgid "Next service sequence"
+msgstr "Secuencia Siguiente Servicio"
+
+#. module: vms
+#: model:ir.model.fields,field_description:vms.field_vms_report_notes
+#: model:ir.ui.view,arch_db:vms.vms_report_form_view
+msgid "Notes"
+msgstr "Notas"
+
+#. module: vms
+#: model:ir.model.fields,field_description:vms.field_vms_report_name
+msgid "Number"
+msgstr "Número"
+
+#. module: vms
+#: model:ir.model.fields,field_description:vms.field_vms_activity_message_needaction_counter
+#: model:ir.model.fields,field_description:vms.field_vms_order_message_needaction_counter
+#: model:ir.model.fields,field_description:vms.field_vms_program_message_needaction_counter
+#: model:ir.model.fields,field_description:vms.field_vms_report_message_needaction_counter
+#: model:ir.model.fields,field_description:vms.field_vms_vehicle_cycle_message_needaction_counter
+msgid "Number of Actions"
+msgstr "Número de Acciones"
+
+#. module: vms
+#: model:ir.model.fields,help:vms.field_vms_activity_message_needaction_counter
+#: model:ir.model.fields,help:vms.field_vms_order_message_needaction_counter
+#: model:ir.model.fields,help:vms.field_vms_program_message_needaction_counter
+#: model:ir.model.fields,help:vms.field_vms_report_message_needaction_counter
+#: model:ir.model.fields,help:vms.field_vms_vehicle_cycle_message_needaction_counter
+msgid "Number of messages which requires an action"
+msgstr "Número de mensajes que requieren una acción"
+
+#. module: vms
+#: model:ir.model.fields,help:vms.field_vms_activity_message_unread_counter
+#: model:ir.model.fields,help:vms.field_vms_order_message_unread_counter
+#: model:ir.model.fields,help:vms.field_vms_program_message_unread_counter
+#: model:ir.model.fields,help:vms.field_vms_report_message_unread_counter
+#: model:ir.model.fields,help:vms.field_vms_vehicle_cycle_message_unread_counter
+msgid "Number of unread messages"
+msgstr "Número de mensajes sin leer"
+
+#. module: vms
+#: model:ir.ui.view,arch_db:vms.vms_order_form_view
+#: selection:vms.order,state:0 selection:vms.report,state:0
+msgid "Open"
+msgstr "Abierto"
+
+#. module: vms
+#: model:ir.actions.act_window,name:vms.action_vms_order
+#: model:ir.model.fields,field_description:vms.field_vms_order_line_order_id
+#: model:ir.model.fields,field_description:vms.field_vms_report_order_id
+#: model:ir.model.fields,field_description:vms.field_vms_vehicle_cycle_order_id
+#: model:ir.ui.menu,name:vms.vms_order_menu
+msgid "Order"
+msgstr "Orden"
+
+#. module: vms
+#: model:ir.model.fields,field_description:vms.field_vms_order_order_line_ids
+msgid "Order Lines"
+msgstr "Líneas de la Orden"
+
+#. module: vms
+#: model:ir.model.fields,field_description:vms.field_vms_order_name
+msgid "Order Number"
+msgstr "Número de Orden"
+
+#. module: vms
+#: model:ir.model.fields,field_description:vms.field_tms_base_order_sequence_id
+msgid "Order Sequence"
+msgstr "Secuencia de las Ordenes"
+
+#. module: vms
+#: model:ir.ui.view,arch_db:vms.vms_order_line_form
+msgid "Order line"
+msgstr "Línea de la Orden"
+
+#. module: vms
+#: model:ir.ui.view,arch_db:vms.vms_order_line_form
+msgid "Order lines"
+msgstr "Líneas de la Orden"
+
+#. module: vms
+#: model:ir.ui.view,arch_db:vms.vms_order_form_view
+msgid "Order of Maintenance"
+msgstr "Orden de Mantenimiento"
+
+#. module: vms
+#: model:ir.ui.view,arch_db:vms.vms_order_calendar_view
+msgid "Orders Calendar"
+msgstr "Calendario de Ordenes"
+
+#. module: vms
+#: model:ir.ui.view,arch_db:vms.vms_order_gantt_view
+msgid "Orders Gantt"
+msgstr "Gantt de Ordenes"
+
+#. module: vms
+#: model:ir.ui.view,arch_db:vms.view_vms_activity_form
+#: model:ir.ui.view,arch_db:vms.vms_activity_time_form
+#: selection:vms.activity,state:0 selection:vms.activity.time,status:0
+msgid "Pause"
+msgstr "Pausar"
+
+#. module: vms
+#: model:ir.ui.view,arch_db:vms.view_vms_activity_search
+msgid "Paused"
+msgstr "Pausada"
+
+#. module: vms
+#: selection:vms.product.line,state:0
+msgid "Pending"
+msgstr "Pendiente"
+
+#. module: vms
+#: model:ir.ui.view,arch_db:vms.view_vms_activity_search
+msgid "Period"
+msgstr "Periodo"
+
+#. module: vms
+#: selection:vms.order,type:0
+msgid "Preventive"
+msgstr "Preventivo"
+
+#. module: vms
+#: model:ir.ui.view,arch_db:vms.view_vms_activity_search
+#: selection:vms.activity,state:0 selection:vms.activity.time,status:0
+#: selection:vms.order.line,state:0
+msgid "Process"
+msgstr "En Proceso"
+
+#. module: vms
+#: model:ir.model.fields,field_description:vms.field_vms_order_line_product_id
+msgid "Product"
+msgstr "Producto"
+
+#. module: vms
+#: model:ir.ui.view,arch_db:vms.view_vms_product_form
+msgid "Product line"
+msgstr "Línea de Producto"
+
+#. module: vms
+#: model:ir.ui.view,arch_db:vms.view_vms_product_form
+msgid "Product lines"
+msgstr "Líneas de Producto"
+
+#. module: vms
+#: model:ir.model.fields,field_description:vms.field_vms_order_program_id
+msgid "Program"
+msgstr "Programa"
+
+#. module: vms
+#: model:ir.ui.view,arch_db:vms.vms_fleet_maintenance_form_view
+msgid "Program Mtto"
+msgstr "Programa de Mantenimiento"
+
+#. module: vms
+#: model:ir.model.fields,field_description:vms.field_vms_order_line_purchase_order_id
+msgid "Purchase Order"
+msgstr "Orden de Compra"
+
+#. module: vms
+#: model:ir.model.fields,field_description:vms.field_vms_order_line_purchase_state
+msgid "Purchase Order State Done"
+msgstr "Orden de Compra en Estado Terminado"
+
+#. module: vms
+#: model:ir.model.fields,field_description:vms.field_vms_order_line_qty_product
+#: model:ir.model.fields,field_description:vms.field_vms_product_line_product_qty
+msgid "Quantity"
+msgstr "Cantidad"
+
+#. module: vms
+#: model:ir.ui.view,arch_db:vms.vms_order_line_form
+msgid "Real"
+msgstr "Real"
+
+#. module: vms
+#: model:ir.model.fields,field_description:vms.field_vms_order_line_real_duration
+msgid "Real duration"
+msgstr "Duración Real"
+
+#. module: vms
+#: model:ir.model.fields,field_description:vms.field_vms_order_end_date_real
+#: model:ir.model.fields,field_description:vms.field_vms_order_line_end_date_real
+msgid "Real end date"
+msgstr "Fecha de Terminación REal"
+
+#. module: vms
+#: model:ir.model.fields,field_description:vms.field_vms_order_line_start_date_real
+#: model:ir.model.fields,field_description:vms.field_vms_order_start_date_real
+msgid "Real start date"
+msgstr "Fecha de Inicio Real"
+
+#. module: vms
+#: model:ir.model.fields,field_description:vms.field_vms_order_line_real_time_total
+msgid "Real time total"
+msgstr "Tiempo Total Real"
+
+#. module: vms
+#: model:ir.ui.view,arch_db:vms.vms_order_form_view
+#: selection:vms.order,state:0
+msgid "Released"
+msgstr "Liberada"
+
+#. module: vms
+#: model:ir.actions.act_window,name:vms.action_vms_report
+#: model:ir.ui.menu,name:vms.menu_vms_report
+#: model:ir.ui.menu,name:vms.vms_report_menu
+#: model:ir.ui.view,arch_db:vms.vms_report_tree_view
+msgid "Report"
+msgstr "Reporte"
+
+#. module: vms
+#: model:ir.model.fields,field_description:vms.field_tms_base_report_sequence_id
+msgid "Report Sequence"
+msgstr "Secuencia de los Reportes"
+
+#. module: vms
+#: model:ir.model.fields,field_description:vms.field_vms_order_report_ids
+msgid "Report(s)"
+msgstr "Reportes(s)"
+
+#. module: vms
+#: model:ir.model.fields,field_description:vms.field_vms_activity_responsible_id
+msgid "Responsible"
+msgstr "Responsable"
+
+#. module: vms
+#: model:ir.ui.view,arch_db:vms.vms_order_line_form
+msgid "Schedule"
+msgstr "Programación"
+
+#. module: vms
+#: model:ir.model.fields,field_description:vms.field_vms_order_end_date
+#: model:ir.model.fields,field_description:vms.field_vms_order_line_end_date
+msgid "Schedule end"
+msgstr "Fin Programado"
+
+#. module: vms
+#: model:ir.model.fields,field_description:vms.field_vms_order_line_start_date
+#: model:ir.model.fields,field_description:vms.field_vms_order_start_date
+msgid "Schedule start"
+msgstr "Inicio Programado"
+
+#. module: vms
+#: model:ir.ui.view,arch_db:vms.view_vms_activity_search
+msgid "Search Activities"
+msgstr "Buscar Actividades"
+
+#. module: vms
+#: model:ir.model.fields,field_description:vms.field_fleet_vehicle_sequence
+#: model:ir.model.fields,field_description:vms.field_vms_order_sequence
+#: model:ir.model.fields,field_description:vms.field_vms_vehicle_cycle_sequence
+msgid "Sequence"
+msgstr "Secuencia"
+
+#. module: vms
+#: model:ir.ui.view,arch_db:vms.view_vms_activity_search
+#: model:ir.ui.view,arch_db:vms.vms_order_form_view
+msgid "Service Order"
+msgstr "Orden de Servicio"
+
+#. module: vms
+#: model:ir.ui.view,arch_db:vms.vms_order_form_view
+msgid "Service Order Detail"
+msgstr "Detalles de la Orden de Servicio"
+
+#. module: vms
+#: model:ir.ui.view,arch_db:vms.view_vms_activity_form
+#: model:ir.ui.view,arch_db:vms.vms_order_form_view
+#: model:ir.ui.view,arch_db:vms.vms_order_line_form
+msgid "Set to Draft"
+msgstr "Revertir a Borrador"
+
+#. module: vms
+#: model:ir.ui.menu,name:vms.menu_vms_settings
+msgid "Settings"
+msgstr "Configuración"
+
+#. module: vms
+#: model:ir.ui.view,arch_db:vms.view_vms_activity_form
+#: model:ir.ui.view,arch_db:vms.view_vms_program_form
+#: model:ir.ui.view,arch_db:vms.vms_report_form_view
+#: model:ir.ui.view,arch_db:vms.vms_vehicle_cycle_form
+msgid "Share a message..."
+msgstr "Compartir un mensaje..."
+
+#. module: vms
+#: model:ir.model.fields,field_description:vms.field_vms_product_line_product_id
+msgid "Spare Part"
+msgstr "Refacción"
+
+#. module: vms
+#: model:ir.model.fields,field_description:vms.field_vms_order_line_spare_part_ids
+#: model:ir.model.fields,field_description:vms.field_vms_task_spare_part_ids
+#: model:ir.ui.view,arch_db:vms.vms_order_line_form
+#: model:ir.ui.view,arch_db:vms.vms_task_form_view
+msgid "Spare Parts"
+msgstr "Refacciones"
+
+#. module: vms
+#: model:ir.ui.view,arch_db:vms.view_vms_activity_form
+#: model:ir.ui.view,arch_db:vms.vms_activity_time_form
+#: model:ir.ui.view,arch_db:vms.vms_order_line_form
+msgid "Start"
+msgstr "Iniciar"
+
+#. module: vms
+#: model:ir.model.fields,field_description:vms.field_vms_activity_start_date
+msgid "Start date"
+msgstr "Fecha de Inicio"
+
+#. module: vms
+#: model:ir.model.fields,field_description:vms.field_vms_activity_state
+#: model:ir.model.fields,field_description:vms.field_vms_order_line_state
+#: model:ir.model.fields,field_description:vms.field_vms_order_state
+#: model:ir.model.fields,field_description:vms.field_vms_product_line_state
+#: model:ir.model.fields,field_description:vms.field_vms_report_state
+#: model:ir.ui.view,arch_db:vms.view_vms_activity_search
+msgid "State"
+msgstr "Estado"
+
+#. module: vms
+#: model:ir.ui.view,arch_db:vms.vms_activity_time_form
+msgid "State Activity"
+msgstr "Estado de la Actividad"
+
+#. module: vms
+#: model:ir.model.fields,field_description:vms.field_vms_activity_time_status
+msgid "Status"
+msgstr "Status"
+
+#. module: vms
+#: model:ir.model.fields,field_description:vms.field_vms_order_stock_location_id
+msgid "Stock Location"
+msgstr "Origen de Refacciones"
+
+#. module: vms
+#: model:ir.model.fields,field_description:vms.field_vms_order_line_stock_picking_id
+msgid "Stock Picking"
+msgstr "Movimiento de Almacén"
+
+#. module: vms
+#: model:ir.model.fields,field_description:vms.field_vms_order_supervisor_id
+msgid "Supervisor"
+msgstr "Supervisor"
+
+#. module: vms
+#: model:ir.model.fields,field_description:vms.field_vms_order_line_supplier_id
+msgid "Supplier"
+msgstr "Proveedor"
+
+#. module: vms
+#: model:ir.actions.act_window,name:vms.action_vms_task
+#: model:ir.model.fields,field_description:vms.field_vms_activity_task_id
+#: model:ir.model.fields,field_description:vms.field_vms_order_line_task_id
+#: model:ir.model.fields,field_description:vms.field_vms_product_line_task_id
+#: model:ir.ui.menu,name:vms.vms_task_menu
+#: model:ir.ui.view,arch_db:vms.vms_task_form_view
+msgid "Task"
+msgstr "Tarea"
+
+#. module: vms
+#: model:ir.model.fields,field_description:vms.field_vms_cycle_task_ids
+#: model:ir.ui.view,arch_db:vms.view_vms_cycle_form
+#: model:ir.ui.view,arch_db:vms.vms_order_form_view
+msgid "Tasks"
+msgstr "Tareas"
+
+#. module: vms
+#. openerp-web
+#: code:addons/vms/static/src/js/module_name.tour.js:44
+#, python-format
+msgid "Text for continue button."
+msgstr "Texto para el botón continue"
+
+#. module: vms
+#: code:addons/vms/models/vms_order_line.py:158
+#, python-format
+msgid "The activities of the mechanics(s) must be finished."
+msgstr "Las actividades del mecánico(s) deben estar terminadas."
+
+#. module: vms
+#: code:addons/vms/models/vms_activity.py:80
+#, python-format
+msgid "The order line task must be open."
+msgstr "La tarea debe estar abierta."
+
+#. module: vms
+#: code:addons/vms/models/vms_order_line.py:108
+#, python-format
+msgid "The order must be open."
+msgstr "La orden debe estar abierta."
+
+#. module: vms
+#: code:addons/vms/models/vms_order.py:201
+#, python-format
+msgid "The order must have at least one task"
+msgstr "La orden debe tener al menos una tarea."
+
+#. module: vms
+#: code:addons/vms/models/vms_order_line.py:163
+#, python-format
+msgid "The stock move must be in done state."
+msgstr ""
+"El movimiento de almacén debe estar liberado para poder liberar la tarea."
+
+#. module: vms
+#: code:addons/vms/models/vms_order.py:231
+#: code:addons/vms/models/vms_order_line.py:136
+#, python-format
+msgid "The tasks must have almost one mechanic."
+msgstr "Las tareas deben tener al menos un mecánico asignado."
+
+#. module: vms
+#. openerp-web
+#: code:addons/vms/static/src/js/module_name.tour.js:19
+#, python-format
+msgid "The title of this step, appears in logs"
+msgstr "El titulo de este paso, aparece en el log"
+
+#. module: vms
+#: model:ir.ui.view,arch_db:vms.vms_order_form_view
+msgid "Times"
+msgstr "Tiempos"
+
+#. module: vms
+#: model:ir.model.fields,field_description:vms.field_vms_activity_total_hours
+msgid "Total hours"
+msgstr "Horas Totales"
+
+#. module: vms
+#. openerp-web
+#: code:addons/vms/static/src/js/module_name.tour.js:13
+#, python-format
+msgid "Try to demostrate how to create a tour"
+msgstr "Trate de demostrar como crea un tour"
+
+#. module: vms
+#: model:ir.model.fields,field_description:vms.field_vms_order_type
+msgid "Type"
+msgstr "Tipo"
+
+#. module: vms
+#: model:ir.model.fields,field_description:vms.field_vms_activity_unit_id
+#: model:ir.model.fields,field_description:vms.field_vms_order_unit_id
+#: model:ir.model.fields,field_description:vms.field_vms_report_unit_id
+#: model:ir.model.fields,field_description:vms.field_vms_vehicle_cycle_unit_id
+msgid "Unit"
+msgstr "Unidad"
+
+#. module: vms
+#: code:addons/vms/models/vms_order.py:195
+#, python-format
+msgid "Unit not available for maintenance because it has more open order(s)."
+msgstr ""
+"Unidad no disponible para mantenimiento porque ya tiene más ordenes "
+"abierta(s)."
+
+#. module: vms
+#: model:ir.model.fields,field_description:vms.field_vms_product_line_product_uom_id
+msgid "Unit of Measure"
+msgstr "Unidad de Medida"
+
+#. module: vms
+#: model:ir.model.fields,field_description:vms.field_vms_activity_message_unread
+#: model:ir.model.fields,field_description:vms.field_vms_order_message_unread
+#: model:ir.model.fields,field_description:vms.field_vms_program_message_unread
+#: model:ir.model.fields,field_description:vms.field_vms_report_message_unread
+#: model:ir.model.fields,field_description:vms.field_vms_vehicle_cycle_message_unread
+msgid "Unread Messages"
+msgstr "Mensajes sin Leer"
+
+#. module: vms
+#: model:ir.model.fields,field_description:vms.field_vms_activity_message_unread_counter
+#: model:ir.model.fields,field_description:vms.field_vms_order_message_unread_counter
+#: model:ir.model.fields,field_description:vms.field_vms_program_message_unread_counter
+#: model:ir.model.fields,field_description:vms.field_vms_report_message_unread_counter
+#: model:ir.model.fields,field_description:vms.field_vms_vehicle_cycle_message_unread_counter
+msgid "Unread Messages Counter"
+msgstr "Contador de Mensajes sin Leer"
+
+#. module: vms
+#: model:ir.ui.view,arch_db:vms.view_employee_form_vms
+msgid "VMS"
+msgstr "VMS"
+
+#. module: vms
+#: model:ir.model,name:vms.model_vms_order_line
+msgid "VMS Order Line"
+msgstr "Lineas de Ordenes"
+
+#. module: vms
+#: model:ir.model,name:vms.model_vms_order
+msgid "VMS Orders"
+msgstr "Ordenes"
+
+#. module: vms
+#: model:ir.model,name:vms.model_vms_product_line
+msgid "VMS Product Lines"
+msgstr "Lineas de Producto"
+
+#. module: vms
+#: model:ir.model,name:vms.model_vms_report
+msgid "VMS Reports"
+msgstr "Reportes"
+
+#. module: vms
+#: model:ir.model,name:vms.model_vms_task
+msgid "VMS Task"
+msgstr "Tarea"
+
+#. module: vms
+#: model:ir.model,name:vms.model_vms_activity_time
+msgid "VMS Time Activities"
+msgstr "Tiempos de Actividades"
+
+#. module: vms
+#: model:ir.model.fields,help:vms.field_hr_employee_mechanic
+msgid "Validates if the employee is mechanic."
+msgstr "Valida si el empleado es un mecánico"
+
+#. module: vms
+#: model:ir.ui.view,arch_db:vms.view_vms_activity_search
+msgid "Vehicle"
+msgstr "Unidad"
+
+#. module: vms
+#: model:ir.model,name:vms.model_vms_vehicle_cycle
+msgid "Vms Vehicle Cycle"
+msgstr "Ciclo de la Unidad"
+
+#. module: vms
+#: model:ir.ui.view,arch_db:vms.vms_order_line_form
+msgid "You must save the order first to configure the purchase order."
+msgstr ""
+"Necesita guardar la orden primero para configurar los datos del a orden de "
+"compra"
+
+#. module: vms
+#: model:ir.model.fields,help:vms.field_vms_order_line_spare_part_ids
+msgid "You must save the order to select the mechanic(s)."
+msgstr "Necesita guardar la orden para asignar el (los) mecánicos"
+
+#. module: vms
+#: model:ir.ui.view,arch_db:vms.vms_order_form_view
+msgid "description"
+msgstr "Descripción "
+
+#. module: vms
+#: model:ir.ui.view,arch_db:vms.vms_order_tree_view
+msgid "order"
+msgstr "Orden"
+
+#. module: vms
+#: model:ir.ui.view,arch_db:vms.vms_task_tree_view
+msgid "task"
+msgstr "Tarea"
+
+#. module: vms
+#: model:ir.model,name:vms.model_vms_cycle
+msgid "vms.cycle"
+msgstr "vms.cycle"

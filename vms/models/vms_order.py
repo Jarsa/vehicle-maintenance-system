@@ -180,7 +180,7 @@ class VmsOrder(models.Model):
     @api.onchange('type', 'unit_id')
     def _onchange_type(self):
         for rec in self:
-            if (rec.type == 'preventive'):
+            if rec.type == 'preventive':
                 rec.program_id = rec.unit_id.program_id
                 rec.current_odometer = rec.unit_id.odometer
                 rec.sequence = rec.unit_id.sequence
@@ -282,10 +282,15 @@ class VmsOrder(models.Model):
     def action_cancel_draft(self):
         for rec in self:
             rec.state = 'draft'
-        if rec.type == 'corrective':
-            for report in rec.report_ids:
-                report.state = 'draft'
-        for line in rec.order_line_ids:
-            line.state = 'draft'
-            for spare in line.spare_part_ids:
-                spare.state = 'draft'
+            if rec.type == 'corrective':
+                for report in rec.report_ids:
+                    report.state = 'draft'
+            for line in rec.order_line_ids:
+                line.state = 'draft'
+                for spare in line.spare_part_ids:
+                    spare.state = 'draft'
+
+    @api.multi
+    def action_done(self):
+        for rec in self:
+            rec.state = 'done'
