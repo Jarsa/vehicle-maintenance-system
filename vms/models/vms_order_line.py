@@ -160,7 +160,7 @@ class VmsOrderLine(models.Model):
                                     'unit_id': rec.order_id.unit_id.id,
                                     'order_line_id': rec.id,
                                     'responsible_id': mechanic.id
-                                    })
+                                })
                         rec.state = 'process'
                         rec.start_date_real = fields.Datetime.now()
                         if rec.spare_part_ids:
@@ -248,6 +248,6 @@ class VmsOrderLine(models.Model):
                     6, 0,
                     [x.id for x in (
                         self.product_id.supplier_taxes_id)]
-                    )],
+                )],
                 'name': self.product_id.name})]})
         self.write({'purchase_order_id': purchase_order_id.id})

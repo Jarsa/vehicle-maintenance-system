@@ -5,7 +5,7 @@
             <field name="name">VMS Fleet Maintenance Form View</field>
             <field name="model">fleet.vehicle</field>
             <field name="type">form</field>
-            <field name="inherit_id" ref="fleet.fleet_vehicle_view_form"/>
+            <field name="inherit_id" ref="fleet.fleet_vehicle_form"/>
             <field name="arch" type="xml">
                 <xpath expr="//sheet/group[2]" position="after">
                         <group string="Maintenance Program" coslpan="2">

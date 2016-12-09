@@ -41,7 +41,7 @@ class VmsOrder(models.Model):
         required=True,
         compute='_compute_end_date',
         string='Schedule end'
-        )
+    )
     start_date_real = fields.Datetime(
         readonly=True,
         string='Real start date')
@@ -49,12 +49,12 @@ class VmsOrder(models.Model):
         compute="_compute_end_date_real",
         readonly=True,
         string='Real end date'
-        )
+    )
     order_line_ids = fields.One2many(
         'vms.order.line',
         'order_id',
         string='Order Lines',
-        )
+    )
     program_id = fields.Many2one(
         'vms.program',
         string='Program')
@@ -79,18 +79,25 @@ class VmsOrder(models.Model):
     @api.model
     def create(self, values):
         order = super(VmsOrder, self).create(values)
-        sequence = order.base_id.order_sequence_id
-        order.name = sequence.next_by_id()
+        if (order.base_id.order_sequence_id or
+                order.base_id.report_sequence_id):
+            sequence = order.base_id.order_sequence_id
+            order.name = sequence.next_by_id()
+        else:
+            raise exceptions.ValidationError(
+                'Verify that the sequences in the base are assigned')
         return order
 
-    @api.model
-    def unlink(self, values):
-        activities = self.env['vms.activity'].search(
-            [('order_id', 'in', [values])])
-        if len(activities) > 0:
-            activities.unlink()
-        else:
-            return super(VmsOrder, self).unlink()
+    @api.multi
+    def unlink(self):
+        for rec in self:
+            order = super(VmsOrder, self).unlink()
+            activities = self.env['vms.activity'].search(
+                [('order_id', '=', rec.id)])
+            if len(activities) > 0:
+                activities.unlink()
+                order.search([('id', '=', rec.id)]).unlink()
+            return order
 
     @api.depends('order_line_ids')
     def _compute_end_date_real(self):
@@ -237,7 +244,7 @@ class VmsOrder(models.Model):
                                         'unit_id': rec.unit_id.id,
                                         'order_line_id': line.id,
                                         'responsible_id': mechanic.id
-                                        })
+                                    })
                             if(line.spare_part_ids):
                                 for product in line.spare_part_ids:
                                     product.state = 'pending'
@@ -289,8 +296,3 @@ class VmsOrder(models.Model):
                 line.state = 'draft'
                 for spare in line.spare_part_ids:
                     spare.state = 'draft'
-
-    @api.multi
-    def action_done(self):
-        for rec in self:
-            rec.state = 'done'
