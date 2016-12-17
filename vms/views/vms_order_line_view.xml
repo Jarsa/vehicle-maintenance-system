@@ -83,7 +83,7 @@
             <field name='name'>VMS Order Line Tree View</field>
             <field name='model'>vms.order.line</field>
             <field name='arch' type='xml'>
-                <tree editable="top">
+                <tree>
                     <field name='task_id'/>
                     <field name='duration' widget='float_time'/>
                     <field name='real_duration' widget='float_time'/>
