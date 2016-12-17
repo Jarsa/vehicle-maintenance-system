@@ -1,16 +1,16 @@
 # -*- coding: utf-8 -*-
-# © <2016> <Jarsa Sistemas, S.A. de C.V.>
+# Copyright 2016, Jarsa Sistemas, S.A. de C.V.
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
-from openerp import api, fields, models
+from __future__ import division
+
 from datetime import datetime, timedelta
+
+from openerp import api, fields, models
 
 
 class FleetVehicle(models.Model):
-    _name = 'fleet.vehicle'
     _inherit = 'fleet.vehicle'
-    _description = "Vehicle"
-    _order = 'name asc'
 
     program_id = fields.Many2one(
         'vms.program',
@@ -54,14 +54,14 @@ class FleetVehicle(models.Model):
                     seq += 1
             last_schedule = 0.00
             for cycles in vehicle.cycle_ids:
-                if (last_schedule <= vehicle.odometer <= cycles.schedule):
+                if last_schedule <= vehicle.odometer <= cycles.schedule:
                     vehicle.sequence = cycles.sequence
                     vehicle.last_cycle_id = cycles.id
-                    next = cycles.search([
+                    next_cycle = cycles.search([
                         ('sequence', '=', (cycles.sequence + 1)),
                         ('unit_id', '=', vehicle.id)])
-                    vehicle.next_cycle_id = next.id
-                    vehicle.next_service_odometer = next.schedule
+                    vehicle.next_cycle_id = next_cycle.id
+                    vehicle.next_service_odometer = next_cycle.schedule
                     return True
                 else:
                     last_schedule = cycles.schedule
@@ -75,7 +75,7 @@ class FleetVehicle(models.Model):
                     vehicle.last_cycle_id.date, "%Y-%m-%d %H:%M:%S")
                 days = []
                 for cycle in vehicle.program_id.cycle_ids:
-                    day = (cycle.frequency/vehicle.distance)*24
+                    day = (cycle.frequency / vehicle.distance) * 24
                     days.append(day)
                 vehicle.next_service_date = (
                     date + timedelta(hours=min(days)))
