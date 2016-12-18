@@ -2,6 +2,7 @@
 # Copyright 2016, Jarsa Sistemas, S.A. de C.V.
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
+
 from openerp import api, fields, models
 
 
@@ -51,13 +52,14 @@ class VmsProductLine(models.Model):
                 'company_id': self.env.user.company_id.id,
                 'date': today,
                 'location_dest_id': (
-                    rec.order_line_id.order_id.stock_location_id.id),
-                'location_id': rec.product_id.property_stock_inventory.id,
+                    rec.product_id.property_stock_production.id),
+                'location_id': rec.order_line_id.order_id.stock_location_id.id,
                 'name': (
                     rec.order_line_id.task_id.name +
                     '-' + rec.product_id.name),
                 'product_id': rec.product_id.id,
                 'product_uom': rec.product_uom_id.id,
+                'product_uom_qty': rec.product_qty
                 })
             moves.append(move)
         picking = {
@@ -66,8 +68,8 @@ class VmsProductLine(models.Model):
             'move_lines': [x for x in moves],
             'picking_type_id': 1,
             'location_dest_id': (
-                rec.order_line_id.order_id.stock_location_id.id),
-            'location_id': rec.product_id.property_stock_inventory.id,
+                rec.product_id.property_stock_production.id),
+            'location_id': rec.order_line_id.order_id.stock_location_id.id,
         }
         pick = self.env['stock.picking'].create(picking)
         return pick
