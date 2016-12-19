@@ -69,11 +69,10 @@ class VmsOrderLine(models.Model):
         'vms.activity',
         'order_line_id', string="Activities", readonly=True)
 
-    @api.model
-    def unlink(self, values):
-        for rec in self:
-            rec.spare_part_ids.unlink()
-            rec.activity_ids.unlink()
+    @api.multi
+    def unlink(self):
+        self.spare_part_ids.unlink()
+        self.activity_ids.unlink()
         return super(VmsOrderLine, self).unlink()
 
     @api.onchange('external')
@@ -90,19 +89,10 @@ class VmsOrderLine(models.Model):
                         'state': 'draft'})
                     rec.spare_part_ids += spare
 
-    @api.multi
-    def action_done(self):
-        for rec in self:
-            for product in rec.spare_part_ids:
-                product.create_stock_picking(
-                    rec.order_id.stock_location_id.id,
-                    product.product_id.id,
-                    product.product_qty,
-                    product.product_uom_id.id)
-
     @api.onchange('task_id')
     def _onchange_task(self):
         for rec in self:
+            rec.duration = rec.task_id.duration
             if rec.start_date:
                 strp_date = datetime.strptime(
                     rec.start_date, "%Y-%m-%d %H:%M:%S")
@@ -234,7 +224,6 @@ class VmsOrderLine(models.Model):
 
     @api.multi
     def create_po(self):
-        "Returns draft PO"
         purchase_order_id = self.env['purchase.order'].create({
             'partner_id': self.supplier_id.id,
             'partner_ref': self.order_id.name,

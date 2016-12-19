@@ -3,7 +3,7 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
 
-from openerp import fields, models
+from openerp import api, fields, models
 
 
 class VmsVehicleCycle(models.Model):
@@ -11,6 +11,7 @@ class VmsVehicleCycle(models.Model):
     _inherit = ['mail.thread', 'ir.needaction_mixin']
     _name = 'vms.vehicle.cycle'
 
+    name = fields.Char()
     cycle_id = fields.Many2one(
         'vms.cycle',
         string='Cycle')
@@ -27,3 +28,9 @@ class VmsVehicleCycle(models.Model):
         'fleet.vehicle',
         string="Unit",
         required=True)
+
+    @api.model
+    def create(self, values):
+        cycle = super(VmsVehicleCycle, self).create(values)
+        sequence_obj = self.env['ir.sequence']
+        cycle.name = sequence_obj.next_by_code('cycle.vehicle.sequence')

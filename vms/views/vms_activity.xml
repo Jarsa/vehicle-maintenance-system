@@ -32,7 +32,6 @@
                     <field name="unit_id"/>
                     <field name="responsible_id"/>
                     <field name="total_hours" widget="float_time"/>
-                    <field name="activity_time_ids"/>
                 </tree>
             </field>
         </record>

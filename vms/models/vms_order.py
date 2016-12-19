@@ -91,13 +91,11 @@ class VmsOrder(models.Model):
     @api.multi
     def unlink(self):
         for rec in self:
-            order = super(VmsOrder, self).unlink()
             activities = self.env['vms.activity'].search(
                 [('order_id', '=', rec.id)])
             if len(activities) > 0:
                 activities.unlink()
-                order.search([('id', '=', rec.id)]).unlink()
-            return order
+            return super(VmsOrder, self).unlink()
 
     @api.depends('order_line_ids')
     def _compute_end_date_real(self):
@@ -114,12 +112,12 @@ class VmsOrder(models.Model):
     @api.multi
     def action_released(self):
         for order in self:
-            if order.type == 'preventive':
-                for line in order.order_line_ids:
+            for line in order.order_line_ids:
                     if line.state != 'done':
                         raise exceptions.ValidationError(
                             'Verify that all activities are in '
                             'end state to continue')
+            if order.type == 'preventive':
                 cycles = order.unit_id.cycle_ids.search(
                     [('sequence', '=', order.unit_id.sequence),
                      ('unit_id', '=', order.unit_id.id)])
@@ -138,12 +136,7 @@ class VmsOrder(models.Model):
                 order.unit_id.write({'next_cycle_id': next_cycle.id})
             elif order.type == 'corrective':
                 for report in order.report_ids:
-                    if report.state == 'confirmed':
-                        report.state = 'close'
-                    else:
-                        raise exceptions.ValidationError(
-                            'Verify that all reports are in '
-                            'confirm state to continue')
+                    report.state = 'close'
             order.state = 'released'
             order.message_post(body=(
                 "<h5><strong>Released</strong></h5>"

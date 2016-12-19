@@ -35,5 +35,6 @@
                 </xpath>
             </field>
         </record>
+        <menuitem action="fleet.fleet_vehicle_act" id="vms_fleet_vehicle_menu" name="Units" parent="menu_vms_settings" sequence="10"/>
     </data>
 </odoo>
