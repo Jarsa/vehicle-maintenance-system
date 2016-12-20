@@ -33,7 +33,7 @@ class FleetVehicle(models.Model):
         'vms.vehicle.cycle', 'unit_id', string="Cycles")
     sequence = fields.Integer()
     distance = fields.Float(
-        'Distance Averange', required=True
+        'Distance Average', required=True
     )
 
     @api.multi
@@ -42,9 +42,10 @@ class FleetVehicle(models.Model):
             prog_ids = vehicle.cycle_ids.search([('unit_id', '=', vehicle.id)])
             if len(prog_ids):
                 prog_ids.unlink()
+            seq = 1
             for cycle in vehicle.program_id.cycle_ids:
-                seq = 1
-                for rec in range(cycle.frequency, 4000000, cycle.frequency):
+                for rec in range(cycle.frequency, (
+                        4000000 + cycle.frequency), cycle.frequency):
                     vehicle.cycle_ids.create({
                         'cycle_id': cycle.id,
                         'schedule': rec,
@@ -58,7 +59,7 @@ class FleetVehicle(models.Model):
                     vehicle.sequence = cycles.sequence
                     vehicle.last_cycle_id = cycles.id
                     next = cycles.search([
-                        ('sequence', '=', (cycles.sequence + 1)),
+                        ('sequence', '=', (cycles.sequence)),
                         ('unit_id', '=', vehicle.id)])
                     vehicle.next_cycle_id = next.id
                     vehicle.next_service_odometer = next.schedule
@@ -75,7 +76,7 @@ class FleetVehicle(models.Model):
                     vehicle.last_cycle_id.date, "%Y-%m-%d %H:%M:%S")
                 days = []
                 for cycle in vehicle.program_id.cycle_ids:
-                    day = (cycle.frequency/vehicle.distance)*24
+                    day = (cycle.frequency / vehicle.distance) * 24
                     days.append(day)
                 vehicle.next_service_date = (
                     date + timedelta(hours=min(days)))

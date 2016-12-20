@@ -113,10 +113,7 @@ class VmsOrder(models.Model):
     def action_released(self):
         for order in self:
             for line in order.order_line_ids:
-                    if line.state != 'done':
-                        raise exceptions.ValidationError(
-                            'Verify that all activities are in '
-                            'end state to continue')
+                    line.state = 'done'
             if order.type == 'preventive':
                 cycles = order.unit_id.cycle_ids.search(
                     [('sequence', '=', order.unit_id.sequence),
@@ -184,9 +181,10 @@ class VmsOrder(models.Model):
                 rec.program_id = rec.unit_id.program_id
                 rec.current_odometer = rec.unit_id.odometer
                 rec.sequence = rec.unit_id.sequence
-                for cycle in rec.unit_id.next_cycle_id:
-                    rec.cycle_id = cycle.id
-                rec.get_tasks_from_cycle(rec.cycle_id.cycle_id, rec)
+                rec.cycle_id = rec.unit_id.next_cycle_id.id
+                rec.order_line_ids = False
+                for cycle in rec.unit_id.program_id.cycle_ids:
+                    rec.get_tasks_from_cycle(cycle, rec)
             else:
                 rec.program_id = False
                 rec.current_odometer = False

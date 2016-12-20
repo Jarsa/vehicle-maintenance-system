@@ -4,6 +4,7 @@
 
 from . import fleet_vehicle
 from . import hr_employee
+from . import stock_picking
 from . import vms_activity
 from . import vms_activity_time
 from . import vms_cycle

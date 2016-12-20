@@ -25,7 +25,7 @@ class VmsOrderLine(models.Model):
     start_date_real = fields.Datetime(
         string='Real start date', readonly=True)
     end_date_real = fields.Datetime(
-        string='Real end date', readonly=True)
+        string='Real Finishing', readonly=True)
     duration = fields.Float(store=True)
     supplier_id = fields.Many2one(
         'res.partner',
@@ -61,10 +61,11 @@ class VmsOrderLine(models.Model):
         compute='_compute_purchase_state')
     order_id = fields.Many2one('vms.order', string='Order', readonly=True)
     real_time_total = fields.Integer()
-    stock_picking_id = fields.Many2one(
+    stock_picking_id = fields.One2many(
         'stock.picking',
+        'order_line_id',
         string="Stock Picking",
-        readonly=True)
+    )
     activity_ids = fields.One2many(
         'vms.activity',
         'order_line_id', string="Activities", readonly=True)
