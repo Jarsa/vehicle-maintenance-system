@@ -16,10 +16,8 @@
                     <field name="end_date"/>
                     <field name="start_date_real"/>
                     <field name="end_date_real"/>
-                    <field name="order_line_ids"/>
                     <field name="program_id"/>
                     <field name="cycle_id"/>
-                    <field name="sequence"/>
                     <field name="report_ids"/>
                     <field name="state"/>
                 </tree>

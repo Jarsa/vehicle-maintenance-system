@@ -1,2 +1,2 @@
-operating-unit
+operating-unit https://github.com/Jarsa-dev/operating-unit.git 9.0
 transport-management-system https://github.com/Jarsa/transport-management-system.git 9.0

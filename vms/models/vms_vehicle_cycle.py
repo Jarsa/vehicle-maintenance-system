@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
-# © <2016> <Jarsa Sistemas, S.A. de C.V.>
+# Copyright 2016, Jarsa Sistemas, S.A. de C.V.
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
-
-from openerp import _, api, exceptions, fields, models
+from __future__ import division
 from datetime import datetime, timedelta
+from openerp import _, api, exceptions, fields, models
 
 
 class VmsVehicleCycle(models.Model):
@@ -70,6 +70,7 @@ class VmsVehicleCycle(models.Model):
         cycle = super(VmsVehicleCycle, self).create(values)
         sequence_obj = self.env['ir.sequence']
         cycle.name = sequence_obj.next_by_code('cycle.vehicle.sequence')
+        return cycle
 
     @api.multi
     def start_service_order(self):
@@ -81,9 +82,9 @@ class VmsVehicleCycle(models.Model):
             if previous_cycle:
                 if (previous_cycle.order_id.state != 'released' or not
                         previous_cycle.order_id):
-                            raise exceptions.ValidationError(
-                                _('You must complete the previous'
-                                    ' maintenance order.'))
+                    raise exceptions.ValidationError(
+                        _('You must complete the previous'
+                            ' maintenance order.'))
         cycle = self.search([
             ('unit_id', '=', self.unit_id.id),
             ('sequence', '=', self.sequence)])
