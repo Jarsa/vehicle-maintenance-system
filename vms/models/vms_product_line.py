@@ -11,7 +11,7 @@ class VmsProductLine(models.Model):
 
     product_id = fields.Many2one(
         'product.product',
-        domain=[('type', '=', 'product')],
+        domain=[('type', 'in', ('product', 'consu'))],
         required=True,
         string='Spare Part')
     product_qty = fields.Float(
