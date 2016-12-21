@@ -13,7 +13,7 @@ class VmsReport(models.Model):
 
     name = fields.Char(string='Number', readonly=True)
     date = fields.Datetime(required=True, default=fields.Datetime.now)
-    base_id = fields.Many2one(
+    operating_unit_id = fields.Many2one(
         'operating.unit', string='Base', required=True)
     unit_id = fields.Many2one(
         'fleet.vehicle',
@@ -41,7 +41,7 @@ class VmsReport(models.Model):
     @api.model
     def create(self, values):
         report = super(VmsReport, self).create(values)
-        sequence = report.base_id.report_sequence_id
+        sequence = report.operating_unit_id.report_sequence_id
         report.name = sequence.next_by_id()
         return report
 

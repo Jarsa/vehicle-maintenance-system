@@ -98,7 +98,7 @@ class VmsVehicleCycle(models.Model):
             'view_mode': 'form',
             'res_model': 'vms.order',
             'context': {
-                'default_base_id': self.unit_id.operating_unit_id.id,
+                'default_operating_unit_id': self.unit_id.operating_unit_id.id,
                 'default_unit_id': self.unit_id.id,
                 'default_type': 'preventive',
                 'default_date': fields.Datetime.now(),

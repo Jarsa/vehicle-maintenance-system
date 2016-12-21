@@ -6,18 +6,12 @@
             <field name="model">vms.activity</field>
             <field name="arch" type="xml">
                 <search string="Search Activities">
-                    <filter string="Draft" domain="[('state','=','draft')]" name="state_draft"/>
-                    <filter string="Process" domain="[('state','=','process')]" name="state_process"/>
-                    <filter string="Paused" domain="[('state','=','pause')]" name="state_pause"/>
-                    <filter string="Ended" domain="[('state','=','end')]"/>
-                    <filter string="Cancel" domain="[('state','=','cancel')]"/>
                     <filter string="Service Order" context="{'group_by':'order_id'}" name="groupby_order_id"/>
                     <filter string="Vehicle" context="{'group_by':'unit_id'}" name="groupby_unit_id"/>
                     <filter string="Mechanic" context="{'group_by':'responsible_id'}" name="groupby_employee_id"/>
                     <field name="responsible_id"/>
                     <field name="order_id"/>
                     <field name="unit_id"/>
-                    <filter string="State" context="{'group_by':'state'}"/>
                     <filter string="Period" context="{'group_by':'date'}"/>
                 </search>
             </field>
@@ -31,7 +25,6 @@
                     <field name="task_id"/>
                     <field name="unit_id"/>
                     <field name="responsible_id"/>
-                    <field name="total_hours" widget="float_time"/>
                 </tree>
             </field>
         </record>
@@ -40,15 +33,6 @@
             <field name='model'>vms.activity</field>
             <field name='arch' type='xml'>
                 <form>
-                    <header>
-                        <button name="action_cancel_draft" states="cancel" string="Set to Draft" type="object"/>
-                        <button name="action_cancel" states="draft,process,pause" string="Cancel" type="object"/>
-                        <button name="action_start" class="oe_highlight" states="draft" string="Start" type="object"/>
-                        <button name="action_resume" class="oe_highlight" states="pause" string="Continue" type="object"/>
-                        <button name="action_pause" class="oe_highlight" states="process" string="Pause" type="object"/>
-                        <button name="action_end" class="oe_highlight" states="process" string="End" type="object"/>
-                        <field name="state" statusbar_visible="draft,approved,confirmed,cancel" widget="statusbar"/>
-                    </header>
                     <sheet>
                         <group string="Details">
                             <group>
@@ -56,26 +40,9 @@
                                 <field name="task_id"/>
                                 <field name="unit_id"/>
                                 <field name="responsible_id"/>
-                                <field name="total_hours" widget="float_time"/>
                             </group>
-                            <group>
-                                <field name="start_date"/>
-                                <field name="end_date"/>
-                            </group>
-                        </group>
-                        <group string="Activities">
-                            <field name="activity_time_ids" nolabel="1" context="{'default_activity_id:':active_id}">
-                                <tree colors="red:status=='pause'; green:status=='process';blue:status=='end';">
-                                    <field name="status"/>
-                                    <field name="date"/>
-                                </tree>
-                             </field>
                         </group>
                     </sheet>
-                     <div class="oe_chatter">
-                        <field name="message_follower_ids" widget="mail_followers"/>
-                        <field name="message_ids" placeholder="Share a message..." widget="mail_thread"/>
-                    </div>
                 </form>
             </field>
         </record>

@@ -12,7 +12,7 @@ class VmsOrder(models.Model):
     _name = 'vms.order'
 
     name = fields.Char(string='Order Number', readonly=True)
-    base_id = fields.Many2one(
+    operating_unit_id = fields.Many2one(
         'operating.unit', string='Base', required=True)
     supervisor_id = fields.Many2one(
         'hr.employee',
@@ -29,7 +29,6 @@ class VmsOrder(models.Model):
         required=True)
     stock_location_id = fields.Many2one(
         'stock.location',
-        domain="[('usage', '=', 'internal')]",
         required=True,
         string='Stock Location')
     start_date = fields.Datetime(
@@ -78,9 +77,9 @@ class VmsOrder(models.Model):
     @api.model
     def create(self, values):
         order = super(VmsOrder, self).create(values)
-        if (order.base_id.order_sequence_id or
-                order.base_id.report_sequence_id):
-            sequence = order.base_id.order_sequence_id
+        if (order.operating_unit_id.order_sequence_id or
+                order.operating_unit_id.report_sequence_id):
+            sequence = order.operating_unit_id.order_sequence_id
             order.name = sequence.next_by_id()
         else:
             raise exceptions.ValidationError(_(
@@ -281,6 +280,6 @@ class VmsOrder(models.Model):
                 for report in rec.report_ids:
                     report.state = 'draft'
             for line in rec.order_line_ids:
-                line.state = 'draft'
+                line.action_cancel_draft()
                 for spare in line.spare_part_ids:
                     spare.state = 'draft'
