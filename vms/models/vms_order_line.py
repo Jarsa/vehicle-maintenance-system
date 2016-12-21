@@ -136,21 +136,15 @@ class VmsOrderLine(models.Model):
                     _('The order must be open.'))
             if not rec.external:
                 if rec.responsible_ids:
-                    activities = self.env['vms.activity'].search(
-                        [('order_line_id', '=', rec.id)])
-                    if len(activities) > 0:
-                        for activity in activities:
-                            activity.state = 'draft'
-                    else:
-                        for mechanic in rec.responsible_ids:
-                            self.env['vms.activity'].create({
-                                'order_id': rec.order_id.id,
-                                'task_id': rec.task_id.id,
-                                'name': rec.task_id.name,
-                                'unit_id': rec.order_id.unit_id.id,
-                                'order_line_id': rec.id,
-                                'responsible_id': mechanic.id
-                            })
+                    for mechanic in rec.responsible_ids:
+                        self.env['vms.activity'].create({
+                            'order_id': rec.order_id.id,
+                            'task_id': rec.task_id.id,
+                            'name': rec.task_id.name,
+                            'unit_id': rec.order_id.unit_id.id,
+                            'order_line_id': rec.id,
+                            'responsible_id': mechanic.id
+                        })
                     rec.state = 'process'
                     rec.start_date_real = fields.Datetime.now()
                     if rec.spare_part_ids:
@@ -166,8 +160,6 @@ class VmsOrderLine(models.Model):
 
     @api.multi
     def action_done(self):
-        act_state_validator = True
-        sum_time = 0.0
         for rec in self:
             if rec.external:
                 if not rec.purchase_state:
@@ -175,26 +167,21 @@ class VmsOrderLine(models.Model):
                         'Verify that purchase order are in '
                         'done state to continue'))
             else:
-                activities = rec.env['vms.activity'].search(
-                    [('order_line_id', '=', rec.id)])
-                for activity in activities:
-                    if activity.state != 'end':
-                        act_state_validator = False
-                    elif activity.state == 'end':
-                        sum_time += activity.total_hours
-                if not act_state_validator:
+                if rec.stock_picking_id.state != 'done':
+                    rec.stock_picking_id.action_confirm()
+                    rec.stock_picking_id.action_assign()
+                    for pack_operation in (
+                            rec.stock_picking_id.pack_operation_product_ids):
+                        pack_operation.qty_done = pack_operation.product_qty
+                    rec.stock_picking_id.do_new_transfer()
+                if rec.stock_picking_id.state != 'done':
                     raise exceptions.ValidationError(
-                        _('The activities of the mechanics(s)'
-                            ' must be finished.'))
-                rec.stock_picking_id.action_confirm()
-                rec.stock_picking_id.action_assign()
-                for pack_operation in (
-                        rec.stock_picking_id.pack_operation_product_ids):
-                    pack_operation.qty_done = pack_operation.product_qty
-                rec.stock_picking_id.do_new_transfer()
+                        _('The stock picking is not in done state'
+                            ' maybe one product has not availability.'
+                            ' Check the picking of the following task.'
+                            '\n\n *Task: %s') % rec.task_id.name)
                 for spare in rec.spare_part_ids:
                     spare.state = 'delievered'
-                rec.real_duration = sum_time
             rec.end_date_real = fields.Datetime.now()
             rec.state = 'done'
 
@@ -202,11 +189,7 @@ class VmsOrderLine(models.Model):
     def action_cancel(self):
         for rec in self:
             if not rec.external:
-                activities = rec.env['vms.activity'].search(
-                    [('order_line_id', '=', rec.id)])
-                if len(activities) > 0:
-                    for activity in activities:
-                        activity.state = 'cancel'
+                rec.stock_picking_id.action_cancel()
                 for spare in rec.spare_part_ids:
                     spare.state = 'cancel'
             else:
@@ -222,6 +205,7 @@ class VmsOrderLine(models.Model):
     @api.multi
     def action_cancel_draft(self):
         for rec in self:
+            rec.stock_picking_id.unlink()
             rec.state = 'draft'
 
     @api.multi
