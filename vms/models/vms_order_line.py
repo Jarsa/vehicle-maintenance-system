@@ -193,11 +193,7 @@ class VmsOrderLine(models.Model):
                     pack_operation.qty_done = pack_operation.product_qty
                 rec.stock_picking_id.do_new_transfer()
                 for spare in rec.spare_part_ids:
-                    if rec.stock_picking_id.state != 'done':
-                        raise exceptions.ValidationError(
-                            _('The stock move must be in done state.'))
-                    else:
-                        spare.state = 'delievered'
+                    spare.state = 'delievered'
                 rec.real_duration = sum_time
             rec.end_date_real = fields.Datetime.now()
             rec.state = 'done'

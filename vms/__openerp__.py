@@ -13,7 +13,7 @@
     "application": True,
     "depends": [
         "account", "stock", "hr", "fleet", "purchase",
-        "operating_unit"],
+        "stock_operating_unit"],
     "data": [
         "security/ir.model.access.csv",
         'views/vms_view.xml',

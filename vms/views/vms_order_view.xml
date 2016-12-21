@@ -44,7 +44,7 @@
                         <notebook>
                             <page string="Service Order Detail">
                                 <group col="4">
-                                    <field name='base_id'/>
+                                    <field name='operating_unit_id'/>
                                     <field name="date"/>
                                     <field name="unit_id"/>
                                     <field name="stock_location_id"/>

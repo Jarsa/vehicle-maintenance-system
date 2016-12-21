@@ -160,8 +160,8 @@ msgstr ""
 
 #. module: vms
 #: model:ir.model,name:vms.model_tms_base
-#: model:ir.model.fields,field_description:vms.field_vms_order_base_id
-#: model:ir.model.fields,field_description:vms.field_vms_report_base_id
+#: model:ir.model.fields,field_description:vms.field_vms_order_operating_unit_id
+#: model:ir.model.fields,field_description:vms.field_vms_report_operating_unit_id
 msgid "Base"
 msgstr "Base"
 

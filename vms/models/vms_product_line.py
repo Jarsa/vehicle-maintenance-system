@@ -47,6 +47,7 @@ class VmsProductLine(models.Model):
         moves = []
         picking_locations = []
         picking_dest_locations = []
+        operating_units = []
         for rec in self:
             today = fields.Datetime.now()
             move = (0, 0, {
@@ -62,27 +63,31 @@ class VmsProductLine(models.Model):
                 'product_id': rec.product_id.id,
                 'product_uom': rec.product_uom_id.id,
                 'product_uom_qty': rec.product_qty,
+                'operating_unit_id': rec.order_id.operating_unit_id.id,
             })
             picking_locations.append(
                 rec.order_line_id.order_id.stock_location_id.id)
             picking_dest_locations.append(
                 rec.product_id.property_stock_production.id)
+            operating_units.append(rec.operating_unit_id.id)
             moves.append(move)
 
         if len(set(picking_locations)) > 1:
             raise exceptions.ValidationError(_(
-                'Verify that purchase order are in '
-                'done state to continue'))
+                'All the source locations must be equal.'))
         elif len(set(picking_dest_locations)) > 1:
             raise exceptions.ValidationError(_(
-                'Verify that purchase order are in '
-                'done state to continue'))
+                'All the destionation locations must be equal.'))
+        elif len(set(operating_units)) > 1:
+            raise exceptions.ValidationError(_(
+                'All the operating units must be equal.'))
         picking = {
             'company_id': self.env.user.company_id.id,
             'move_lines': [x for x in moves],
             'picking_type_id': self.env.ref('stock.picking_type_internal').id,
             'location_id': picking_locations[0],
             'location_dest_id': picking_dest_locations[0],
+            'operating_unit_id': operating_units[0],
         }
         pick = self.env['stock.picking'].create(picking)
         return pick
