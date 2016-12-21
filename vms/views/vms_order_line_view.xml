@@ -8,7 +8,6 @@
             <field name="arch" type="xml">
                 <form string="Order lines">
                     <header>
-                        <button icon="gtk-apply" name="action_done" string="Confirm" type="object"/>
                         <button name="action_cancel_draft" states="cancel" string="Set to Draft" type="object"/>
                         <button name="action_process" class="oe_highlight" states="draft" string="Start" type="object"/>
                         <button name="action_cancel" states="draft,process" string="Cancel" type="object" confirm="Are you sure to cancel this task?"/>
@@ -88,7 +87,6 @@
                     <field name='duration' widget='float_time'/>
                     <field name='real_duration' widget='float_time'/>
                     <field name='state'/>
-                    <field name='responsible_ids' widget="many2many_tags"/>
                 </tree>
             </field>
         </record>

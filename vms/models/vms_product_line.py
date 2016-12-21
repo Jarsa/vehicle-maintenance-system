@@ -2,7 +2,7 @@
 # Copyright 2016, Jarsa Sistemas, S.A. de C.V.
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
-from openerp import api, fields, models
+from openerp import _, exceptions, api, fields, models
 
 
 class VmsProductLine(models.Model):
@@ -18,16 +18,16 @@ class VmsProductLine(models.Model):
         required=True,
         default=0.0,
         string='Quantity',
-        )
+    )
     product_uom_id = fields.Many2one(
         'product.uom',
         string='Unit of Measure',
         required=True,
-        )
+    )
     task_id = fields.Many2one(
         'vms.task',
         string='Task',
-        )
+    )
     order_line_id = fields.Many2one(
         'vms.order.line',
         string='Activity')
@@ -45,29 +45,44 @@ class VmsProductLine(models.Model):
     @api.multi
     def _create_stock_picking(self):
         moves = []
+        picking_locations = []
+        picking_dest_locations = []
         for rec in self:
             today = fields.Datetime.now()
             move = (0, 0, {
                 'company_id': self.env.user.company_id.id,
                 'date': today,
                 'location_dest_id': (
+                    rec.product_id.property_stock_production.id),
+                'location_id': (
                     rec.order_line_id.order_id.stock_location_id.id),
-                'location_id': rec.product_id.property_stock_inventory.id,
                 'name': (
                     rec.order_line_id.task_id.name +
                     '-' + rec.product_id.name),
                 'product_id': rec.product_id.id,
                 'product_uom': rec.product_uom_id.id,
-                })
+                'product_uom_qty': rec.product_qty,
+            })
+            picking_locations.append(
+                rec.order_line_id.order_id.stock_location_id.id)
+            picking_dest_locations.append(
+                rec.product_id.property_stock_production.id)
             moves.append(move)
+
+        if len(set(picking_locations)) > 1:
+            raise exceptions.ValidationError(_(
+                'Verify that purchase order are in '
+                'done state to continue'))
+        elif len(set(picking_dest_locations)) > 1:
+            raise exceptions.ValidationError(_(
+                'Verify that purchase order are in '
+                'done state to continue'))
         picking = {
-            'min_date': rec.order_line_id.start_date,
             'company_id': self.env.user.company_id.id,
             'move_lines': [x for x in moves],
-            'picking_type_id': 1,
-            'location_dest_id': (
-                rec.order_line_id.order_id.stock_location_id.id),
-            'location_id': rec.product_id.property_stock_inventory.id,
+            'picking_type_id': self.env.ref('stock.picking_type_internal').id,
+            'location_id': picking_locations[0],
+            'location_dest_id': picking_dest_locations[0],
         }
         pick = self.env['stock.picking'].create(picking)
         return pick

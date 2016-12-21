@@ -36,7 +36,7 @@ class VmsReport(models.Model):
          ('close', 'Close'),
          ('cancel', 'Cancel')],
         default='draft')
-    notes = fields.Text(required=True)
+    notes = fields.Html()
 
     @api.model
     def create(self, values):

@@ -2,9 +2,8 @@
 # Copyright 2016, Jarsa Sistemas, S.A. de C.V.
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
-
-from openerp import _, api, exceptions, fields, models
 from datetime import datetime, timedelta
+from openerp import _, api, exceptions, fields, models
 
 
 class VmsOrder(models.Model):
@@ -41,7 +40,7 @@ class VmsOrder(models.Model):
         required=True,
         compute='_compute_end_date',
         string='Schedule end'
-        )
+    )
     start_date_real = fields.Datetime(
         readonly=True,
         string='Real start date')
@@ -49,12 +48,12 @@ class VmsOrder(models.Model):
         compute="_compute_end_date_real",
         readonly=True,
         string='Real end date'
-        )
+    )
     order_line_ids = fields.One2many(
         'vms.order.line',
         'order_id',
         string='Order Lines',
-        )
+    )
     program_id = fields.Many2one(
         'vms.program',
         string='Program')
@@ -79,17 +78,22 @@ class VmsOrder(models.Model):
     @api.model
     def create(self, values):
         order = super(VmsOrder, self).create(values)
-        sequence = order.base_id.order_sequence_id
-        order.name = sequence.next_by_id()
+        if (order.base_id.order_sequence_id or
+                order.base_id.report_sequence_id):
+            sequence = order.base_id.order_sequence_id
+            order.name = sequence.next_by_id()
+        else:
+            raise exceptions.ValidationError(_(
+                'Verify that the sequences in the base are assigned'))
         return order
 
-    @api.model
-    def unlink(self, values):
-        activities = self.env['vms.activity'].search(
-            [('order_id', 'in', [values])])
-        if len(activities) > 0:
-            activities.unlink()
-        else:
+    @api.multi
+    def unlink(self):
+        for rec in self:
+            activities = self.env['vms.activity'].search(
+                [('order_id', '=', rec.id)])
+            if len(activities) > 0:
+                activities.unlink()
             return super(VmsOrder, self).unlink()
 
     @api.depends('order_line_ids')
@@ -107,12 +111,9 @@ class VmsOrder(models.Model):
     @api.multi
     def action_released(self):
         for order in self:
+            for line in order.order_line_ids:
+                line.action_done()
             if order.type == 'preventive':
-                for line in order.order_line_ids:
-                    if line.state != 'done':
-                        raise exceptions.ValidationError(
-                            'Verify that all activities are in '
-                            'end state to continue')
                 cycles = order.unit_id.cycle_ids.search(
                     [('sequence', '=', order.unit_id.sequence),
                      ('unit_id', '=', order.unit_id.id)])
@@ -131,12 +132,7 @@ class VmsOrder(models.Model):
                 order.unit_id.write({'next_cycle_id': next_cycle.id})
             elif order.type == 'corrective':
                 for report in order.report_ids:
-                    if report.state == 'confirmed':
-                        report.state = 'close'
-                    else:
-                        raise exceptions.ValidationError(
-                            'Verify that all reports are in '
-                            'confirm state to continue')
+                    report.state = 'close'
             order.state = 'released'
             order.message_post(body=(
                 "<h5><strong>Released</strong></h5>"
@@ -184,9 +180,10 @@ class VmsOrder(models.Model):
                 rec.program_id = rec.unit_id.program_id
                 rec.current_odometer = rec.unit_id.odometer
                 rec.sequence = rec.unit_id.sequence
-                for cycle in rec.unit_id.next_cycle_id:
-                    rec.cycle_id = cycle.id
-                rec.get_tasks_from_cycle(rec.cycle_id.cycle_id, rec)
+                rec.cycle_id = rec.unit_id.next_cycle_id.id
+                rec.order_line_ids = False
+                for cycle in rec.unit_id.program_id.cycle_ids:
+                    rec.get_tasks_from_cycle(cycle, rec)
             else:
                 rec.program_id = False
                 rec.current_odometer = False
@@ -215,52 +212,50 @@ class VmsOrder(models.Model):
                 raise exceptions.ValidationError(_(
                     'Unit not available for maintenance '
                     'because it has more open order(s).'))
-            else:
-                if not rec.order_line_ids:
-                    raise exceptions.ValidationError(
-                        _('The order must have at least one task'))
-                for line in rec.order_line_ids:
-                    if not line.external:
-                        if line.responsible_ids:
-                            obj_activity = self.env['vms.activity']
-                            activities = obj_activity.search(
-                                [('order_line_id', '=', line.id)])
-                            if len(activities) > 0:
-                                for activity in activities:
-                                    activity.state = 'draft'
-                            else:
-                                for mechanic in line.responsible_ids:
-                                    obj_activity.create({
-                                        'order_id': rec.id,
-                                        'task_id': line.task_id.id,
-                                        'name': line.task_id.name,
-                                        'unit_id': rec.unit_id.id,
-                                        'order_line_id': line.id,
-                                        'responsible_id': mechanic.id
-                                        })
-                            if line.spare_part_ids:
-                                for product in line.spare_part_ids:
-                                    product.state = 'pending'
-                                line.stock_picking_id = (
-                                    line.spare_part_ids.
-                                    _create_stock_picking())
-                            if rec.type == 'corrective':
-                                for report in rec.report_ids:
-                                    report.state = 'open'
-                        else:
-                            raise exceptions.ValidationError(
-                                _('The tasks must have almost one mechanic.'))
-
-                    line.state = 'process'
-                    line.start_date_real = fields.Datetime.now()
-                    rec.state = 'open'
-                    rec.start_date_real = fields.Datetime.now()
-                    rec.message_post(_(
-                        '<strong>Order Opened.</strong><ul>'
-                        '<li><strong>Opened by: </strong>%s</li>'
-                        '<li><strong>Opened at: </strong>%s</li>'
-                        '</ul>') % (
-                        self.env.user.name, fields.Datetime.now()))
+            if not rec.order_line_ids:
+                raise exceptions.ValidationError(
+                    _('The order must have at least one task'))
+            for line in rec.order_line_ids:
+                if not line.external:
+                    if not line.responsible_ids:
+                        raise exceptions.ValidationError(
+                            _('The tasks must have almost one mechanic.'))
+                if line.responsible_ids:
+                    obj_activity = self.env['vms.activity']
+                    activities = obj_activity.search(
+                        [('order_line_id', '=', line.id)])
+                    if len(activities) > 0:
+                        for activity in activities:
+                            activity.state = 'draft'
+                    else:
+                        for mechanic in line.responsible_ids:
+                            obj_activity.create({
+                                'order_id': rec.id,
+                                'task_id': line.task_id.id,
+                                'name': line.task_id.name,
+                                'unit_id': rec.unit_id.id,
+                                'order_line_id': line.id,
+                                'responsible_id': mechanic.id
+                            })
+                    if line.spare_part_ids:
+                        for product in line.spare_part_ids:
+                            product.state = 'pending'
+                        line.stock_picking_id = (
+                            line.spare_part_ids.
+                            _create_stock_picking())
+                    if rec.type == 'corrective':
+                        for report in rec.report_ids:
+                            report.state = 'open'
+                line.state = 'process'
+                line.start_date_real = fields.Datetime.now()
+                rec.state = 'open'
+                rec.start_date_real = fields.Datetime.now()
+                rec.message_post(_(
+                    '<strong>Order Opened.</strong><ul>'
+                    '<li><strong>Opened by: </strong>%s</li>'
+                    '<li><strong>Opened at: </strong>%s</li>'
+                    '</ul>') % (
+                    self.env.user.name, fields.Datetime.now()))
 
     @api.multi
     def action_cancel(self):
@@ -289,8 +284,3 @@ class VmsOrder(models.Model):
                 line.state = 'draft'
                 for spare in line.spare_part_ids:
                     spare.state = 'draft'
-
-    @api.multi
-    def action_done(self):
-        for rec in self:
-            rec.state = 'done'

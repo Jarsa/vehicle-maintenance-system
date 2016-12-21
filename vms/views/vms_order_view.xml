@@ -33,14 +33,14 @@
                         <button name="action_cancel_draft" states="cancel" string="Set to Draft" type="object"/>
                         <button icon="fa-arrow-right" class="oe_highlight" name="action_open" states="draft" string="Open" type="object"/>
                         <button icon="fa-check-square-o" class="oe_highlight" name="action_released" states="open" string="Released" type="object"/>
-                        <button icon="fa-thumbs-up" class="oe_highlight" name="action_done" states="released" string="Done" type="object"/>
                         <button icon="fa-times" name="action_cancel" states="draft,open" string="Cancel" type="object" confirm="Are you sure to cancel this order? All the task(s) will cancel too."/>
                         <field name="state" statusbar_visible="draft,open,released" widget="statusbar"/>
                     </header>
                     <sheet>
-                        <group string="Service Order">
-                            <field name="name" nolabel="1" readonly="1"/>
-                        </group>
+                        <h1 class="oe_title">
+                            <label attrs="{'invisible':[('name','=', False)]}" class="oe_inline" string="Service Order - " style="font-size:30px;"/>
+                            <field name="name" readonly="1"/>
+                        </h1>
                         <notebook>
                             <page string="Service Order Detail">
                                 <group col="4">
@@ -73,7 +73,7 @@
                                 </group>
                             </page>
                             <page string="Driver Reports Solved" attrs="{'invisible':[('type','in',(False,'preventive'))]}">
-                                <field name="report_ids" nolabel="1">
+                                <field name="report_ids" nolabel="1" domain="[('state','=','confirmed')]">
                                     <tree string='description'>
                                         <field name="name"/>
                                         <field name="unit_id"/>

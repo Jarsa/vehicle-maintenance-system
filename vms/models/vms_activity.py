@@ -2,6 +2,7 @@
 # Copyright 2016, Jarsa Sistemas, S.A. de C.V.
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
+from __future__ import division
 from datetime import datetime
 from openerp import _, api, exceptions, fields, models
 
@@ -49,7 +50,7 @@ class VmsActivity(models.Model):
         ('pause', 'Pause'),
         ('end', 'End'),
         ('cancel', 'Cancel'),
-        ], default='draft', readonly=True)
+    ], default='draft', readonly=True)
     start_date = fields.Datetime(readonly=True)
     end_date = fields.Datetime(readonly=True)
 
@@ -82,11 +83,11 @@ class VmsActivity(models.Model):
                 'status': 'process',
                 'date': fields.Datetime.now(),
                 'activity_id': rec.id
-                })
+            })
             rec.write({
                 'state': 'process',
                 'start_date': fields.Datetime.now()
-                })
+            })
             rec.message_post(_(
                 '<strong>Activity Started.</strong><ul>'
                 '<li><strong>Started by: </strong>%s</li>'
@@ -100,10 +101,10 @@ class VmsActivity(models.Model):
                 'status': 'pause',
                 'date': fields.Datetime.now(),
                 'activity_id': rec.id
-                })
+            })
             rec.write({
                 'state': 'pause'
-                })
+            })
             rec.message_post(_(
                 '<strong>Activity Paused.</strong><ul>'
                 '<li><strong>Paused by: </strong>%s</li>'
@@ -117,10 +118,10 @@ class VmsActivity(models.Model):
                 'status': 'process',
                 'date': fields.Datetime.now(),
                 'activity_id': rec.id
-                })
+            })
             rec.write({
                 'state': 'process'
-                })
+            })
             rec.message_post(_(
                 '<strong>Activity Resumed.</strong><ul>'
                 '<li><strong>Resumed by: </strong>%s</li>'
@@ -132,11 +133,11 @@ class VmsActivity(models.Model):
         for rec in self:
             rec.state = 'cancel'
             rec.order_line_id.state = 'done'
-        rec.message_post(_(
-            '<strong>Activity Canceled.</strong><ul>'
-            '<li><strong>Canceled by: </strong>%s</li>'
-            '<li><strong>Canceled at: </strong>%s</li>'
-            '</ul>') % (self.env.user.name, fields.Datetime.now()))
+            rec.message_post(_(
+                '<strong>Activity Canceled.</strong><ul>'
+                '<li><strong>Canceled by: </strong>%s</li>'
+                '<li><strong>Canceled at: </strong>%s</li>'
+                '</ul>') % (self.env.user.name, fields.Datetime.now()))
 
     @api.multi
     def action_end(self):
@@ -145,11 +146,11 @@ class VmsActivity(models.Model):
                 'status': 'end',
                 'date': fields.Datetime.now(),
                 'activity_id': rec.id
-                })
+            })
             rec.write({
                 'state': 'end',
                 'end_date': fields.Datetime.now()
-                })
+            })
             rec.message_post(_(
                 '<strong>Activity Ended.</strong><ul>'
                 '<li><strong>Ended by: </strong>%s</li>'

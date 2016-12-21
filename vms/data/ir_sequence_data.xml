@@ -17,5 +17,14 @@
             <field name="padding">4</field>
             <field name="number_increment">1</field>
         </record>
+        <record model="ir.sequence" id="cycle_sequence">
+            <field name="name">Cycle Sequence</field>
+            <field name="implementation">no_gap</field>
+            <field name="code">cycle.vehicle.sequence</field>
+            <field name="prefix">CV</field>
+            <field name="padding">4</field>
+            <field name="number_increment">1</field>
+        </record>
+
     </data>
 </odoo>

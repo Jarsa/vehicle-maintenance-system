@@ -25,7 +25,7 @@ class VmsOrderLine(models.Model):
     start_date_real = fields.Datetime(
         string='Real start date', readonly=True)
     end_date_real = fields.Datetime(
-        string='Real end date', readonly=True)
+        string='Real Finishing', readonly=True)
     duration = fields.Float(store=True)
     supplier_id = fields.Many2one(
         'res.partner',
@@ -64,16 +64,16 @@ class VmsOrderLine(models.Model):
     stock_picking_id = fields.Many2one(
         'stock.picking',
         string="Stock Picking",
-        readonly=True)
+        readonly=True,
+    )
     activity_ids = fields.One2many(
         'vms.activity',
         'order_line_id', string="Activities", readonly=True)
 
-    @api.model
-    def unlink(self, values):
-        for rec in self:
-            rec.spare_part_ids.unlink()
-            rec.activity_ids.unlink()
+    @api.multi
+    def unlink(self):
+        self.spare_part_ids.unlink()
+        self.activity_ids.unlink()
         return super(VmsOrderLine, self).unlink()
 
     @api.onchange('external')
@@ -90,19 +90,10 @@ class VmsOrderLine(models.Model):
                         'state': 'draft'})
                     rec.spare_part_ids += spare
 
-    @api.multi
-    def action_done(self):
-        for rec in self:
-            for product in rec.spare_part_ids:
-                product.create_stock_picking(
-                    rec.order_id.stock_location_id.id,
-                    product.product_id.id,
-                    product.product_qty,
-                    product.product_uom_id.id)
-
     @api.onchange('task_id')
     def _onchange_task(self):
         for rec in self:
+            rec.duration = rec.task_id.duration
             if rec.start_date:
                 strp_date = datetime.strptime(
                     rec.start_date, "%Y-%m-%d %H:%M:%S")
@@ -143,36 +134,35 @@ class VmsOrderLine(models.Model):
             if rec.order_id.state != 'open':
                 raise exceptions.ValidationError(
                     _('The order must be open.'))
-            else:
-                if not rec.external:
-                    if rec.responsible_ids:
-                        activities = self.env['vms.activity'].search(
-                            [('order_line_id', '=', rec.id)])
-                        if len(activities) > 0:
-                            for activity in activities:
-                                activity.state = 'draft'
-                        else:
-                            for mechanic in rec.responsible_ids:
-                                self.env['vms.activity'].create({
-                                    'order_id': rec.order_id.id,
-                                    'task_id': rec.task_id.id,
-                                    'name': rec.task_id.name,
-                                    'unit_id': rec.order_id.unit_id.id,
-                                    'order_line_id': rec.id,
-                                    'responsible_id': mechanic.id
-                                    })
-                        rec.state = 'process'
-                        rec.start_date_real = fields.Datetime.now()
-                        if rec.spare_part_ids:
-                            for product in rec.spare_part_ids:
-                                product.state = 'pending'
-                            rec.stock_picking_id = (
-                                rec.spare_part_ids.
-                                _create_stock_picking())
-                        rec.state = 'process'
+            if not rec.external:
+                if rec.responsible_ids:
+                    activities = self.env['vms.activity'].search(
+                        [('order_line_id', '=', rec.id)])
+                    if len(activities) > 0:
+                        for activity in activities:
+                            activity.state = 'draft'
                     else:
-                        raise exceptions.ValidationError(
-                            _('The tasks must have almost one mechanic.'))
+                        for mechanic in rec.responsible_ids:
+                            self.env['vms.activity'].create({
+                                'order_id': rec.order_id.id,
+                                'task_id': rec.task_id.id,
+                                'name': rec.task_id.name,
+                                'unit_id': rec.order_id.unit_id.id,
+                                'order_line_id': rec.id,
+                                'responsible_id': mechanic.id
+                            })
+                    rec.state = 'process'
+                    rec.start_date_real = fields.Datetime.now()
+                    if rec.spare_part_ids:
+                        for product in rec.spare_part_ids:
+                            product.state = 'pending'
+                        rec.stock_picking_id = (
+                            rec.spare_part_ids.
+                            _create_stock_picking())
+                    rec.state = 'process'
+                else:
+                    raise exceptions.ValidationError(
+                        _('The tasks must have almost one mechanic.'))
 
     @api.multi
     def action_done(self):
@@ -181,9 +171,9 @@ class VmsOrderLine(models.Model):
         for rec in self:
             if rec.external:
                 if not rec.purchase_state:
-                    raise exceptions.ValidationError(
+                    raise exceptions.ValidationError(_(
                         'Verify that purchase order are in '
-                        'done state to continue')
+                        'done state to continue'))
             else:
                 activities = rec.env['vms.activity'].search(
                     [('order_line_id', '=', rec.id)])
@@ -196,6 +186,12 @@ class VmsOrderLine(models.Model):
                     raise exceptions.ValidationError(
                         _('The activities of the mechanics(s)'
                             ' must be finished.'))
+                rec.stock_picking_id.action_confirm()
+                rec.stock_picking_id.action_assign()
+                for pack_operation in (
+                        rec.stock_picking_id.pack_operation_product_ids):
+                    pack_operation.qty_done = pack_operation.product_qty
+                rec.stock_picking_id.do_new_transfer()
                 for spare in rec.spare_part_ids:
                     if rec.stock_picking_id.state != 'done':
                         raise exceptions.ValidationError(
@@ -234,7 +230,6 @@ class VmsOrderLine(models.Model):
 
     @api.multi
     def create_po(self):
-        "Returns draft PO"
         purchase_order_id = self.env['purchase.order'].create({
             'partner_id': self.supplier_id.id,
             'partner_ref': self.order_id.name,
@@ -248,6 +243,6 @@ class VmsOrderLine(models.Model):
                     6, 0,
                     [x.id for x in (
                         self.product_id.supplier_taxes_id)]
-                    )],
+                )],
                 'name': self.product_id.name})]})
         self.write({'purchase_order_id': purchase_order_id.id})
