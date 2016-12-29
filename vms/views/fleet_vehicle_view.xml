@@ -7,6 +7,20 @@
             <field name="type">form</field>
             <field name="inherit_id" ref="fleet.fleet_vehicle_form"/>
             <field name="arch" type="xml">
+                <xpath expr="//notebook" position="inside">
+                    <page string="Maintenance Orders">
+                        <group>
+                            <field name="order_ids" nolabel="1">
+                                <tree>
+                                    <field name="name" />
+                                    <field name="date" />
+                                    <field name='type' />
+                                    <field name='state' />
+                                </tree>
+                            </field>
+                        </group>
+                    </page>
+                </xpath>
                 <xpath expr="//sheet/group[2]" position="after">
                     <group coslpan="2" string="Maintenance Program">
                         <field name="program_id"/>

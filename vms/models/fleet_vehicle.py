@@ -35,6 +35,15 @@ class FleetVehicle(models.Model):
     distance = fields.Float(
         'Distance Average', required=True
     )
+    order_ids = fields.One2many(
+        'vms.order', 'unit_id', string="Orders",
+        compute="_compute_order_ids")
+
+    @api.depends('last_order_id')
+    def _compute_order_ids(self):
+        for rec in self:
+            rec.order_ids = rec.env['vms.order'].search(
+                [('unit_id', '=', rec.id)])
 
     @api.multi
     def program_mtto(self):
