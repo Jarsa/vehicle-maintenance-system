@@ -36,20 +36,14 @@ class FleetVehicle(models.Model):
         'Distance Average', required=True
     )
     order_ids = fields.One2many(
-        'vms.order', 'unit_id', string="Orders",
-        compute="_compute_order_ids")
-
-    @api.depends('last_order_id')
-    def _compute_order_ids(self):
-        for rec in self:
-            rec.order_ids = rec.env['vms.order'].search(
-                [('unit_id', '=', rec.id)])
+        'vms.order', 'unit_id', string="Orders")
 
     @api.multi
     def program_mtto(self):
         for vehicle in self:
             prog_ids = vehicle.cycle_ids.search([('unit_id', '=', vehicle.id)])
-            if len(prog_ids):
+            control = len(prog_ids)
+            if control:
                 prog_ids.unlink()
             seq = 1
             for cycle in vehicle.program_id.cycle_ids:

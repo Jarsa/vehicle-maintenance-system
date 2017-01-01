@@ -91,7 +91,8 @@ class VmsOrder(models.Model):
         for rec in self:
             activities = self.env['vms.activity'].search(
                 [('order_id', '=', rec.id)])
-            if len(activities) > 0:
+            control = len(activities)
+            if control > 0:
                 activities.unlink()
             return super(VmsOrder, self).unlink()
 
@@ -223,7 +224,8 @@ class VmsOrder(models.Model):
                     obj_activity = self.env['vms.activity']
                     activities = obj_activity.search(
                         [('order_line_id', '=', line.id)])
-                    if len(activities) > 0:
+                    control = len(activities)
+                    if control > 0:
                         for activity in activities:
                             activity.state = 'draft'
                     else:
