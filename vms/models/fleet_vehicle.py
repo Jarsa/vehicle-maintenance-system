@@ -35,12 +35,15 @@ class FleetVehicle(models.Model):
     distance = fields.Float(
         'Distance Average', required=True
     )
+    order_ids = fields.One2many(
+        'vms.order', 'unit_id', string="Orders")
 
     @api.multi
     def program_mtto(self):
         for vehicle in self:
             prog_ids = vehicle.cycle_ids.search([('unit_id', '=', vehicle.id)])
-            if len(prog_ids):
+            control = len(prog_ids)
+            if control:
                 prog_ids.unlink()
             seq = 1
             for cycle in vehicle.program_id.cycle_ids:

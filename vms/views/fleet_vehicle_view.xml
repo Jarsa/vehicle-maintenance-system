@@ -8,30 +8,46 @@
             <field name="inherit_id" ref="fleet.fleet_vehicle_form"/>
             <field name="arch" type="xml">
                 <xpath expr="//sheet/group[2]" position="after">
-                    <group coslpan="2" string="Maintenance Program">
-                        <field name="program_id"/>
-                        <field attrs="{'readonly': [('next_cycle_id', '!=', False)], 'invisible': [('sequence', '=', 0)]}" name="sequence" required="1"/>
-                        <field attrs="{'invisible': [('last_order_id', '=', False)]}" name="last_order_id"/>
-                        <field attrs="{'invisible': [('sequence', '=', 0)]}" name="last_cycle_id"/>
-                        <field attrs="{'invisible': [('last_order_id', '=', False)]}" name="next_cycle_id"/>
-                        <field attrs="{'invisible': [('last_order_id', '=', False)]}" name="next_service_date"/>
-                        <field attrs="{'invisible': [('next_service_odometer', '=', 0.00)]}" name="next_service_odometer"/>
-                        <field name="distance"/>
-                    </group>
-                    <group style="text-align: center;">
-                        <button attrs="{'invisible': [('program_id', '=', False)]}" class="oe_highlight" confirm="Are you sure you want to create Program Sequence for this record? All previous records will be deleted !!!" name="program_mtto" string="Program Mtto" type="object"/>
-                    </group>
-                    <separator colspan="4" string="Cycles"/>
-                    <field name="cycle_ids" nolabel="1">
-                        <tree create="false" delete="false">
-                            <field name="order_id"/>
-                            <field name="unit_id"/>
-                            <field name="distance"/>
-                            <field name="schedule"/>
-                            <field name="sequence"/>
-                            <field name="date"/>
-                        </tree>
-                    </field>
+                    <notebook>
+                        <page string="Maintenance Orders">
+                            <group>
+                                <field name="order_ids" nolabel="1">
+                                    <tree>
+                                        <field name="name"/>
+                                        <field name="date"/>
+                                        <field name="type"/>
+                                        <field name="state"/>
+                                    </tree>
+                                </field>
+                            </group>
+                        </page>
+                        <page string="Maintenance Program">
+                            <group coslpan="2">
+                                <field name="program_id"/>
+                                <field attrs="{'readonly': [('next_cycle_id', '!=', False)], 'invisible': [('sequence', '=', 0)]}" name="sequence" required="1"/>
+                                <field attrs="{'invisible': [('last_order_id', '=', False)]}" name="last_order_id"/>
+                                <field attrs="{'invisible': [('sequence', '=', 0)]}" name="last_cycle_id"/>
+                                <field attrs="{'invisible': [('last_order_id', '=', False)]}" name="next_cycle_id"/>
+                                <field attrs="{'invisible': [('last_order_id', '=', False)]}" name="next_service_date"/>
+                                <field attrs="{'invisible': [('next_service_odometer', '=', 0.00)]}" name="next_service_odometer"/>
+                                <field name="distance"/>
+                            </group>
+                            <group style="text-align: center;">
+                                <button attrs="{'invisible': [('program_id', '=', False)]}" class="oe_highlight" confirm="Are you sure you want to create Program Sequence for this record? All previous records will be deleted !!!" name="program_mtto" string="Program Mtto" type="object"/>
+                            </group>
+                            <separator colspan="4" string="Cycles"/>
+                            <field name="cycle_ids" nolabel="1">
+                                <tree create="false" delete="false">
+                                    <field name="order_id"/>
+                                    <field name="unit_id"/>
+                                    <field name="distance"/>
+                                    <field name="schedule"/>
+                                    <field name="sequence"/>
+                                    <field name="date"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
                 </xpath>
             </field>
         </record>
