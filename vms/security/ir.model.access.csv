@@ -1,5 +1,6 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
 access_vms_activity,access_vms_activity,model_vms_activity,,1,1,1,1
+access_vms_activity_time,access_vms_activity_time,model_vms_activity_time,,1,1,1,1
 access_vms_cycle,access_vms_cycle,model_vms_cycle,,1,1,1,1
 access_vms_order,access_vms_order,model_vms_order,,1,1,1,1
 access_vms_order_line,access_vms_order_line,model_vms_order_line,,1,1,1,1

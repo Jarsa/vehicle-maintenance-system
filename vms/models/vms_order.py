@@ -29,6 +29,7 @@ class VmsOrder(models.Model):
         required=True)
     stock_location_id = fields.Many2one(
         'stock.location',
+        domain="[('usage', '=', 'internal')]",
         required=True,
         string='Stock Location')
     start_date = fields.Datetime(
@@ -280,6 +281,6 @@ class VmsOrder(models.Model):
                 for report in rec.report_ids:
                     report.state = 'draft'
             for line in rec.order_line_ids:
-                line.action_cancel_draft()
+                line.state = 'draft'
                 for spare in line.spare_part_ids:
                     spare.state = 'draft'

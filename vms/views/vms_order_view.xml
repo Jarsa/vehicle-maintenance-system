@@ -47,7 +47,7 @@
                                     <field name='operating_unit_id'/>
                                     <field name="date"/>
                                     <field name="unit_id"/>
-                                    <field name="stock_location_id" domain="[('usage', '=', 'internal'),('operating_unit_id', '=', operating_unit_id)]"/>
+                                    <field name="stock_location_id"/>
                                     <field name="type"/>
                                     <field context="{'default_mechanic': True}" name="supervisor_id"/>
                                 </group>
