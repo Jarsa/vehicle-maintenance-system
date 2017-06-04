@@ -29,7 +29,6 @@ class VmsOrder(models.Model):
         required=True)
     stock_location_id = fields.Many2one(
         'stock.location',
-        domain="[('usage', '=', 'internal')]",
         required=True,
         string='Stock Location')
     start_date = fields.Datetime(
