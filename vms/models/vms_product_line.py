@@ -63,13 +63,15 @@ class VmsProductLine(models.Model):
                 'product_id': rec.product_id.id,
                 'product_uom': rec.product_uom_id.id,
                 'product_uom_qty': rec.product_qty,
-                'operating_unit_id': rec.order_id.operating_unit_id.id,
+                'operating_unit_id': (
+                    rec.order_line_id.order_id.operating_unit_id.id),
             })
             picking_locations.append(
                 rec.order_line_id.order_id.stock_location_id.id)
             picking_dest_locations.append(
                 rec.product_id.property_stock_production.id)
-            operating_units.append(rec.operating_unit_id.id)
+            operating_units.append(
+                rec.order_line_id.order_id.operating_unit_id.id)
             moves.append(move)
 
         if len(set(picking_locations)) > 1:

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <record id="vms_task_01" model="vms.task">
+            <field name="name">Task 01</field>
+            <field name="duration">0.5</field>
+            <field name="spare_part_ids" eval="[(0,0,{'product_id': ref('vms_product_01'),'product_qty': 2}),(0,0,{'product_id': ref('vms_product_02'),'product_qty': 1})]"/>
+        </record>
+    </data>
+</odoo>

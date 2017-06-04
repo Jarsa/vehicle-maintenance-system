@@ -88,11 +88,7 @@ class VmsActivity(models.Model):
                 'state': 'process',
                 'start_date': fields.Datetime.now()
             })
-            rec.message_post(_(
-                '<strong>Activity Started.</strong><ul>'
-                '<li><strong>Started by: </strong>%s</li>'
-                '<li><strong>Started at: </strong>%s</li>'
-                '</ul>') % (self.env.user.name, fields.Datetime.now()))
+            rec.message_post(_('<strong>Activity Started.</strong>'))
 
     @api.multi
     def action_pause(self):
@@ -105,11 +101,7 @@ class VmsActivity(models.Model):
             rec.write({
                 'state': 'pause'
             })
-            rec.message_post(_(
-                '<strong>Activity Paused.</strong><ul>'
-                '<li><strong>Paused by: </strong>%s</li>'
-                '<li><strong>Paused at: </strong>%s</li>'
-                '</ul>') % (self.env.user.name, fields.Datetime.now()))
+            rec.message_post(_('<strong>Activity Paused.</strong>'))
 
     @api.multi
     def action_resume(self):
@@ -122,22 +114,14 @@ class VmsActivity(models.Model):
             rec.write({
                 'state': 'process'
             })
-            rec.message_post(_(
-                '<strong>Activity Resumed.</strong><ul>'
-                '<li><strong>Resumed by: </strong>%s</li>'
-                '<li><strong>Resumed at: </strong>%s</li>'
-                '</ul>') % (self.env.user.name, fields.Datetime.now()))
+            rec.message_post(_('<strong>Activity Resumed.</strong>'))
 
     @api.multi
     def action_cancel(self):
         for rec in self:
             rec.state = 'cancel'
             rec.order_line_id.state = 'done'
-            rec.message_post(_(
-                '<strong>Activity Canceled.</strong><ul>'
-                '<li><strong>Canceled by: </strong>%s</li>'
-                '<li><strong>Canceled at: </strong>%s</li>'
-                '</ul>') % (self.env.user.name, fields.Datetime.now()))
+            rec.message_post(_('<strong>Activity Canceled.</strong>'))
 
     @api.multi
     def action_end(self):
@@ -151,18 +135,10 @@ class VmsActivity(models.Model):
                 'state': 'end',
                 'end_date': fields.Datetime.now()
             })
-            rec.message_post(_(
-                '<strong>Activity Ended.</strong><ul>'
-                '<li><strong>Ended by: </strong>%s</li>'
-                '<li><strong>Ended at: </strong>%s</li>'
-                '</ul>') % (self.env.user.name, fields.Datetime.now()))
+            rec.message_post(_('<strong>Activity Ended.</strong>'))
 
     @api.multi
     def action_cancel_draft(self):
         for rec in self:
             rec.state = 'draft'
-            rec.message_post(_(
-                '<strong>Activity Drafted.</strong><ul>'
-                '<li><strong>Drafted by: </strong>%s</li>'
-                '<li><strong>Drafted at: </strong>%s</li>'
-                '</ul>') % (self.env.user.name, fields.Datetime.now()))
+            rec.message_post(_('<strong>Activity Drafted.</strong>'))
