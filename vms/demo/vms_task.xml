@@ -4,7 +4,31 @@
         <record id="vms_task_01" model="vms.task">
             <field name="name">Task 01</field>
             <field name="duration">0.5</field>
-            <field name="spare_part_ids" eval="[(0,0,{'product_id': ref('vms_product_01'),'product_qty': 2}),(0,0,{'product_id': ref('vms_product_02'),'product_qty': 1})]"/>
+            <field name="spare_part_ids" eval="[(0, 0, {'product_id': ref('vms_product_01'), 'product_qty': 2, 'product_uom_id': ref('product.product_uom_litre')}), (0, 0, {'product_id': ref('vms_product_02'), 'product_qty': 1, 'product_uom_id': ref('product.product_uom_unit')})]"/>
+        </record>
+        <record id="vms_task_02" model="vms.task">
+            <field name="name">Task 02</field>
+            <field name="duration">1</field>
+            <field name="spare_part_ids" eval="[(0, 0, {'product_id': ref('vms_product_03'), 'product_qty': 2, 'product_uom_id': ref('product.product_uom_unit')})]"/>
+        </record>
+        <record id="vms_task_03" model="vms.task">
+            <field name="name">Task 03</field>
+            <field name="duration">1.5</field>
+            <field name="spare_part_ids" eval="[(0, 0, {'product_id': ref('vms_product_04'), 'product_qty': 2, 'product_uom_id': ref('product.product_uom_litre')}), (0, 0, {'product_id': ref('vms_product_05'), 'product_qty': 1, 'product_uom_id': ref('product.product_uom_unit')})]"/>
+        </record>
+        <record id="vms_task_04" model="vms.task">
+            <field name="name">Task 04</field>
+            <field name="duration">0.5</field>
+            <field name="spare_part_ids" eval="[(0, 0, {'product_id': ref('vms_product_06'), 'product_qty': 2, 'product_uom_id': ref('product.product_uom_unit')}), (0, 0, {'product_id': ref('vms_product_07'), 'product_qty': 1, 'product_uom_id': ref('product.product_uom_litre')})]"/>
+        </record>
+        <record id="vms_task_05" model="vms.task">
+            <field name="name">Task 05</field>
+            <field name="duration">.45</field>
+            <field name="spare_part_ids" eval="[(0, 0, {'product_id': ref('vms_product_08'), 'product_qty': 2, 'product_uom_id': ref('product.product_uom_unit')})]"/>
+        </record>
+        <record id="vms_task_06" model="vms.task">
+            <field name="name">Task 06</field>
+            <field name="duration">2.5</field>
         </record>
     </data>
 </odoo>

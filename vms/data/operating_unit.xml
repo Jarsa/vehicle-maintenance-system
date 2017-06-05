@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <record model="operating.unit" id="operating_unit.main_operating_unit">
+            <field name="order_sequence_id" ref="order_sequence"/>
+            <field name="report_sequence_id" ref="report_sequence"/>
+        </record>
+    </data>
+</odoo>

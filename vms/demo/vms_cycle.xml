@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <record id="vms_cycle_01" model="vms.cycle">
+            <field name="name">Cycle A</field>
+            <field name="frequency">25000</field>
+            <field name="task_ids" eval="[(6, 0, [ref('vms_task_01'), ref('vms_task_02'), ref('vms_task_03'), ref('vms_task_04')])]"/>
+        </record>
+        <record id="vms_cycle_02" model="vms.cycle">
+            <field name="name">Cycle B</field>
+            <field name="frequency">50000</field>
+            <field name="task_ids" eval="[(6, 0, [ref('vms_task_05'), ref('vms_task_06')])]"/>
+            <field name="cycle_ids" eval="[(6, 0, [ref('vms_cycle_01')])]"/>
+        </record>
+    </data>
+</odoo>

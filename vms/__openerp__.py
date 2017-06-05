@@ -33,8 +33,16 @@
         'views/fleet_vehicle_view.xml',
         'views/operating_unit_view.xml',
         'data/ir_sequence_data.xml',
+        'data/operating_unit.xml',
     ],
     'demo': [
+        'demo/hr_employee.xml',
         'demo/product_product.xml',
+        'demo/operating_unit.xml',
+        'demo/vms_task.xml',
+        'demo/vms_cycle.xml',
+        'demo/vms_program.xml',
+        'demo/fleet_vehicle.xml',
+        'demo/vms_order.xml',
     ]
 }

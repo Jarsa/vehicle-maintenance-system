@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <record id="hr_employee_01" model="hr.employee">
+            <field name="name">Amador Sanchez</field>
+            <field name="mechanic" eval="1"/>
+        </record>
+        <record id="hr_employee_02" model="hr.employee">
+            <field name="name">Efrain Vargas</field>
+            <field name="mechanic" eval="1"/>
+        </record>
+        <record id="hr_employee_03" model="hr.employee">
+            <field name="name">John Snow</field>
+            <field name="mechanic" eval="1"/>
+        </record>
+    </data>
+</odoo>
