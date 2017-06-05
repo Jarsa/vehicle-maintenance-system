@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <record id="tms.tms_fleet_vehicle_01" model="fleet.vehicle">
+            <field name="program_id" ref="vms_program_01"/>
+            <field name="distance">980</field>
+        </record>
+        <record id="tms.tms_fleet_vehicle_05" model="fleet.vehicle">
+            <field name="program_id" ref="vms_program_01"/>
+            <field name="distance">960</field>
+        </record>
+        <record id="tms.tms_fleet_vehicle_09" model="fleet.vehicle">
+            <field name="program_id" ref="vms_program_01"/>
+            <field name="distance">800</field>
+        </record>
+        <record id="tms.tms_fleet_vehicle_13" model="fleet.vehicle">
+            <field name="program_id" ref="vms_program_01"/>
+            <field name="distance">1000</field>
+        </record>
+        <record id="tms.tms_fleet_vehicle_17" model="fleet.vehicle">
+            <field name="program_id" ref="vms_program_01"/>
+            <field name="distance">750</field>
+        </record>
+        <function name="program_mtto" model="fleet.vehicle" eval="[ref('tms.tms_fleet_vehicle_01')]"/>
+        <function name="program_mtto" model="fleet.vehicle" eval="[ref('tms.tms_fleet_vehicle_05')]"/>
+        <function name="program_mtto" model="fleet.vehicle" eval="[ref('tms.tms_fleet_vehicle_09')]"/>
+        <function name="program_mtto" model="fleet.vehicle" eval="[ref('tms.tms_fleet_vehicle_13')]"/>
+        <function name="program_mtto" model="fleet.vehicle" eval="[ref('tms.tms_fleet_vehicle_17')]"/>
+    </data>
+</odoo>

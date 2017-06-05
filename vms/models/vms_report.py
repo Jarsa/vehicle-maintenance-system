@@ -49,9 +49,4 @@ class VmsReport(models.Model):
     def action_confirmed(self):
         for rec in self:
             rec.state = 'confirmed'
-            rec.message_post(_(
-                '<strong>Report Confirmed.</strong><ul>'
-                '<li><strong>Confirmed by: </strong>%s</li>'
-                '<li><strong>Confirmed at: </strong>%s</li>'
-                '</ul>') % (
-                self.env.user.name, fields.Datetime.now()))
+            rec.message_post(_('<strong>Report Confirmed.</strong>'))

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <record id="vms_program_01" model="vms.program">
+            <field name="name">Maintainance Program for Trucks</field>
+            <field name="cycle_ids" eval="[(6, 0, [ref('vms_cycle_01'), ref('vms_cycle_02')])]"/>
+        </record>
+    </data>
+</odoo>

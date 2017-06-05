@@ -133,11 +133,7 @@ class VmsOrder(models.Model):
                 for report in order.report_ids:
                     report.state = 'close'
             order.state = 'released'
-            order.message_post(body=(
-                "<h5><strong>Released</strong></h5>"
-                "<p><strong>Released by: </strong> %s <br>"
-                "<strong>Released at: </strong> %s</p") % (
-                order.supervisor_id.name, fields.Datetime.now()))
+            order.message_post(body=("<strong>Released</strong>"))
 
     @api.multi
     def get_tasks_from_cycle(self, cycle_id, order_id):
@@ -171,23 +167,21 @@ class VmsOrder(models.Model):
             else:
                 break
 
-    @api.multi
     @api.onchange('type', 'unit_id')
     def _onchange_type(self):
-        for rec in self:
-            if rec.type == 'preventive':
-                rec.program_id = rec.unit_id.program_id
-                rec.current_odometer = rec.unit_id.odometer
-                rec.sequence = rec.unit_id.sequence
-                rec.cycle_id = rec.unit_id.next_cycle_id.id
-                rec.order_line_ids = False
-                for cycle in rec.unit_id.program_id.cycle_ids:
-                    rec.get_tasks_from_cycle(cycle, rec)
-            else:
-                rec.program_id = False
-                rec.current_odometer = False
-                rec.sequence = False
-                rec.order_line_ids = False
+        if self.type == 'preventive':
+            self.program_id = self.unit_id.program_id
+            self.current_odometer = self.unit_id.odometer
+            self.sequence = self.unit_id.sequence
+            self.cycle_id = self.unit_id.next_cycle_id.id
+            self.order_line_ids = False
+            for cycle in self.unit_id.program_id.cycle_ids:
+                self.get_tasks_from_cycle(cycle, self)
+        else:
+            self.program_id = False
+            self.current_odometer = False
+            self.sequence = False
+            self.order_line_ids = False
 
     @api.depends('order_line_ids')
     def _compute_end_date(self):
@@ -249,12 +243,7 @@ class VmsOrder(models.Model):
                 line.start_date_real = fields.Datetime.now()
                 rec.state = 'open'
                 rec.start_date_real = fields.Datetime.now()
-                rec.message_post(_(
-                    '<strong>Order Opened.</strong><ul>'
-                    '<li><strong>Opened by: </strong>%s</li>'
-                    '<li><strong>Opened at: </strong>%s</li>'
-                    '</ul>') % (
-                    self.env.user.name, fields.Datetime.now()))
+                rec.message_post(_('<strong>Order Opened.</strong>'))
 
     @api.multi
     def action_cancel(self):
@@ -265,12 +254,7 @@ class VmsOrder(models.Model):
                 for report in rec.report_ids:
                     report.state = 'cancel'
             rec.state = 'cancel'
-            rec.message_post(_(
-                '<strong>Order Closed.</strong><ul>'
-                '<li><strong>Closed by: </strong>%s</li>'
-                '<li><strong>Closed at: </strong>%s</li>'
-                '</ul>') % (
-                self.env.user.name, fields.Datetime.now()))
+            rec.message_post(_('<strong>Order Closed.</strong>'))
 
     @api.multi
     def action_cancel_draft(self):
@@ -280,6 +264,6 @@ class VmsOrder(models.Model):
                 for report in rec.report_ids:
                     report.state = 'draft'
             for line in rec.order_line_ids:
-                line.action_cancel_draft()
+                line.state = 'draft'
                 for spare in line.spare_part_ids:
                     spare.state = 'draft'

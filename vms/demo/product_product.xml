@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <record id="vms_product_01" model="product.product">
+            <field name="name">Oil</field>
+            <field name="purchase_ok" eval="1"/>
+            <field name="sale_ok" eval="0"/>
+            <field name="default_code">15W40</field>
+            <field name="type">product</field>
+            <field name="route_ids" eval="[(6,0,[ref('purchase.route_warehouse0_buy'), ref('stock.route_warehouse0_mto')])]"/> 
+            <field name="seller_ids" eval="[(0,0,{'name': ref('base.res_partner_3'), 'price': 1000})]"/>
+            <field name="uom_id" ref="product.product_uom_litre"/>
+            <field name="uom_po_id" ref="product.product_uom_litre"/>
+        </record>
+        <record id="vms_product_02" model="product.product">
+            <field name="name">Oil Filter</field>
+            <field name="purchase_ok" eval="1"/>
+            <field name="sale_ok" eval="0"/>
+            <field name="default_code">P120001</field>
+            <field name="type">product</field>
+            <field name="route_ids" eval="[(6,0,[ref('purchase.route_warehouse0_buy'), ref('stock.route_warehouse0_mto')])]"/> 
+            <field name="seller_ids" eval="[(0,0,{'name': ref('base.res_partner_3'), 'price': 300})]"/>
+            <field name="uom_id" ref="product.product_uom_unit"/>
+            <field name="uom_po_id" ref="product.product_uom_unit"/>
+        </record>
+        <record id="vms_product_03" model="product.product">
+            <field name="name">Air Filter</field>
+            <field name="purchase_ok" eval="1"/>
+            <field name="sale_ok" eval="0"/>
+            <field name="default_code">A14201</field>
+            <field name="type">product</field>
+            <field name="route_ids" eval="[(6,0,[ref('purchase.route_warehouse0_buy'), ref('stock.route_warehouse0_mto')])]"/> 
+            <field name="seller_ids" eval="[(0,0,{'name': ref('base.res_partner_3'), 'price': 1000})]"/>
+            <field name="uom_id" ref="product.product_uom_unit"/>
+            <field name="uom_po_id" ref="product.product_uom_unit"/>
+        </record>
+        <record id="vms_product_04" model="product.product">
+            <field name="name">####</field>
+            <field name="purchase_ok" eval="1"/>
+            <field name="sale_ok" eval="0"/>
+            <field name="default_code">15W40</field>
+            <field name="type">product</field>
+            <field name="route_ids" eval="[(6,0,[ref('purchase.route_warehouse0_buy'), ref('stock.route_warehouse0_mto')])]"/> 
+            <field name="seller_ids" eval="[(0,0,{'name': ref('base.res_partner_3'), 'price': 1000})]"/>
+            <field name="uom_id" ref="product.product_uom_litre"/>
+            <field name="uom_po_id" ref="product.product_uom_litre"/>
+        </record>
+        <record id="vms_product_05" model="product.product">
+            <field name="name">####</field>
+            <field name="purchase_ok" eval="1"/>
+            <field name="sale_ok" eval="0"/>
+            <field name="default_code">P120001</field>
+            <field name="type">product</field>
+            <field name="route_ids" eval="[(6,0,[ref('purchase.route_warehouse0_buy'), ref('stock.route_warehouse0_mto')])]"/> 
+            <field name="seller_ids" eval="[(0,0,{'name': ref('base.res_partner_3'), 'price': 300})]"/>
+            <field name="uom_id" ref="product.product_uom_unit"/>
+            <field name="uom_po_id" ref="product.product_uom_unit"/>
+        </record>
+        <record id="vms_product_06" model="product.product">
+            <field name="name">####</field>
+            <field name="purchase_ok" eval="1"/>
+            <field name="sale_ok" eval="0"/>
+            <field name="default_code">A14201</field>
+            <field name="type">product</field>
+            <field name="route_ids" eval="[(6,0,[ref('purchase.route_warehouse0_buy'), ref('stock.route_warehouse0_mto')])]"/> 
+            <field name="seller_ids" eval="[(0,0,{'name': ref('base.res_partner_3'), 'price': 1000})]"/>
+            <field name="uom_id" ref="product.product_uom_unit"/>
+            <field name="uom_po_id" ref="product.product_uom_unit"/>
+        </record>
+        <record id="vms_product_07" model="product.product">
+            <field name="name">####</field>
+            <field name="purchase_ok" eval="1"/>
+            <field name="sale_ok" eval="0"/>
+            <field name="default_code">15W40</field>
+            <field name="type">product</field>
+            <field name="route_ids" eval="[(6,0,[ref('purchase.route_warehouse0_buy'), ref('stock.route_warehouse0_mto')])]"/> 
+            <field name="seller_ids" eval="[(0,0,{'name': ref('base.res_partner_3'), 'price': 1000})]"/>
+            <field name="uom_id" ref="product.product_uom_litre"/>
+            <field name="uom_po_id" ref="product.product_uom_litre"/>
+        </record>
+        <record id="vms_product_08" model="product.product">
+            <field name="name">####</field>
+            <field name="purchase_ok" eval="1"/>
+            <field name="sale_ok" eval="0"/>
+            <field name="default_code">P120001</field>
+            <field name="type">product</field>
+            <field name="route_ids" eval="[(6,0,[ref('purchase.route_warehouse0_buy'), ref('stock.route_warehouse0_mto')])]"/> 
+            <field name="seller_ids" eval="[(0,0,{'name': ref('base.res_partner_3'), 'price': 300})]"/>
+            <field name="uom_id" ref="product.product_uom_unit"/>
+            <field name="uom_po_id" ref="product.product_uom_unit"/>
+        </record>
+        <record id="vms_product_09" model="product.product">
+            <field name="name">####</field>
+            <field name="purchase_ok" eval="1"/>
+            <field name="sale_ok" eval="0"/>
+            <field name="default_code">A14201</field>
+            <field name="type">product</field>
+            <field name="route_ids" eval="[(6,0,[ref('purchase.route_warehouse0_buy'), ref('stock.route_warehouse0_mto')])]"/> 
+            <field name="seller_ids" eval="[(0,0,{'name': ref('base.res_partner_3'), 'price': 1000})]"/>
+            <field name="uom_id" ref="product.product_uom_unit"/>
+            <field name="uom_po_id" ref="product.product_uom_unit"/>
+        </record>
+        <record id="vms_product_10" model="product.product">
+            <field name="name">####</field>
+            <field name="purchase_ok" eval="1"/>
+            <field name="sale_ok" eval="0"/>
+            <field name="default_code">A14201</field>
+            <field name="type">product</field>
+            <field name="route_ids" eval="[(6,0,[ref('purchase.route_warehouse0_buy'), ref('stock.route_warehouse0_mto')])]"/> 
+            <field name="seller_ids" eval="[(0,0,{'name': ref('base.res_partner_3'), 'price': 1000})]"/>
+            <field name="uom_id" ref="product.product_uom_unit"/>
+            <field name="uom_po_id" ref="product.product_uom_unit"/>
+        </record>
+    </data>
+</odoo>

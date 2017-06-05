@@ -65,8 +65,6 @@ class VmsProductLine(models.Model):
                 'product_uom_qty': rec.product_qty,
                 'operating_unit_id': (
                     rec.order_line_id.order_id.operating_unit_id.id),
-                'operating_unit_dest_id': (
-                    rec.order_line_id.order_id.operating_unit_id.id),
             })
             picking_locations.append(
                 rec.order_line_id.order_id.stock_location_id.id)

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <record id="vms_order_01" model="vms.order">
+            <field name="operating_unit_id" ref="operating_unit.main_operating_unit"/>
+            <field name="date" eval="datetime.now()"/>
+            <field name="unit_id" ref="tms.tms_fleet_vehicle_01"/>
+            <field name="stock_location_id" ref="stock.stock_location_stock"/>
+            <field name="type">preventive</field>
+            <field name="supervisor_id" ref="hr_employee_01"/>
+        </record>
+        <record id="vms_order_02" model="vms.order">
+            <field name="operating_unit_id" ref="operating_unit.main_operating_unit"/>
+            <field name="date" eval="datetime.now()"/>
+            <field name="unit_id" ref="tms.tms_fleet_vehicle_05"/>
+            <field name="stock_location_id" ref="stock.stock_location_stock"/>
+            <field name="type">corrective</field>
+            <field name="supervisor_id" ref="hr_employee_02"/>
+        </record>
+    </data>
+</odoo>
