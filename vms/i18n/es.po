@@ -455,7 +455,7 @@ msgid "Information on a vehicle"
 msgstr "Información de la unidad"
 
 #. module: vms
-#. openerp-web
+#. odoo-web
 #: code:addons/vms/static/src/js/module_name.tour.js:38
 #, python-format
 msgid "Instructions for end user."
@@ -980,7 +980,7 @@ msgid "Tasks"
 msgstr "Tareas"
 
 #. module: vms
-#. openerp-web
+#. odoo-web
 #: code:addons/vms/static/src/js/module_name.tour.js:44
 #, python-format
 msgid "Text for continue button."
@@ -1025,7 +1025,7 @@ msgid "The tasks must have almost one mechanic."
 msgstr "Las tareas deben tener al menos un mecánico asignado."
 
 #. module: vms
-#. openerp-web
+#. odoo-web
 #: code:addons/vms/static/src/js/module_name.tour.js:19
 #, python-format
 msgid "The title of this step, appears in logs"
@@ -1042,7 +1042,7 @@ msgid "Total hours"
 msgstr "Horas Totales"
 
 #. module: vms
-#. openerp-web
+#. odoo-web
 #: code:addons/vms/static/src/js/module_name.tour.js:13
 #, python-format
 msgid "Try to demostrate how to create a tour"

@@ -4,7 +4,7 @@
 
 from datetime import datetime
 from datetime import timedelta
-from openerp import _, api, exceptions, fields, models
+from odoo import _, api, exceptions, fields, models
 
 
 class VmsOrderLine(models.Model):

@@ -6,7 +6,7 @@ from __future__ import division
 
 from datetime import datetime, timedelta
 
-from openerp import api, fields, models
+from odoo import api, fields, models
 
 
 class FleetVehicle(models.Model):

@@ -4,7 +4,7 @@
 
 from __future__ import division
 from datetime import datetime
-from openerp import _, api, exceptions, fields, models
+from odoo import _, api, exceptions, fields, models
 
 
 class VmsActivity(models.Model):
