@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="stock_picking_type_vms_out" model='stock.picking.type'>
+        <field name="name">VMS Spare Parts OUT</field>
+        <field name="code">outgoing</field>
+        <field name="default_location_src_id" ref="stock.stock_location_stock"/>
+        <field name="default_location_dest_id" ref="stock.location_production"/>
+        <field name="sequence_id" ref="vms.vms_out_sequence"/>
+        <field name="sequence" eval="12"/>
+     </record>
+</odoo>

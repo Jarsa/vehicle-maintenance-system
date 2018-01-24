@@ -17,6 +17,7 @@
     'data': [
         'security/ir.model.access.csv',
         'views/vms_view.xml',
+        'views/hr_employee_view.xml',
         'views/vms_vehicle_cycle.xml',
         'views/vms_program.xml',
         'views/vms_cycle_view.xml',
@@ -28,6 +29,8 @@
         'views/fleet_vehicle_view.xml',
         'views/operating_unit_view.xml',
         'data/ir_sequence_data.xml',
+        'data/stock_picking_type_data.xml',
+        'data/procurement_route_data.xml',
     ],
     'demo': [
     ]

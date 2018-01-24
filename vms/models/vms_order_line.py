@@ -58,11 +58,6 @@ class VmsOrderLine(models.Model):
         compute='_compute_purchase_state')
     order_id = fields.Many2one('vms.order', string='Order', readonly=True)
     real_time_total = fields.Integer()
-    stock_picking_id = fields.Many2one(
-        'stock.picking',
-        string="Stock Picking",
-        readonly=True,
-    )
 
     @api.multi
     def unlink(self):
@@ -126,13 +121,14 @@ class VmsOrderLine(models.Model):
         for rec in self:
             if rec.order_id.state != 'open':
                 raise ValidationError(_('The order must be open.'))
+            rec.write({
+                'state': 'process',
+                'start_date_real': fields.Datetime.now(),
+            })
             if not rec.external:
-                if rec.spare_part_ids:
-                    rec.spare_part_ids.write({'state': 'pending'})
-                    rec.stock_picking_id = (
-                        rec.spare_part_ids._create_stock_picking())
-            rec.state = 'process'
-            rec.start_date_real = fields.Datetime.now()
+                if not rec.spare_part_ids:
+                    return True
+                rec.spare_part_ids.procurement_create()
 
     @api.multi
     def get_real_duration(self):
@@ -147,30 +143,25 @@ class VmsOrderLine(models.Model):
                     raise ValidationError(_(
                         'Verify that purchase order are in done state '
                         'to continue'))
-            else:
-                rec.stock_picking_id.action_confirm()
-                rec.stock_picking_id.action_assign()
-                for pack_operation in (
-                        rec.stock_picking_id.pack_operation_product_ids):
-                    pack_operation.qty_done = pack_operation.product_qty
-                rec.stock_picking_id.do_new_transfer()
-                rec.spare_part_ids.write({'state': 'delivered'})
-                rec.get_real_duration()
+            rec.get_real_duration()
             rec.end_date_real = fields.Datetime.now()
             rec.state = 'done'
 
     @api.multi
     def action_cancel(self):
         for rec in self:
-            if rec.external:
-                rec.purchase_order_id.unlink()
-                if rec.spare_part_ids:
-                    for spare in rec.spare_part_ids:
-                        if spare.stock_move_id:
-                            spare.stock_move_id.state = 'cancel'
-                        spare.state = 'cancel'
-            rec.state = 'cancel'
-            rec.start_date_real = False
+            if not rec.external:
+                if self.mapped('spare_part_ids').filtered(
+                        lambda x: x.state == 'done'):
+                    raise ValidationError(
+                        _('Error, you cannot cancel a maintenance order'
+                            ' with done stock moves.'))
+                self.mapped('spare_part_ids').mapped(
+                    'procurement_ids').cancel()
+            rec.write({
+                'state': 'cancel',
+                'start_date_real': False,
+            })
 
     @api.multi
     def action_cancel_draft(self):

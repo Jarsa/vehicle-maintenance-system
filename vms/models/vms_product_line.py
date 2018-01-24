@@ -2,7 +2,7 @@
 # Copyright 2016, Jarsa Sistemas, S.A. de C.V.
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
-from odoo import _, exceptions, api, fields, models
+from odoo import api, fields, models
 
 
 class VmsProductLine(models.Model):
@@ -31,63 +31,62 @@ class VmsProductLine(models.Model):
     order_line_id = fields.Many2one(
         'vms.order.line',
         string='Activity')
-    state = fields.Selection(
-        [('draft', 'Draft'),
-         ('pending', 'Pending'),
-         ('delievered', 'Delievered'),
-         ('cancel', 'Cancel')],
-        readonly=True, default='draft')
+    procurement_ids = fields.One2many(
+        'procurement.order',
+        'vms_product_line_id',
+        string='Procurement Orders',)
 
     @api.onchange('product_id')
     def _onchange_product_id(self):
         self.product_uom_id = self.product_id.uom_id
 
     @api.multi
-    def _create_stock_picking(self):
-        moves = []
-        picking_locations = []
-        picking_dest_locations = []
-        operating_units = []
-        for rec in self:
-            today = fields.Datetime.now()
-            move = (0, 0, {
-                'company_id': self.env.user.company_id.id,
-                'date': today,
-                'location_dest_id': (
-                    rec.product_id.property_stock_production.id),
-                'location_id': (
-                    rec.order_line_id.order_id.stock_location_id.id),
-                'name': (
-                    rec.order_line_id.task_id.name +
-                    '-' + rec.product_id.name),
-                'product_id': rec.product_id.id,
-                'product_uom': rec.product_uom_id.id,
-                'product_uom_qty': rec.product_qty,
-                'operating_unit_id': rec.order_id.operating_unit_id.id,
-            })
-            picking_locations.append(
-                rec.order_line_id.order_id.stock_location_id.id)
-            picking_dest_locations.append(
-                rec.product_id.property_stock_production.id)
-            operating_units.append(rec.operating_unit_id.id)
-            moves.append(move)
-
-        if len(set(picking_locations)) > 1:
-            raise exceptions.ValidationError(_(
-                'All the source locations must be equal.'))
-        elif len(set(picking_dest_locations)) > 1:
-            raise exceptions.ValidationError(_(
-                'All the destionation locations must be equal.'))
-        elif len(set(operating_units)) > 1:
-            raise exceptions.ValidationError(_(
-                'All the operating units must be equal.'))
-        picking = {
+    def _prepare_order_line_procurement(self, group_id=False):
+        self.ensure_one()
+        order = self.order_line_id.order_id
+        prod_loc_id = (
+            order.warehouse_id.wh_vms_out_picking_type_id.
+            default_location_dest_id
+        )
+        return {
+            'name': self.product_id.name,
+            'origin': order.name,
+            'product_id': self.product_id.id,
+            'product_qty': self.product_qty,
+            'product_uom': self.product_uom_id.id,
             'company_id': self.env.user.company_id.id,
-            'move_lines': [x for x in moves],
-            'picking_type_id': self.env.ref('stock.picking_type_internal').id,
-            'location_id': picking_locations[0],
-            'location_dest_id': picking_dest_locations[0],
-            'operating_unit_id': operating_units[0],
+            'group_id': group_id,
+            'vms_product_line_id': self.id,
+            'date_planned': fields.Datetime.now(),
+            'location_id': prod_loc_id.id,
+            'route_ids': self.product_id.route_ids and [
+                (4, self.product_id.route_ids.ids)] or [],
+            'warehouse_id': order.warehouse_id.id,
         }
-        pick = self.env['stock.picking'].create(picking)
-        return pick
+
+    @api.multi
+    def procurement_create(self):
+        new_procs = self.env['procurement.order']
+        proc_group_obj = self.env["procurement.group"]
+        for line in self:
+            if (line.order_line_id.state != 'process' or not
+                    line.product_id._need_procurement()):
+                continue
+            qty = 0.0
+            for procurement in line.procurement_ids:
+                qty += procurement.product_qty
+
+            if not line.order_line_id.order_id.procurement_group_id:
+                vals = line.order_line_id.order_id._prepare_procurement_group()
+                line.order_line_id.order_id.procurement_group_id = (
+                    proc_group_obj.create(vals)
+                )
+
+            vals = line._prepare_order_line_procurement(
+                line.order_line_id.order_id.procurement_group_id.id)
+            vals['product_qty'] = line.product_qty - qty
+            new_proc = self.env["procurement.order"].with_context(
+                procurement_autorun_defer=True).create(vals)
+            new_procs += new_proc
+        new_procs.run()
+        return new_procs
