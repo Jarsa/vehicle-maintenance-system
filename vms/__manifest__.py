@@ -9,7 +9,7 @@
     'website': 'https://jarsa/.com.mx',
     'author': 'Jarsa Sistemas',
     'license': 'AGPL-3',
-    'installable': False,
+    'installable': True,
     'application': True,
     'depends': [
         'account', 'stock', 'hr', 'fleet', 'purchase',

@@ -5,7 +5,7 @@
             <field name="name">VMS Fleet Maintenance Form View</field>
             <field name="model">fleet.vehicle</field>
             <field name="type">form</field>
-            <field name="inherit_id" ref="fleet.fleet_vehicle_form"/>
+            <field name="inherit_id" ref="fleet.fleet_vehicle_view_form"/>
             <field name="arch" type="xml">
                 <xpath expr="//sheet/group[2]" position="after">
                     <group coslpan="2" string="Maintenance Program">
@@ -35,6 +35,6 @@
                 </xpath>
             </field>
         </record>
-        <menuitem action="fleet.fleet_vehicle_act" id="vms_fleet_vehicle_menu" name="Units" parent="menu_vms_settings" sequence="10"/>
+        <menuitem action="fleet.fleet_vehicle_action" id="vms_fleet_vehicle_menu" name="Units" parent="menu_vms_settings" sequence="10"/>
     </data>
 </odoo>
