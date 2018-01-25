@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <odoo>
-    <data>
-        <menuitem id="menu_vms" name="Maintenance" sequence="10" web_icon="vms,static/description/icon.png"/>
-        <menuitem id="menu_vms_maintenance" name="Maintenance" parent="menu_vms" sequence="10"/>
-        <menuitem id="menu_vms_report" name="Report" parent="menu_vms" sequence="20"/>
-        <menuitem id="menu_vms_settings" name="Settings" parent="menu_vms" sequence="30"/>
-    </data>
+    <menuitem id="menu_vms" name="Maintenance" sequence="10" web_icon="vms,static/description/icon.png"/>
+    <menuitem id="menu_vms_maintenance" name="Maintenance" parent="menu_vms" sequence="10"/>
+    <menuitem id="menu_vms_report" name="Report" parent="menu_vms" sequence="20"/>
+    <menuitem id="menu_vms_settings" name="Settings" parent="menu_vms" sequence="30"/>
 </odoo>

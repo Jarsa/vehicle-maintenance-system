@@ -1,48 +1,46 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <odoo>
-    <data>
-        <record id="vms_task_tree_view" model="ir.ui.view">
-            <field name="name">vms.task.tree</field>
-            <field name="model">vms.task</field>
-            <field name="arch" type="xml">
-                <tree string="task">
-                    <field name="name"/>
-                    <field name="duration"/>
-                    <field name="active"/>
-                </tree>
-            </field>
-        </record>
-        <record id="vms_task_form_view" model="ir.ui.view">
-            <field name="name">vms.task.form</field>
-            <field name="model">vms.task</field>
-            <field name="arch" type="xml">
-                <form string="Task">
-                    <sheet>
-                        <group col="4">
-                            <field name="name"/>
-                            <field name="active"/>
-                            <field name="duration" widget="float_time"/>
-                        </group>
-                        <group string="Spare Parts">
-                            <field name="spare_part_ids" nolabel="1">
-                                <tree editable="top">
-                                    <field name="product_id"/>
-                                    <field name="product_qty"/>
-                                    <field name="product_uom_id"/>
-                                </tree>
-                            </field>
-                        </group>
-                    </sheet>
-                </form>
-            </field>
-        </record>
-        <record id="action_vms_task" model="ir.actions.act_window">
-            <field name="name">Task</field>
-            <field name="type">ir.actions.act_window</field>
-            <field name="res_model">vms.task</field>
-            <field name="view_type">form</field>
-            <field name="view_mode">tree,form</field>
-        </record>
-        <menuitem action="action_vms_task" id="vms_task_menu" parent="menu_vms_settings" sequence="20"/>
-    </data>
+    <record id="vms_task_tree_view" model="ir.ui.view">
+        <field name="name">vms.task.tree</field>
+        <field name="model">vms.task</field>
+        <field name="arch" type="xml">
+            <tree string="task">
+                <field name="name"/>
+                <field name="duration"/>
+                <field name="active"/>
+            </tree>
+        </field>
+    </record>
+    <record id="vms_task_form_view" model="ir.ui.view">
+        <field name="name">vms.task.form</field>
+        <field name="model">vms.task</field>
+        <field name="arch" type="xml">
+            <form string="Task">
+                <sheet>
+                    <group col="4">
+                        <field name="name"/>
+                        <field name="active"/>
+                        <field name="duration" widget="float_time"/>
+                    </group>
+                    <group string="Spare Parts">
+                        <field name="spare_part_ids" nolabel="1">
+                            <tree editable="top">
+                                <field name="product_id"/>
+                                <field name="product_qty"/>
+                                <field name="product_uom_id"/>
+                            </tree>
+                        </field>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="action_vms_task" model="ir.actions.act_window">
+        <field name="name">Task</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">vms.task</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+    <menuitem action="action_vms_task" id="vms_task_menu" parent="menu_vms_settings" sequence="20"/>
 </odoo>

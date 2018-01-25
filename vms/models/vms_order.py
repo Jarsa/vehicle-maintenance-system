@@ -59,9 +59,6 @@ class VmsOrder(models.Model):
     program_id = fields.Many2one(
         'vms.program',
         string='Program')
-    cycle_id = fields.Many2one(
-        'vms.vehicle.cycle',
-        string='Cycle')
     sequence = fields.Integer()
     report_ids = fields.Many2many(
         'vms.report',
@@ -158,59 +155,12 @@ class VmsOrder(models.Model):
         for order in self:
             for line in order.order_line_ids:
                 line.action_done()
-            if order.type == 'preventive':
-                cycles = order.unit_id.cycle_ids.search(
-                    [('sequence', '=', order.unit_id.sequence),
-                     ('unit_id', '=', order.unit_id.id)])
-                cycles.write({
-                    'order_id': order.id,
-                    'date': fields.Datetime.now(),
-                    'distance': order.current_odometer
-                })
-                order.unit_id.last_order_id = order.id
-                order.unit_id.last_cycle_id = cycles.id
-                order.unit_id.next_service_odometer = cycles.schedule
-                order.unit_id.sequence += 1
-                next_cycle = order.unit_id.cycle_ids.search(
-                    [('sequence', '=', order.unit_id.sequence),
-                     ('unit_id', '=', order.unit_id.id)])
-                order.unit_id.write({'next_cycle_id': next_cycle.id})
-            elif order.type == 'corrective':
+            # if order.type == 'preventive':
+                # Preguntar que tenemos que hacer ahora.
+            if order.type == 'corrective':
                 for report in order.report_ids:
                     report.state = 'close'
             order.state = 'released'
-
-    @api.multi
-    def get_tasks_from_cycle(self, cycle_id, order_id):
-        spares = []
-        for cycle in cycle_id:
-            for task in cycle.task_ids:
-                duration = task.duration
-                start_date = datetime.now()
-                end_date = start_date + timedelta(
-                    hours=duration)
-                for spare_part in task.spare_part_ids:
-                    spares.append((0, False, {
-                        'product_id': spare_part.product_id.id,
-                        'product_qty': spare_part.product_qty,
-                        'product_uom_id': (
-                            spare_part.product_uom_id.id),
-                        'state': 'draft'
-                    }))
-                order_id.order_line_ids += order_id.order_line_ids.create({
-                    'task_id': task.id,
-                    'start_date': start_date,
-                    'duration': duration,
-                    'end_date': end_date,
-                    'spare_part_ids': [line for line in spares],
-                    'order_id': order_id.id
-                })
-            if cycle.cycle_ids:
-                for sub_cycle in cycle.cycle_ids:
-                    order_id.get_tasks_from_cycle(
-                        sub_cycle, order_id)
-            else:
-                break
 
     @api.multi
     @api.onchange('type', 'unit_id')
@@ -220,10 +170,7 @@ class VmsOrder(models.Model):
                 rec.program_id = rec.unit_id.program_id
                 rec.current_odometer = rec.unit_id.odometer
                 rec.sequence = rec.unit_id.sequence
-                rec.cycle_id = rec.unit_id.next_cycle_id.id
                 rec.order_line_ids = False
-                for cycle in rec.unit_id.program_id.cycle_ids:
-                    rec.get_tasks_from_cycle(cycle, rec)
             else:
                 rec.program_id = False
                 rec.current_odometer = False
