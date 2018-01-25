@@ -3,7 +3,8 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
 from datetime import datetime, timedelta
-from odoo import _, api, exceptions, fields, models
+from odoo import _, api, fields, models
+from odoo.exceptions import ValidationError
 
 
 class VmsOrder(models.Model):
@@ -17,7 +18,6 @@ class VmsOrder(models.Model):
     supervisor_id = fields.Many2one(
         'hr.employee',
         required=True,
-        domain=[('mechanic', '=', True)],
         string='Supervisor')
     date = fields.Datetime(
         required=True,
@@ -83,18 +83,9 @@ class VmsOrder(models.Model):
             sequence = order.operating_unit_id.order_sequence_id
             order.name = sequence.next_by_id()
         else:
-            raise exceptions.ValidationError(_(
+            raise ValidationError(_(
                 'Verify that the sequences in the base are assigned'))
         return order
-
-    @api.multi
-    def unlink(self):
-        for rec in self:
-            activities = self.env['vms.activity'].search(
-                [('order_id', '=', rec.id)])
-            if len(activities) > 0:
-                activities.unlink()
-            return super(VmsOrder, self).unlink()
 
     @api.depends('order_line_ids')
     def _compute_end_date_real(self):
@@ -204,58 +195,27 @@ class VmsOrder(models.Model):
     @api.multi
     def action_open(self):
         for rec in self:
-            orders = self.search_count(
-                [('unit_id', '=', rec.unit_id.id),
-                 ('state', '=', 'open'),
-                 ('id', '!=', rec.id)])
+            orders = self.search_count([
+                ('unit_id', '=', rec.unit_id.id), ('state', '=', 'open'),
+                ('id', '!=', rec.id)])
             if orders > 0:
-                raise exceptions.ValidationError(_(
-                    'Unit not available for maintenance '
-                    'because it has more open order(s).'))
+                raise ValidationError(_(
+                    'Unit not available for maintenance because it has more '
+                    'open order(s).'))
             if not rec.order_line_ids:
-                raise exceptions.ValidationError(
-                    _('The order must have at least one task'))
-            for line in rec.order_line_ids:
-                if not line.external:
-                    if not line.responsible_ids:
-                        raise exceptions.ValidationError(
-                            _('The tasks must have almost one mechanic.'))
-                if line.responsible_ids:
-                    obj_activity = self.env['vms.activity']
-                    activities = obj_activity.search(
-                        [('order_line_id', '=', line.id)])
-                    if len(activities) > 0:
-                        for activity in activities:
-                            activity.state = 'draft'
-                    else:
-                        for mechanic in line.responsible_ids:
-                            obj_activity.create({
-                                'order_id': rec.id,
-                                'task_id': line.task_id.id,
-                                'name': line.task_id.name,
-                                'unit_id': rec.unit_id.id,
-                                'order_line_id': line.id,
-                                'responsible_id': mechanic.id
-                            })
-                    if line.spare_part_ids:
-                        for product in line.spare_part_ids:
-                            product.state = 'pending'
-                        line.stock_picking_id = (
-                            line.spare_part_ids.
-                            _create_stock_picking())
-                    if rec.type == 'corrective':
-                        for report in rec.report_ids:
-                            report.state = 'open'
-                line.state = 'process'
-                line.start_date_real = fields.Datetime.now()
-                rec.state = 'open'
-                rec.start_date_real = fields.Datetime.now()
-                rec.message_post(_(
-                    '<strong>Order Opened.</strong><ul>'
-                    '<li><strong>Opened by: </strong>%s</li>'
-                    '<li><strong>Opened at: </strong>%s</li>'
-                    '</ul>') % (
-                    self.env.user.name, fields.Datetime.now()))
+                raise ValidationError(_(
+                    'The order must have at least one task'))
+            if rec.type == 'corrective':
+                rec.report_ids.write({'state': 'open'})
+            rec.order_line_ids.action_process()
+
+            rec.state = 'open'
+            rec.start_date_real = fields.Datetime.now()
+            rec.message_post(_(
+                '<strong>Order Opened.</strong><ul>'
+                '<li><strong>Opened by: </strong>%s</li>'
+                '<li><strong>Opened at: </strong>%s</li>'
+                '</ul>') % (self.env.user.name, fields.Datetime.now()))
 
     @api.multi
     def action_cancel(self):

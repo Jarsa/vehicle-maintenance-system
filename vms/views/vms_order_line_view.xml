@@ -46,15 +46,6 @@
                                 <field name="real_duration" widget='float_time'/>
                             </group>
                         </group>
-                        <group string="Mechanics" attrs="{'invisible':[('external','=',True)]}">
-                            <field name="responsible_ids" attrs="{'readonly':[('order_id', '=', False)]}" nolabel="1">
-                                <tree>
-                                    <field name="name"/>
-                                    <field name="job_id"/>
-                                    <field name="parent_id"/>
-                                </tree>
-                            </field>
-                        </group>
                         <group string="Spare Parts" attrs="{'invisible':[('external','=',True)]}">
                             <notebook>
                                 <page string="Spare Parts">

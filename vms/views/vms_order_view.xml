@@ -49,7 +49,7 @@
                                     <field name="unit_id"/>
                                     <field name="stock_location_id"/>
                                     <field name="type"/>
-                                    <field context="{'default_mechanic': True}" name="supervisor_id"/>
+                                    <field name="supervisor_id"/>
                                 </group>
                                 <group col="4" string="Times">
                                     <field name="start_date"/>
@@ -57,7 +57,7 @@
                                     <field name="end_date"/>
                                     <field attrs="{'invisible': [('start_date_real', '=', False)]}" name="end_date_real"/>
                                 </group>
-                                <group string="Tasks">
+                                <group string="Tasks" attrs="{'invisible':[('name', '=', False)]}">
                                     <field context="{'default_order_id': active_id}" name="order_line_ids" nolabel="1"/>
                                 </group>
                             </page>

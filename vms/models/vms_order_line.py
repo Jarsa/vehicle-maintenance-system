@@ -4,7 +4,8 @@
 
 from datetime import datetime
 from datetime import timedelta
-from odoo import _, api, exceptions, fields, models
+from odoo import _, api, fields, models
+from odoo.exceptions import ValidationError
 
 
 class VmsOrderLine(models.Model):
@@ -48,10 +49,6 @@ class VmsOrderLine(models.Model):
         'order_line_id',
         string='Spare Parts',
         help='You must save the order to select the mechanic(s).')
-    responsible_ids = fields.Many2many(
-        'hr.employee',
-        string='Mechanics',
-        domain=[('mechanic', '=', True)])
     purchase_order_id = fields.Many2one(
         'purchase.order',
         string='Purchase Order',
@@ -66,14 +63,10 @@ class VmsOrderLine(models.Model):
         string="Stock Picking",
         readonly=True,
     )
-    activity_ids = fields.One2many(
-        'vms.activity',
-        'order_line_id', string="Activities", readonly=True)
 
     @api.multi
     def unlink(self):
         self.spare_part_ids.unlink()
-        self.activity_ids.unlink()
         return super(VmsOrderLine, self).unlink()
 
     @api.onchange('external')
@@ -132,84 +125,44 @@ class VmsOrderLine(models.Model):
     def action_process(self):
         for rec in self:
             if rec.order_id.state != 'open':
-                raise exceptions.ValidationError(
-                    _('The order must be open.'))
+                raise ValidationError(_('The order must be open.'))
             if not rec.external:
-                if rec.responsible_ids:
-                    activities = self.env['vms.activity'].search(
-                        [('order_line_id', '=', rec.id)])
-                    if len(activities) > 0:
-                        for activity in activities:
-                            activity.state = 'draft'
-                    else:
-                        for mechanic in rec.responsible_ids:
-                            self.env['vms.activity'].create({
-                                'order_id': rec.order_id.id,
-                                'task_id': rec.task_id.id,
-                                'name': rec.task_id.name,
-                                'unit_id': rec.order_id.unit_id.id,
-                                'order_line_id': rec.id,
-                                'responsible_id': mechanic.id
-                            })
-                    rec.state = 'process'
-                    rec.start_date_real = fields.Datetime.now()
-                    if rec.spare_part_ids:
-                        for product in rec.spare_part_ids:
-                            product.state = 'pending'
-                        rec.stock_picking_id = (
-                            rec.spare_part_ids.
-                            _create_stock_picking())
-                    rec.state = 'process'
-                else:
-                    raise exceptions.ValidationError(
-                        _('The tasks must have almost one mechanic.'))
+                if rec.spare_part_ids:
+                    rec.spare_part_ids.write({'state': 'pending'})
+                    rec.stock_picking_id = (
+                        rec.spare_part_ids._create_stock_picking())
+            rec.state = 'process'
+            rec.start_date_real = fields.Datetime.now()
+
+    @api.multi
+    def get_real_duration(self):
+        for rec in self:
+            rec.real_duration = sum([task.duration for task in rec.task_id])
 
     @api.multi
     def action_done(self):
-        act_state_validator = True
-        sum_time = 0.0
         for rec in self:
             if rec.external:
                 if not rec.purchase_state:
-                    raise exceptions.ValidationError(_(
-                        'Verify that purchase order are in '
-                        'done state to continue'))
+                    raise ValidationError(_(
+                        'Verify that purchase order are in done state '
+                        'to continue'))
             else:
-                activities = rec.env['vms.activity'].search(
-                    [('order_line_id', '=', rec.id)])
-                for activity in activities:
-                    if activity.state != 'end':
-                        act_state_validator = False
-                    elif activity.state == 'end':
-                        sum_time += activity.total_hours
-                if not act_state_validator:
-                    raise exceptions.ValidationError(
-                        _('The activities of the mechanics(s)'
-                            ' must be finished.'))
                 rec.stock_picking_id.action_confirm()
                 rec.stock_picking_id.action_assign()
                 for pack_operation in (
                         rec.stock_picking_id.pack_operation_product_ids):
                     pack_operation.qty_done = pack_operation.product_qty
                 rec.stock_picking_id.do_new_transfer()
-                for spare in rec.spare_part_ids:
-                    spare.state = 'delievered'
-                rec.real_duration = sum_time
+                rec.spare_part_ids.write({'state': 'delivered'})
+                rec.get_real_duration()
             rec.end_date_real = fields.Datetime.now()
             rec.state = 'done'
 
     @api.multi
     def action_cancel(self):
         for rec in self:
-            if not rec.external:
-                activities = rec.env['vms.activity'].search(
-                    [('order_line_id', '=', rec.id)])
-                if len(activities) > 0:
-                    for activity in activities:
-                        activity.state = 'cancel'
-                for spare in rec.spare_part_ids:
-                    spare.state = 'cancel'
-            else:
+            if rec.external:
                 rec.purchase_order_id.unlink()
                 if rec.spare_part_ids:
                     for spare in rec.spare_part_ids:
