@@ -4,7 +4,7 @@
 
 from __future__ import division
 
-from datetime import datetime, timedelta
+from datetime import timedelta
 
 from odoo import api, fields, models
 
@@ -15,70 +15,77 @@ class FleetVehicle(models.Model):
     program_id = fields.Many2one(
         'vms.program',
         string='Maintenance Program')
-    last_order_id = fields.Many2one(
-        'vms.order',
-        string='Last Order')
-    last_cycle_id = fields.Many2one(
-        'vms.vehicle.cycle',
-        string='Last Cycle')
-    next_cycle_id = fields.Many2one(
-        'vms.vehicle.cycle',
-        string='Next Cycle')
-    next_service_date = fields.Datetime(
-        compute='_compute_next_service_date'
-    )
-    next_service_odometer = fields.Float()
-    next_service_sequence = fields.Integer()
-    cycle_ids = fields.One2many(
-        'vms.vehicle.cycle', 'unit_id', string="Cycles")
-    sequence = fields.Integer()
     distance = fields.Float(
-        'Distance Average', required=True
+        'Distance Average', required=True,
+        compute="_compute_distance_averange",
     )
+    supervisor_id = fields.Many2one('hr.employee', 'Supervisor')
+
+    @api.model
+    def cron_vehicle_maintenance(self):
+        order_obj = self.env['vms.order']
+        time = fields.Date
+        follower = self.env['mail.wizard.invite']
+        security_day = int(self.env['ir.config_parameter'].sudo().get_param(
+            'security_days'))
+        for vehicle in self.search([]):
+            if vehicle.program_id:
+                for cycle in vehicle.program_id.cycle_ids:
+                    days = round((cycle.frequency / vehicle.distance))
+                    order = order_obj.search([
+                        ('unit_id', '=', vehicle.id),
+                        ('state', '=', 'draft')])
+                    if not order:
+                        new_order = order_obj.create({
+                            'operating_unit_id': 1,
+                            'unit_id': vehicle.id,
+                            'type': 'preventive',
+                            'date': time.to_string(
+                                time.from_string(time.today()) +
+                                timedelta(days=days)),
+                            'supervisor_id': vehicle.supervisor_id.id,
+                            'state': 'draft',
+                            'program_id': vehicle.program_id.id,
+
+                        })
+                        mail_invite = follower.with_context({
+                            'default_res_model': 'vms.order',
+                            'default_res_id': new_order.id
+                        }).create({
+                            'partner_ids': [(
+                                4, vehicle.supervisor_id.address_home_id.id)],
+                            'send_mail': True,
+                        })
+                        mail_invite.add_followers()
+                    else:
+                        order_date = (
+                            time.from_string(order.date) -
+                            time.from_string(time.today()))
+                        if security_day == order_date.days:
+                            self.env['mail.message'].create({
+                                'date': time.today(),
+                                'email_from': '',
+                                'author_id': self.env.user.id,
+                                'record_name': order.name,
+                                'model': 'vms.order',
+                                'res_id': order.id,
+                                'message_type': 'email',
+                                'body': 'Mantenimiento pendiente en',
+                            })
 
     @api.multi
-    def program_mtto(self):
+    def _compute_distance_averange(self):
         for vehicle in self:
-            prog_ids = vehicle.cycle_ids.search([('unit_id', '=', vehicle.id)])
-            if len(prog_ids):
-                prog_ids.unlink()
-            seq = 1
-            for cycle in vehicle.program_id.cycle_ids:
-                for rec in range(cycle.frequency, (
-                        4000000 + cycle.frequency), cycle.frequency):
-                    vehicle.cycle_ids.create({
-                        'cycle_id': cycle.id,
-                        'schedule': rec,
-                        'sequence': seq,
-                        'unit_id': vehicle.id,
-                    })
-                    seq += 1
-            last_schedule = 0.00
-            for cycles in vehicle.cycle_ids:
-                if last_schedule <= vehicle.odometer <= cycles.schedule:
-                    vehicle.sequence = cycles.sequence
-                    vehicle.last_cycle_id = cycles.id
-                    next_cycle = cycles.search([
-                        ('sequence', '=', (cycles.sequence)),
-                        ('unit_id', '=', vehicle.id)])
-                    vehicle.next_cycle_id = next_cycle.id
-                    vehicle.next_service_odometer = next_cycle.schedule
-                    return True
-                else:
-                    last_schedule = cycles.schedule
-                    cycles.unlink()
-
-    @api.depends('distance', 'last_cycle_id')
-    def _compute_next_service_date(self):
-        for vehicle in self:
-            if vehicle.last_order_id.id:
-                date = datetime.strptime(
-                    vehicle.last_cycle_id.date, "%Y-%m-%d %H:%M:%S")
-                days = []
-                for cycle in vehicle.program_id.cycle_ids:
-                    day = (cycle.frequency / vehicle.distance) * 24
-                    days.append(day)
-                vehicle.next_service_date = (
-                    date + timedelta(hours=min(days)))
-            else:
-                vehicle.next_service_date = False
+            frequency = int(self.env['ir.config_parameter'].sudo().get_param(
+                'day_distance_averange'))
+            time = fields.Date
+            date_end = time.from_string(time.today())
+            date_start = date_end - timedelta(days=frequency)
+            odometer = self.env['fleet.vehicle.odometer']
+            odometers = odometer.search([
+                ('vehicle_id', '=', vehicle.id),
+                ('date', '>=', time.to_string(date_start)),
+                ('date', '<=', time.to_string(date_end))])
+            if odometers:
+                distance = sum([x.value for x in odometers]) / frequency
+                vehicle.distance = distance

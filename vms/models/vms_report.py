@@ -2,8 +2,7 @@
 # Copyright 2016, Jarsa Sistemas, S.A. de C.V.
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
-
-from odoo import _, api, fields, models
+from odoo import api, fields, models
 
 
 class VmsReport(models.Model):
@@ -48,9 +47,3 @@ class VmsReport(models.Model):
     def action_confirmed(self):
         for rec in self:
             rec.state = 'confirmed'
-            rec.message_post(_(
-                '<strong>Report Confirmed.</strong><ul>'
-                '<li><strong>Confirmed by: </strong>%s</li>'
-                '<li><strong>Confirmed at: </strong>%s</li>'
-                '</ul>') % (
-                self.env.user.name, fields.Datetime.now()))
