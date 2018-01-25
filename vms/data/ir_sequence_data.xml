@@ -1,30 +1,35 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <odoo>
-    <data>
-        <record model="ir.sequence" id="order_sequence">
-            <field name="name">Order Sequence</field>
-            <field name="implementation">no_gap</field>
-            <field name="code">O</field>
-            <field name="prefix">O</field>
-            <field name="padding">4</field>
-            <field name="number_increment">1</field>
-        </record>
-        <record model="ir.sequence" id="report_sequence">
-            <field name="name">Report Sequence</field>
-            <field name="implementation">no_gap</field>
-            <field name="code">R</field>
-            <field name="prefix">R</field>
-            <field name="padding">4</field>
-            <field name="number_increment">1</field>
-        </record>
-        <record model="ir.sequence" id="cycle_sequence">
-            <field name="name">Cycle Sequence</field>
-            <field name="implementation">no_gap</field>
-            <field name="code">cycle.vehicle.sequence</field>
-            <field name="prefix">CV</field>
-            <field name="padding">4</field>
-            <field name="number_increment">1</field>
-        </record>
-
-    </data>
+    <record model="ir.sequence" id="order_sequence">
+        <field name="name">Order Sequence</field>
+        <field name="implementation">no_gap</field>
+        <field name="code">O</field>
+        <field name="prefix">O</field>
+        <field name="padding">4</field>
+        <field name="number_increment">1</field>
+    </record>
+    <record model="ir.sequence" id="report_sequence">
+        <field name="name">Report Sequence</field>
+        <field name="implementation">no_gap</field>
+        <field name="code">R</field>
+        <field name="prefix">R</field>
+        <field name="padding">4</field>
+        <field name="number_increment">1</field>
+    </record>
+    <record model="ir.sequence" id="cycle_sequence">
+        <field name="name">Cycle Sequence</field>
+        <field name="implementation">no_gap</field>
+        <field name="code">cycle.vehicle.sequence</field>
+        <field name="prefix">CV</field>
+        <field name="padding">4</field>
+        <field name="number_increment">1</field>
+    </record>
+     <record model="ir.sequence" id="vms_out_sequence">
+        <field name="name">VMS OUT Sequence</field>
+        <field name="implementation">no_gap</field>
+        <field name="code">vms_out</field>
+        <field name="prefix">WH/SP/OUT/</field>
+        <field name="padding">5</field>
+        <field name="number_increment">1</field>
+    </record>
 </odoo>

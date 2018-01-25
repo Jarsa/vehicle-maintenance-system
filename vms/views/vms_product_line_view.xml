@@ -6,9 +6,6 @@
             <field name="model">vms.product.line</field>
             <field name="arch" type="xml">
                 <form string="Product lines">
-                    <header>
-                        <field name="state" statusbar_visible="draft,open,released" widget="statusbar"/>
-                    </header>
                     <sheet>
                         <group string="Product line">
                             <group>

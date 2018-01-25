@@ -18,7 +18,8 @@ class VmsOrder(models.Model):
     supervisor_id = fields.Many2one(
         'hr.employee',
         required=True,
-        string='Supervisor')
+        string='Supervisor',
+        domain=[('mechanic', '=', True)],)
     date = fields.Datetime(
         required=True,
         default=fields.Datetime.now)
@@ -27,11 +28,12 @@ class VmsOrder(models.Model):
         [('preventive', 'Preventive'),
          ('corrective', 'Corrective')],
         required=True)
-    stock_location_id = fields.Many2one(
-        'stock.location',
-        domain="[('usage', '=', 'internal')]",
+    warehouse_id = fields.Many2one(
+        'stock.warehouse',
+        string='Warehouse',
         required=True,
-        string='Stock Location')
+        readonly=True,
+        default=lambda self: self._default_warehouse_id(),)
     start_date = fields.Datetime(
         required=True,
         default=fields.Datetime.now,
@@ -74,6 +76,58 @@ class VmsOrder(models.Model):
     unit_id = fields.Many2one(
         'fleet.vehicle',
         string='Unit', required=True, store=True)
+    picking_ids = fields.Many2many(
+        'stock.picking',
+        compute='_compute_picking_ids',
+        string='Stock Pickings',
+        copy=False,)
+    pickings_count = fields.Integer(
+        string='Delivery Orders',
+        compute='_compute_pickings_count',
+        copy=False,)
+    procurement_group_id = fields.Many2one(
+        'procurement.group',
+        string='Procurement Group',
+        readonly=True,
+        copy=False,)
+
+    @api.multi
+    @api.depends('procurement_group_id')
+    def _compute_picking_ids(self):
+        for rec in self:
+            rec.picking_ids = (
+                self.env['stock.picking'].search(
+                    [('group_id', '=', rec.procurement_group_id.id)])
+                if rec.procurement_group_id else [])
+
+    @api.multi
+    @api.depends('picking_ids')
+    def _compute_pickings_count(self):
+        for rec in self:
+            rec.pickings_count = (
+                self.env['stock.picking'].search_count(
+                    [('group_id', '=', rec.procurement_group_id.id)])
+                if rec.procurement_group_id else 0)
+
+    @api.multi
+    def action_view_pickings(self):
+        action = self.env.ref('stock.action_picking_tree_all').read()[0]
+
+        pickings = self.mapped('picking_ids')
+        if len(pickings) > 1:
+            action['domain'] = [('id', 'in', pickings.ids)]
+        elif pickings:
+            action['views'] = [
+                (self.env.ref('stock.view_picking_form').id, 'form')]
+            action['res_id'] = pickings.id
+        return action
+
+    @api.model
+    def _default_warehouse_id(self):
+        company = self.env.user.company_id.id
+        warehouse_ids = self.env['stock.warehouse'].search(
+            [('company_id', '=', company)], limit=1)
+        return warehouse_ids
 
     @api.model
     def create(self, values):
@@ -125,11 +179,6 @@ class VmsOrder(models.Model):
                 for report in order.report_ids:
                     report.state = 'close'
             order.state = 'released'
-            order.message_post(body=(
-                "<h5><strong>Released</strong></h5>"
-                "<p><strong>Released by: </strong> %s <br>"
-                "<strong>Released at: </strong> %s</p") % (
-                order.supervisor_id.name, fields.Datetime.now()))
 
     @api.multi
     def get_tasks_from_cycle(self, cycle_id, order_id):
@@ -205,33 +254,20 @@ class VmsOrder(models.Model):
             if not rec.order_line_ids:
                 raise ValidationError(_(
                     'The order must have at least one task'))
+            rec.state = 'open'
             if rec.type == 'corrective':
                 rec.report_ids.write({'state': 'open'})
             rec.order_line_ids.action_process()
-
-            rec.state = 'open'
             rec.start_date_real = fields.Datetime.now()
-            rec.message_post(_(
-                '<strong>Order Opened.</strong><ul>'
-                '<li><strong>Opened by: </strong>%s</li>'
-                '<li><strong>Opened at: </strong>%s</li>'
-                '</ul>') % (self.env.user.name, fields.Datetime.now()))
 
     @api.multi
     def action_cancel(self):
         for rec in self:
-            for line in rec.order_line_ids:
-                line.action_cancel()
+            rec.order_line_ids.action_cancel()
             if rec.type == 'corrective':
                 for report in rec.report_ids:
                     report.state = 'cancel'
             rec.state = 'cancel'
-            rec.message_post(_(
-                '<strong>Order Closed.</strong><ul>'
-                '<li><strong>Closed by: </strong>%s</li>'
-                '<li><strong>Closed at: </strong>%s</li>'
-                '</ul>') % (
-                self.env.user.name, fields.Datetime.now()))
 
     @api.multi
     def action_cancel_draft(self):
@@ -244,3 +280,9 @@ class VmsOrder(models.Model):
                 line.state = 'draft'
                 for spare in line.spare_part_ids:
                     spare.state = 'draft'
+
+    def _prepare_procurement_group(self):
+        return {
+            'name': self.name,
+            'move_type': 'direct',
+        }

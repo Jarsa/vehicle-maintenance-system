@@ -26,7 +26,6 @@ class VmsReport(models.Model):
     employee_id = fields.Many2one(
         'hr.employee',
         required=True,
-        domain=[('driver', '=', True)],
         string='Driver')
     end_date = fields.Datetime()
     state = fields.Selection(
