@@ -17,7 +17,6 @@ class VmsOrder(models.Model):
         'operating.unit', string='Base', required=True)
     supervisor_id = fields.Many2one(
         'hr.employee',
-        required=True,
         string='Supervisor',
         domain=[('mechanic', '=', True)],)
     date = fields.Datetime(
@@ -128,15 +127,14 @@ class VmsOrder(models.Model):
 
     @api.model
     def create(self, values):
-        order = super(VmsOrder, self).create(values)
-        if (order.operating_unit_id.order_sequence_id or
-                order.operating_unit_id.report_sequence_id):
-            sequence = order.operating_unit_id.order_sequence_id
-            order.name = sequence.next_by_id()
+        res = super(VmsOrder, self).create(values)
+        if res.operating_unit_id.order_sequence_id:
+            sequence = res.operating_unit_id.order_sequence_id
+            res.name = sequence.next_by_id()
         else:
             raise ValidationError(_(
                 'Verify that the sequences in the base are assigned'))
-        return order
+        return res
 
     @api.depends('order_line_ids')
     def _compute_end_date_real(self):
@@ -203,7 +201,7 @@ class VmsOrder(models.Model):
                     'The order must have at least one task'))
             rec.state = 'open'
             if rec.type == 'corrective':
-                rec.report_ids.write({'state': 'open'})
+                rec.report_ids.write({'state': 'pending'})
             rec.order_line_ids.action_process()
             rec.start_date_real = fields.Datetime.now()
 

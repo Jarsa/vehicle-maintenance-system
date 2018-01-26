@@ -50,7 +50,7 @@
                         <field name="unit_id"/>
                         <field name="warehouse_id"/>
                         <field name="type"/>
-                        <field name="supervisor_id" options="{'no_quick_create': True, 'no_create_edit' : True}"/>
+                        <field name="supervisor_id" required="1" options="{'no_quick_create': True, 'no_create_edit' : True}"/>
                     </group>
                     <notebook>
                         <page string="Service Order Detail">
