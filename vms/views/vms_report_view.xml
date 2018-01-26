@@ -21,9 +21,10 @@
         <field name="arch" type="xml">
             <form>
                 <header>
-                    <button name="action_confirmed" class="oe_highlight" states="draft" string="Confirm" type="object"/>
-                    <button name="action_cancel" class="oe_highlight" states="draft, confirmed" string="Cancel" type="object"/>
-                    <field name="state" statusbar_visible="draft,confirmed,close,cancel" widget="statusbar"/>
+                    <button name="action_pending" states="cancel" string="Set to pending" type="object"/>
+                    <button name="action_confirmed" class="oe_highlight" states="pending, closed" string="Confirm" type="object" confirm="Are you sure to confirm this report?"/>
+                    <button name="action_cancel" class="oe_highlight" states="pending, cancel" string="Cancel" type="object"/>
+                    <field name="state" statusbar_visible="pending,closed,cancel" widget="statusbar"/>
                 </header>
                 <sheet>
                     <h1 class="oe_title">
@@ -49,7 +50,7 @@
             </form>
         </field>
     </record>
-|       <record id="action_vms_report" model="ir.actions.act_window">
+    <record id="action_vms_report" model="ir.actions.act_window">
         <field name="name">Report</field>
         <field name="type">ir.actions.act_window</field>
         <field name="res_model">vms.report</field>

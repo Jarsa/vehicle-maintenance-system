@@ -32,6 +32,7 @@
         'views/vms_order_view.xml',
         'views/fleet_vehicle_view.xml',
         'views/operating_unit_view.xml',
+        'wizards/vms_wizard_maintenance_order_view.xml',
         'data/ir_sequence_data.xml',
         'data/stock_picking_type_data.xml',
         'data/procurement_route_data.xml',

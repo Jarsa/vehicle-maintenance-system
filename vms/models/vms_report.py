@@ -2,7 +2,8 @@
 # Copyright 2016, Jarsa Sistemas, S.A. de C.V.
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
-from odoo import api, fields, models
+from odoo import _, api, fields, models
+from odoo.exceptions import ValidationError
 
 
 class VmsReport(models.Model):
@@ -28,22 +29,34 @@ class VmsReport(models.Model):
         string='Driver')
     end_date = fields.Datetime()
     state = fields.Selection(
-        [('draft', 'Draft'),
-         ('open', 'Open'),
-         ('confirmed', 'Confirmed'),
-         ('close', 'Close'),
+        [('pending', 'Pending'),
+         ('closed', 'Closed'),
          ('cancel', 'Cancel')],
-        default='draft')
+        default='pending')
     notes = fields.Html()
 
     @api.model
     def create(self, values):
-        report = super(VmsReport, self).create(values)
-        sequence = report.operating_unit_id.report_sequence_id
-        report.name = sequence.next_by_id()
-        return report
+        res = super(VmsReport, self).create(values)
+        if res.operating_unit_id.report_sequence_id:
+            sequence = res.operating_unit_id.report_sequence_id
+            res.name = sequence.next_by_id()
+        else:
+            raise ValidationError(_(
+                'Verify that the sequences in the base are assigned'))
+        return res
 
     @api.multi
     def action_confirmed(self):
         for rec in self:
-            rec.state = 'confirmed'
+            rec.state = 'closed'
+
+    @api.multi
+    def action_cancel(self):
+        for rec in self:
+            rec.state = 'cancel'
+
+    @api.multi
+    def action_pending(self):
+        for rec in self:
+            rec.state = 'pending'

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="vms_wizard_mo" model="ir.ui.view">
+        <field name="name">Create Manteinance Order</field>
+        <field name="model">vms.wizard.maintenance.order</field>
+        <field name="arch" type="xml">
+            <form string="Create  Manteinance Order">
+                <separator colspan="4" string="Create Manteinance Order from selected Records ?"/>
+                <footer>
+                    <button name="make_orders" string="Confirm" type="object"/>or
+                    <button class="oe_link" special="cancel" string="Cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+    <act_window id="action_waybill_wizard_mo" key2="client_action_multi" name="Create Manteinance Order" res_model="vms.wizard.maintenance.order" src_model="vms.report" target="new" view_mode="form"/>
+</odoo>
