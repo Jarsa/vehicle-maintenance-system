@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="view_vms_activity_search" model="ir.ui.view">
+        <field name="name">vms.activity.search</field>
+        <field name="model">vms.activity</field>
+        <field name="arch" type="xml">
+            <search string="Search Activities">
+                <filter domain="[('state','=','draft')]" name="state_draft" string="Draft"/>
+                <filter domain="[('state','=','process')]" name="state_process" string="Process"/>
+                <filter domain="[('state','=','pause')]" name="state_pause" string="Paused"/>
+                <filter domain="[('state','=','end')]" string="Ended"/>
+                <filter domain="[('state','=','cancel')]" string="Cancel"/>
+                <filter context="{'group_by':'order_id'}" name="groupby_order_id" string="Service Order"/>
+                <filter context="{'group_by':'unit_id'}" name="groupby_unit_id" string="Vehicle"/>
+                <filter context="{'group_by':'responsible_id'}" name="groupby_employee_id" string="Mechanic"/>
+                <field name="responsible_id"/>
+                <field name="order_id"/>
+                <field name="unit_id"/>
+                <filter context="{'group_by':'state'}" string="State"/>
+                <filter context="{'group_by':'date'}" string="Period"/>
+            </search>
+        </field>
+    </record>
+    <record id="view_vms_activity_tree" model="ir.ui.view">
+        <field name="name">vms.activity.tree</field>
+        <field name="model">vms.activity</field>
+        <field name="arch" type="xml">
+            <tree colors="red:state=='process'; blue:state=='pause'; #429071:state=='end'" create="false" edit="false">
+                <field name="order_id"/>
+                <field name="task_id"/>
+                <field name="unit_id"/>
+                <field name="responsible_id"/>
+                <field name="total_hours" widget="float_time"/>
+                <field name="priority"/>
+                <field name="state"/>
+            </tree>
+        </field>
+    </record>
+    <record id="view_vms_activity_form" model="ir.ui.view">
+        <field name="name">vms.activity.form</field>
+        <field name="model">vms.activity</field>
+        <field name="arch" type="xml">
+            <form create="false" edit="false">
+                <header>
+                    <button name="action_draft" states="cancel" string="Set to Draft" type="object"/>
+                    <button name="action_cancel" states="draft,pending,process,pause" string="Cancel" type="object"/>
+                    <button class="oe_highlight" name="action_start" states="pending" string="Start" type="object"/>
+                    <button class="oe_highlight" name="action_resume" states="pause" string="Continue" type="object"/>
+                    <button class="oe_highlight" name="action_pause" states="process" string="Pause" type="object"/>
+                    <button class="oe_highlight" name="action_end" states="pause,process" string="End" type="object"/>
+                    <field name="state" statusbar_visible="draft,cancel,pending,process,pause,end" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <div attrs="{'invisible':[('name','=',False)]}" class="oe_title">
+                        <h1 class="o_row">
+                            <field modifiers="{}" name="priority" widget="priority"/>
+                            <field name="name"/>
+                        </h1>
+                    </div>
+                    <group string="Details">
+                        <group>
+                            <field name="order_id"/>
+                            <field name="task_id"/>
+                            <field name="unit_id"/>
+                            <field name="responsible_id"/>
+                        </group>
+                        <group>
+                            <field name="start_date"/>
+                            <field name="end_date"/>
+                            <field name="total_hours" widget="float_time"/>
+                        </group>
+                    </group>
+                    <group string="Activities">
+                        <field context="{'default_activity_id:':active_id}" name="activity_time_ids" nolabel="1">
+                            <tree colors="blue:state=='process';">
+                                <field name="start_date"/>
+                                <field name="end_date"/>
+                                <field name="state"/>
+                            </tree>
+                        </field>
+                    </group>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers"/>
+                    <field name="message_ids" placeholder="Share a message..." widget="mail_thread"/>
+                </div>
+            </form>
+        </field>
+    </record>
+    <record id="action_vms_activity_form" model="ir.actions.act_window">
+        <field name="name">Mechanic's Tasks</field>
+        <field name="res_model">vms.activity</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+    <menuitem action="action_vms_activity_form" id="vms_activity_menu" name="Mechanic's Tasks" parent="vms.menu_vms_maintenance" sequence="30"/>
+</odoo>
