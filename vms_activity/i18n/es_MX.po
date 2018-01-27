@@ -1,0 +1,334 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+#   * vms_activity
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 10.0+e\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2018-01-26 16:31+0000\n"
+"PO-Revision-Date: 2018-01-26 16:31+0000\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: vms_activity
+#: code:addons/vms_activity/models/vms_activity.py:135
+#, python-format
+msgid "<strong>Activity Canceled.</strong><ul><li><strong>Canceled by: </strong>%s</li><li><strong>Canceled at: </strong>%s</li></ul>"
+msgstr "<strong>Actividad Cancelada.</strong><ul><li><strong>Cancelada por: </strong>%s</li><li><strong>Cancelada el: </strong>%s</li></ul>"
+
+#. module: vms_activity
+#: code:addons/vms_activity/models/vms_activity.py:160
+#, python-format
+msgid "<strong>Activity Drafted.</strong><ul><li><strong>Drafted by: </strong>%s</li><li><strong>Drafted at: </strong>%s</li></ul>"
+msgstr "<strong>Actividad en borrador.</strong><ul><li><strong>En borrador por: </strong>%s</li><li><strong>En borrador el: </strong>%s</li></ul>"
+
+#. module: vms_activity
+#: code:addons/vms_activity/models/vms_activity.py:148
+#, python-format
+msgid "<strong>Activity Ended.</strong><ul><li><strong>Ended by: </strong>%s</li><li><strong>Ended at: </strong>%s</li></ul>"
+msgstr "<strong>Actividad terminada.</strong><ul><li><strong>Terminada por: </strong>%s</li><li><strong>Terminada el: </strong>%s</li></ul>"
+
+#. module: vms_activity
+#: code:addons/vms_activity/models/vms_activity.py:110
+#, python-format
+msgid "<strong>Activity Started.</strong><ul><li><strong>Started by: </strong>%s</li><li><strong>Started at: </strong>%s</li></ul>"
+msgstr "<strong>Actividad iniciada.</strong><ul><li><strong>Iniciada por: </strong>%s</li><li><strong>Iniciada el: </strong>%s</li></ul>"
+
+#. module: vms_activity
+#: model:ir.model.fields,field_description:vms_activity.field_vms_activity_activity_time_ids
+#: model:ir.model.fields,field_description:vms_activity.field_vms_order_line_activity_ids
+#: model:ir.ui.view,arch_db:vms_activity.view_vms_activity_form
+msgid "Activities"
+msgstr "Actividades"
+
+#. module: vms_activity
+#: model:ir.model.fields,field_description:vms_activity.field_vms_activity_order_line_id
+#: model:ir.model.fields,field_description:vms_activity.field_vms_activity_time_activity_id
+msgid "Activity"
+msgstr "Actividad"
+
+#. module: vms_activity
+#: selection:vms.activity,priority:0
+msgid "All"
+msgstr "Todas"
+
+#. module: vms_activity
+#: code:addons/vms_activity/models/vms_order_line.py:61
+#, python-format
+msgid "All the activities must be finished."
+msgstr "Todas las actividades deben estar terminadas."
+
+#. module: vms_activity
+#: model:ir.ui.view,arch_db:vms_activity.view_vms_activity_form
+#: model:ir.ui.view,arch_db:vms_activity.view_vms_activity_search
+#: selection:vms.activity,state:0
+msgid "Cancel"
+msgstr "Cancelar"
+
+#. module: vms_activity
+#: model:ir.ui.view,arch_db:vms_activity.view_vms_activity_form
+msgid "Continue"
+msgstr "Continuar"
+
+#. module: vms_activity
+#: model:ir.model.fields,field_description:vms_activity.field_vms_activity_create_uid
+#: model:ir.model.fields,field_description:vms_activity.field_vms_activity_time_create_uid
+msgid "Created by"
+msgstr "Creado por"
+
+#. module: vms_activity
+#: model:ir.model.fields,field_description:vms_activity.field_vms_activity_create_date
+#: model:ir.model.fields,field_description:vms_activity.field_vms_activity_time_create_date
+msgid "Created on"
+msgstr "Creado el"
+
+#. module: vms_activity
+#: model:ir.ui.view,arch_db:vms_activity.view_vms_activity_form
+msgid "Details"
+msgstr "Detalles"
+
+#. module: vms_activity
+#: model:ir.model.fields,field_description:vms_activity.field_vms_activity_display_name
+#: model:ir.model.fields,field_description:vms_activity.field_vms_activity_time_display_name
+msgid "Display Name"
+msgstr "Nombre a mostrar"
+
+#. module: vms_activity
+#: model:ir.ui.view,arch_db:vms_activity.view_vms_activity_search
+#: selection:vms.activity,state:0
+msgid "Draft"
+msgstr "Borrador"
+
+#. module: vms_activity
+#: model:ir.ui.view,arch_db:vms_activity.view_vms_activity_form
+#: selection:vms.activity,state:0
+#: selection:vms.activity.time,state:0
+msgid "End"
+msgstr "Terminar"
+
+#. module: vms_activity
+#: model:ir.model.fields,field_description:vms_activity.field_vms_activity_end_date
+#: model:ir.model.fields,field_description:vms_activity.field_vms_activity_time_end_date
+msgid "End date"
+msgstr "Fecha de término"
+
+#. module: vms_activity
+#: model:ir.ui.view,arch_db:vms_activity.view_vms_activity_search
+msgid "Ended"
+msgstr "Terminado"
+
+#. module: vms_activity
+#: selection:vms.activity,priority:0
+msgid "High priority"
+msgstr "Prioridad alta"
+
+#. module: vms_activity
+#: model:ir.model.fields,field_description:vms_activity.field_vms_activity_id
+#: model:ir.model.fields,field_description:vms_activity.field_vms_activity_time_id
+msgid "ID"
+msgstr "ID"
+
+#. module: vms_activity
+#: model:ir.model.fields,field_description:vms_activity.field_vms_activity___last_update
+#: model:ir.model.fields,field_description:vms_activity.field_vms_activity_time___last_update
+msgid "Last Modified on"
+msgstr "Última modificación en"
+
+#. module: vms_activity
+#: model:ir.model.fields,field_description:vms_activity.field_vms_activity_time_write_uid
+#: model:ir.model.fields,field_description:vms_activity.field_vms_activity_write_uid
+msgid "Last Updated by"
+msgstr "Última actualización por"
+
+#. module: vms_activity
+#: model:ir.model.fields,field_description:vms_activity.field_vms_activity_time_write_date
+#: model:ir.model.fields,field_description:vms_activity.field_vms_activity_write_date
+msgid "Last Updated on"
+msgstr "Última actualización el"
+
+#. module: vms_activity
+#: selection:vms.activity,priority:0
+msgid "Low priority"
+msgstr "Prioridad baja"
+
+#. module: vms_activity
+#: model:ir.model.fields,field_description:vms_activity.field_vms_activity_order_id
+msgid "Maintenance Order"
+msgstr "Orden de Mantenimiento"
+
+#. module: vms_activity
+#: model:ir.ui.view,arch_db:vms_activity.view_vms_activity_search
+msgid "Mechanic"
+msgstr "Mecánico"
+
+#. module: vms_activity
+#: model:ir.actions.act_window,name:vms_activity.action_vms_activity_form
+#: model:ir.ui.menu,name:vms_activity.vms_activity_menu
+msgid "Mechanic's Tasks"
+msgstr "Tareas del Mecánico"
+
+#. module: vms_activity
+#: model:ir.model.fields,field_description:vms_activity.field_vms_order_line_responsible_ids
+#: model:ir.ui.view,arch_db:vms_activity.view_vms_order_line_form_vms_activity
+msgid "Mechanics"
+msgstr "Mecánicos"
+
+#. module: vms_activity
+#: model:ir.model.fields,field_description:vms_activity.field_vms_activity_name
+msgid "Name"
+msgstr "Nombre"
+
+#. module: vms_activity
+#: model:ir.ui.view,arch_db:vms_activity.view_vms_activity_form
+#: selection:vms.activity,state:0
+msgid "Pause"
+msgstr "Detener"
+
+#. module: vms_activity
+#: model:ir.ui.view,arch_db:vms_activity.view_vms_activity_search
+msgid "Paused"
+msgstr "Pausada"
+
+#. module: vms_activity
+#: selection:vms.activity,state:0
+msgid "Pending"
+msgstr "Pendiente"
+
+#. module: vms_activity
+#: model:ir.ui.view,arch_db:vms_activity.view_vms_activity_search
+msgid "Period"
+msgstr "Período"
+
+#. module: vms_activity
+#: model:ir.model.fields,field_description:vms_activity.field_vms_activity_priority
+msgid "Priority"
+msgstr "Prioridad"
+
+#. module: vms_activity
+#: model:ir.ui.view,arch_db:vms_activity.view_vms_activity_search
+#: selection:vms.activity,state:0
+#: selection:vms.activity.time,state:0
+msgid "Process"
+msgstr "En Proceso"
+
+#. module: vms_activity
+#: model:ir.model.fields,field_description:vms_activity.field_vms_activity_responsible_id
+msgid "Responsible"
+msgstr "Responsable"
+
+#. module: vms_activity
+#: model:ir.ui.view,arch_db:vms_activity.view_vms_activity_search
+msgid "Search Activities"
+msgstr "Buscar Actividades"
+
+#. module: vms_activity
+#: model:ir.ui.view,arch_db:vms_activity.view_vms_activity_search
+msgid "Service Order"
+msgstr "Orden de Servicio"
+
+#. module: vms_activity
+#: model:ir.ui.view,arch_db:vms_activity.view_vms_activity_form
+msgid "Set to Draft"
+msgstr "Revertir a Borrador"
+
+#. module: vms_activity
+#: model:ir.ui.view,arch_db:vms_activity.view_vms_activity_form
+msgid "Share a message..."
+msgstr "Compartir un mensaje..."
+
+#. module: vms_activity
+#: model:ir.ui.view,arch_db:vms_activity.view_vms_activity_form
+msgid "Start"
+msgstr "Iniciar"
+
+#. module: vms_activity
+#: model:ir.model.fields,field_description:vms_activity.field_vms_activity_start_date
+#: model:ir.model.fields,field_description:vms_activity.field_vms_activity_time_start_date
+msgid "Start date"
+msgstr "Fecha de Inicio"
+
+#. module: vms_activity
+#: model:ir.model.fields,field_description:vms_activity.field_vms_activity_state
+#: model:ir.model.fields,field_description:vms_activity.field_vms_activity_time_state
+#: model:ir.ui.view,arch_db:vms_activity.view_vms_activity_search
+msgid "State"
+msgstr "Estado"
+
+#. module: vms_activity
+#: model:ir.ui.view,arch_db:vms_activity.vms_activity_time_form
+msgid "State Activity"
+msgstr "Estado Actividad"
+
+#. module: vms_activity
+#: model:ir.model.fields,field_description:vms_activity.field_vms_activity_task_id
+msgid "Task"
+msgstr "Tarea"
+
+#. module: vms_activity
+#: code:addons/vms_activity/models/vms_activity.py:100
+#, python-format
+msgid "The activity must be in Pending, Process or Pause"
+msgstr "La actividad debe estar en Pendiente, Proceso o Pause"
+
+#. module: vms_activity
+#: code:addons/vms_activity/models/vms_activity.py:98
+#, python-format
+msgid "The order line task must be open."
+msgstr "La tarea de la linea de orden debe estar abierta."
+
+#. module: vms_activity
+#: code:addons/vms_activity/models/vms_order_line.py:30
+#, python-format
+msgid "The tasks must have almost one mechanic."
+msgstr "La tarea debe tener al menos un mecánico."
+
+#. module: vms_activity
+#: code:addons/vms_activity/models/vms_activity.py:70
+#, python-format
+msgid "There is another task in process."
+msgstr "Hay otra tarea en proceso."
+
+#. module: vms_activity
+#: model:ir.model.fields,field_description:vms_activity.field_vms_activity_total_hours
+msgid "Total hours"
+msgstr "Horas totales"
+
+#. module: vms_activity
+#: model:ir.model.fields,field_description:vms_activity.field_vms_activity_unit_id
+msgid "Unit"
+msgstr "Unidad"
+
+#. module: vms_activity
+#: selection:vms.activity,priority:0
+msgid "Urgent"
+msgstr "Urgente"
+
+#. module: vms_activity
+#: model:ir.model,name:vms_activity.model_vms_order_line
+msgid "VMS Order Line"
+msgstr "Lineas de Ordenes"
+
+#. module: vms_activity
+#: model:ir.model,name:vms_activity.model_vms_order
+msgid "VMS Orders"
+msgstr "Ordenes"
+
+#. module: vms_activity
+#: model:ir.model,name:vms_activity.model_vms_activity_time
+msgid "VMS Time Activities"
+msgstr "Horas de Actividades VMS"
+
+#. module: vms_activity
+#: model:ir.ui.view,arch_db:vms_activity.view_vms_activity_search
+msgid "Vehicle"
+msgstr "Vehículo"
+
+#. module: vms_activity
+#: model:ir.model,name:vms_activity.model_vms_activity
+msgid "vms.activity"
+msgstr "vms.activity"
