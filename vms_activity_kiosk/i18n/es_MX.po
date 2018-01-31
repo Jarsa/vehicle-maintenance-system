@@ -1,0 +1,195 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+#   * vms_activity_kiosk
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 10.0+e\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2018-01-31 18:37+0000\n"
+"PO-Revision-Date: 2018-01-31 18:37+0000\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: vms_activity_kiosk
+#. openerp-web
+#: code:addons/vms_activity_kiosk/static/src/xml/vms_kiosk_templates.xml:19
+#, python-format
+msgid "Activities for"
+msgstr "Actividades para"
+
+#. module: vms_activity_kiosk
+#. openerp-web
+#: code:addons/vms_activity_kiosk/static/src/xml/vms_kiosk_templates.xml:73
+#, python-format
+msgid "Activity of"
+msgstr "Actividad de"
+
+#. module: vms_activity_kiosk
+#. openerp-web
+#: code:addons/vms_activity_kiosk/static/src/xml/vms_kiosk_templates.xml:7
+#, python-format
+msgid "Company Logo"
+msgstr "Logotipo de la Compañía"
+
+#. module: vms_activity_kiosk
+#: model:ir.actions.act_window,help:vms_activity_kiosk.hr_employee_vms_activity_kiosk_action_kanban
+msgid "Create a few mechanics to be able to select an mechanic here and perform his activities."
+msgstr "Cree unos cuantos mecánicos para seleccionar un mecánico aquí y manejar sus actividades."
+
+#. module: vms_activity_kiosk
+#. openerp-web
+#: code:addons/vms_activity_kiosk/static/src/xml/vms_kiosk_templates.xml:110
+#, python-format
+msgid "Finish Task"
+msgstr "Finalizar Tarea"
+
+#. module: vms_activity_kiosk
+#. openerp-web
+#: code:addons/vms_activity_kiosk/static/src/js/task_view_handler.js:44
+#: model:ir.actions.client,name:vms_activity_kiosk.vms_activity_kiosk_action
+#: model:ir.ui.menu,name:vms_activity_kiosk.menu_vms_activity_kiosk_mode
+#, python-format
+msgid "Mechanic Tasks Kiosk Mode"
+msgstr "Modo Quiosco de Tareas Mecánico"
+
+#. module: vms_activity_kiosk
+#: model:ir.actions.act_window,name:vms_activity_kiosk.hr_employee_vms_activity_kiosk_action_kanban
+msgid "Mechanics"
+msgstr "Mecánicos "
+
+#. module: vms_activity_kiosk
+#. openerp-web
+#: code:addons/vms_activity_kiosk/static/src/xml/vms_kiosk_templates.xml:25
+#, python-format
+msgid "Name"
+msgstr "Nombre"
+
+#. module: vms_activity_kiosk
+#. openerp-web
+#: code:addons/vms_activity_kiosk/static/src/xml/vms_kiosk_templates.xml:35
+#, python-format
+msgid "No Results"
+msgstr "Sin Resultados"
+
+#. module: vms_activity_kiosk
+#. openerp-web
+#: code:addons/vms_activity_kiosk/static/src/xml/vms_kiosk_templates.xml:107
+#, python-format
+msgid "Pause Task"
+msgstr "Pausar Tarea"
+
+#. module: vms_activity_kiosk
+#. openerp-web
+#: code:addons/vms_activity_kiosk/static/src/js/barcode_employee_entry.js:49
+#, python-format
+msgid "Please, Scan again !!"
+msgstr "¡¡ Por favor, Escanee de nuevo !!"
+
+#. module: vms_activity_kiosk
+#. openerp-web
+#: code:addons/vms_activity_kiosk/static/src/xml/vms_kiosk_templates.xml:29
+#, python-format
+msgid "Priority"
+msgstr "Prioridad"
+
+#. module: vms_activity_kiosk
+#. openerp-web
+#: code:addons/vms_activity_kiosk/static/src/xml/vms_kiosk_templates.xml:71
+#, python-format
+msgid "Return"
+msgstr "Regresar"
+
+#. module: vms_activity_kiosk
+#. openerp-web
+#: code:addons/vms_activity_kiosk/static/src/xml/vms_kiosk_templates.xml:8
+#, python-format
+msgid "Scan your business badge"
+msgstr "Escanee su gafete de negocio"
+
+#. module: vms_activity_kiosk
+#. openerp-web
+#: code:addons/vms_activity_kiosk/static/src/xml/vms_kiosk_templates.xml:20
+#, python-format
+msgid "Select the activity you are going to work with."
+msgstr "Seleccione la actividad con la que va a trabajar."
+
+#. module: vms_activity_kiosk
+#. openerp-web
+#: code:addons/vms_activity_kiosk/static/src/xml/vms_kiosk_templates.xml:104
+#, python-format
+msgid "Start/Resume Task"
+msgstr "Iniciar/Reanudar Tarea"
+
+#. module: vms_activity_kiosk
+#. openerp-web
+#: code:addons/vms_activity_kiosk/static/src/xml/vms_kiosk_templates.xml:28
+#: code:addons/vms_activity_kiosk/static/src/xml/vms_kiosk_templates.xml:89
+#, python-format
+msgid "State"
+msgstr "Estado"
+
+#. module: vms_activity_kiosk
+#. openerp-web
+#: code:addons/vms_activity_kiosk/static/src/xml/vms_kiosk_templates.xml:9
+#, python-format
+msgid "Tap to scan"
+msgstr "Presione para escanear"
+
+#. module: vms_activity_kiosk
+#. openerp-web
+#: code:addons/vms_activity_kiosk/static/src/js/barcode_employee_entry.js:61
+#: code:addons/vms_activity_kiosk/static/src/js/employee_kanban_view_handler.js:16
+#, python-format
+msgid "Tasks"
+msgstr "Tareas"
+
+#. module: vms_activity_kiosk
+#. openerp-web
+#: code:addons/vms_activity_kiosk/static/src/xml/vms_kiosk_templates.xml:98
+#, python-format
+msgid "Time:"
+msgstr "Tiempo:"
+
+#. module: vms_activity_kiosk
+#: model:ir.actions.act_window,help:vms_activity_kiosk.hr_employee_vms_activity_kiosk_action_kanban
+msgid "To create mechanics go to the Employees menu."
+msgstr "Para crear mecánicos vaya a el menú de Empleados."
+
+#. module: vms_activity_kiosk
+#. openerp-web
+#: code:addons/vms_activity_kiosk/static/src/xml/vms_kiosk_templates.xml:27
+#, python-format
+msgid "Total Hours"
+msgstr "Horas Totales"
+
+#. module: vms_activity_kiosk
+#. openerp-web
+#: code:addons/vms_activity_kiosk/static/src/xml/vms_kiosk_templates.xml:26
+#: code:addons/vms_activity_kiosk/static/src/xml/vms_kiosk_templates.xml:88
+#, python-format
+msgid "Unit"
+msgstr "Unidad"
+
+#. module: vms_activity_kiosk
+#. openerp-web
+#: code:addons/vms_activity_kiosk/static/src/xml/vms_kiosk_templates.xml:6
+#, python-format
+msgid "Welcome to"
+msgstr "Bienvenido a"
+
+#. module: vms_activity_kiosk
+#. openerp-web
+#: code:addons/vms_activity_kiosk/static/src/xml/vms_kiosk_templates.xml:11
+#, python-format
+msgid "or select mechanic"
+msgstr "o seleccione un mecánico"
+
+#. module: vms_activity_kiosk
+#: model:ir.model,name:vms_activity_kiosk.model_vms_activity
+msgid "vms.activity"
+msgstr "vms.activity"

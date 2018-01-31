@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="view_employee_form_inherit_hr_attendance" model="ir.ui.view">
+        <field name="name">hr.employee</field>
+        <field name="model">hr.employee</field>
+        <field name="inherit_id" ref="vms.view_employee_form_vms"/>
+        <field name="priority">110</field>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='mechanic']" position="after">
+                <field name="vms_barcode"/>
+            </xpath>
+        </field>
+    </record>
+    <!-- employee kanban view specifically for vms_activity_kiosk (to register activities) -->
+    <record id="hr_employees_vms_activity_kiosk_view_kanban" model="ir.ui.view">
+        <field name="name">hr.employee.kanban</field>
+        <field name="model">hr.employee</field>
+        <field name="priority">99</field>
+        <field name="arch" type="xml">
+            <kanban class="o_hr_employee_vms_activity_kiosk_kanban" create="false">
+                <templates>
+                    <t t-name="kanban-box">
+                    <div class="oe_kanban_global_click">
+                        <div class="o_kanban_image">
+                            <img t-att-src="kanban_image('hr.employee', 'image_medium', record.id.value)"/>
+                        </div>
+                        <div class="oe_kanban_details">
+                            <div id="textbox">
+                                <div class="col-xs-11" style="padding:0px">
+                                    <strong>
+                                        <field name="name"/>
+                                    </strong>
+                                </div>
+                            </div>
+                            <ul>
+                                <li t-if="record.job_id.raw_value"><field name="job_id"/></li>
+                                <li t-if="record.work_location.raw_value"><field name="work_location"/></li>
+                            </ul>
+                        </div>
+                    </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+    <record id="hr_employee_vms_activity_kiosk_action_kanban" model="ir.actions.act_window">
+        <field name="name">Mechanics</field>
+        <field name="res_model">hr.employee</field>
+        <field name="view_mode">kanban</field>
+        <field name="view_id" ref="hr_employees_vms_activity_kiosk_view_kanban"/>
+        <field name="domain">[('mechanic','=',True)]</field>
+        <field name="help" type="html">
+            <p>
+                Create a few mechanics to be able to select an mechanic here and perform his activities.
+            </p>
+            <p>
+                To create mechanics go to the Employees menu.
+            </p>
+        </field>
+    </record>
+</odoo>

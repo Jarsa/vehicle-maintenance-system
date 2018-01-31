@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<template xml:space="preserve">
+    <t t-name="VmsKioskSelectMechanic">
+        <div class="o_vms_kiosk_mode_container">
+            <div class="o_vms_kiosk_mode">
+                <h1>Welcome to <t t-esc="widget.company_name"/></h1>
+                <img t-attf-src="{{widget.company_image_url}}" alt="Company Logo"/>
+                <h2>Scan your business badge</h2>
+                <a class="btn btn-primary btn-block o_vms_kiosk_mobile_barcode"> <i class="fa fa-camera fa-2x o_mobile_barcode_camara"></i> <div>Tap to scan</div></a>
+                <a class="btn btn-primary btn-block" id="o_vms_kiosk_select_hr" style="margin-top:10px;">
+                    <i class="fa fa-male fa-2x o_mobile_barcode_camara"></i> <div> or select mechanic</div>
+                </a>
+            </div>
+        </div>
+    </t>
+    <t t-name="VmsKioskSelectTask">
+        <div class="o_vms_kiosk_mode_container">
+            <div class="o_vms_kiosk_mode">
+                <div class="vms-btn-return" id="return_home">
+                    <i class="fa fa-home"></i> <span>Home</span>
+                </div>
+                <h1 style="margin: 10px 0;">Activities for <t t-esc="widget.mechanic_name"/></h1>
+                <div style="font-size:13px;margin-bottom:5px;">Select the activity you are going to work with.</div>
+                <div class="table-responsive vms-kiosk-table">
+                    <table class="table table-bordered table-hover table-sm">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Unit</th>
+                                <th>Total Hours</th>
+                                <th>State</th>
+                                <th>Priority</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        <t t-if="widget.activities.length == 0">
+                            <tr>
+                                <td colspan="5">
+                                    No Results
+                                </td>
+                            </tr>
+                        </t>
+                        <t t-foreach="widget.activities" t-as="activity">
+                            <tr t-att-index="activity.id" class="vms-activity-row">
+                                <td name="name"><t t-esc="activity.name"/></td>
+                                <td name="unit_id"><t t-esc="activity.unit_id[1]"/></td>
+                                <td name="total_hours"><t t-esc="activity.total_hours"/></td>
+                                <td t-if="activity.state == 'pause'" name="state" style="color:royalblue;font-weight:600;">
+                                    <t t-esc="activity.state"/>
+                                </td>
+                                <td t-elif="activity.state == 'process'" name="state" style="color:indianred;font-weight:600;">
+                                    <t t-esc="activity.state"/>
+                                </td>
+                                <td t-else="" name="state"><t t-esc="activity.state"/></td>
+                                <td name="priority">
+                                    <t t-set="stars_count" t-value="0"/>
+                                    <t t-foreach="[1, 2, 3]" t-as="star">
+                                        <t t-if="stars_count &lt; activity.priority">
+                                            <i class="fa fa-star" style="color:goldenrod;"></i>
+                                            <t t-set="stars_count" t-value="stars_count + 1"/>
+                                        </t>
+                                    </t>
+                                </td>
+                            </tr>
+                        </t>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </t>
+    <t t-name="VmsKioskTaskHandler">
+        <div class="o_vms_kiosk_mode_container">
+            <div class="o_vms_kiosk_mode">
+                <div class="vms-double-btn">
+                    <div class="vms-btn-return" id="return_tasks">
+                        <i class="fa fa-bars"></i> <span>Task's List</span>
+                    </div>
+                    <div class="vms-btn-return" id="return_home">
+                        <i class="fa fa-home"></i> <span>Home</span>
+                    </div>
+                </div>
+                <h1 style="margin:10px 10px 0 10px;">
+                    <t t-set="stars_count" t-value="0"/>
+                    <t t-foreach="[1, 2, 3]" t-as="star">
+                        <t t-if="stars_count &lt; activity.priority">
+                            <i class="fa fa-star" style="color:goldenrod;"></i>
+                            <t t-set="stars_count" t-value="stars_count + 1"/>
+                        </t>
+                    </t>
+                    <t t-esc="activity.name"/>
+                </h1>
+                <div style="font-size:13px;font-weight:300;margin-bottom:10px;">Activity of <t t-esc="mechanic"/>.</div>
+                <table style="width:100%;font-size:13px;margin-bottom:10px;">
+                    <thead>
+                        <tr>
+                            <th style="padding: 0 5px;text-align:center;border-right: 1px solid #e0e0e0;">Unit</th>
+                            <th style="padding: 0 5px;text-align:center;">State</th>
+                        </tr>
+                    </thead>
+                    <tbody style="border-top: 2px solid #d8d6d6;">
+                        <tr>
+                            <td style="padding:5px;text-align:center;border-right: 1px solid #e0e0e0;" width="50%"><t t-esc="activity.unit_id[1]"/></td>
+                            <td style="padding:5px;text-align:center;" width="50%" id="activity_state"><t t-esc="activity.state"/></td>
+                        </tr>
+                        <tr style="border-top: 1px solid #e0e0e0; display: none;" class="o_vms_kiosk_clock_content">
+                            <td colspan="2" style="padding: 5px 5px 0 5px;font-size:15px;font-weight:500;">Time: <span class="o_vms_kiosk_clock"></span></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="row vms-task-buttons-row">
+                    <div class="col-sm-4"><a class="btn btn-primary btn-block" id="start_task">
+                        <i class="fa fa-play fa-2x"></i> <div> Start/Resume Task</div>
+                    </a></div>
+                    <div class="col-sm-4"><a class="btn btn-primary btn-block" id="pause_task">
+                        <i class="fa fa-pause fa-2x"></i> <div> Pause Task</div>
+                    </a></div>
+                    <div class="col-sm-4"><a class="btn btn-primary btn-block" id="stop_task">
+                        <i class="fa fa-stop fa-2x"></i> <div> Finish Task</div>
+                    </a></div>
+                </div>
+            </div>
+        </div>
+    </t>
+</template>
