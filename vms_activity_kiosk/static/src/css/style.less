@@ -1,0 +1,146 @@
+.o_vms_kiosk_mode_container {
+    .o-flex-display();
+    .o-flex-flow(column, nowrap);
+    .o-justify-content(center);
+    .o-align-items(center);
+
+    @media (min-width: @screen-xs-max) {
+        background: url("../../../../web_enterprise/static/src/img/application-switcher-bg.jpg") no-repeat center center fixed;
+        background-size: cover;
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+    }
+}
+
+.o_vms_kiosk_mode {
+    width: 100%;
+    text-align: center;
+    position: relative;
+    background-color: #fff;
+    padding: 2em;
+
+    h1 {
+        margin: 0 0 2rem 0;
+    }
+
+    .message_demo_barcodes {
+        font-size: 0.9em;
+        margin: 0;
+    }
+
+    img {
+        overflow:hidden; // prevent margins colapsing with h1
+        width: 200px;
+    }
+
+    p {
+        text-align: left;
+        margin: 3rem 0;
+    }
+
+    > button {
+        font-size: 1.2em;
+        margin-bottom: 2rem;
+        width: 100%;
+    }
+
+    > button:last-child {
+        margin-bottom: 0;
+    }
+
+    @media (min-width: @screen-xs-max) {
+        flex: 0 0 auto;
+        width: 550px;
+        border-radius: 10px;
+        background-color: rgba(255,255,255,0.8);
+        box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.6);
+        font-size: 1.2em;
+        padding: 1em;
+    }
+
+}
+
+.vms-btn-return {
+    font-size: 16px;
+    padding: 6px 16px;
+    font-weight: 300;
+    margin: 0;
+    text-align: left;
+    background-color: #f3f3f3;
+    cursor: pointer;
+
+    &:active {
+        background-color: #e8e6e6;;
+    }
+
+    @media (min-width: @screen-xs-max) {
+        margin: -5px -16px 0;
+        background-color: #e6dfe2;
+
+        &:active {
+            box-shadow: inset 1px 1px 15px 0px rgba(197, 191, 194, 0.63);
+        }
+    }
+}
+
+.vms-double-btn {
+    margin: -5px 0 0;
+
+    .vms-btn-return:not(:last-child) {
+        margin-bottom: 5px;
+    }
+
+    @media (min-width: @screen-xs-max) {
+        margin: -5px -16px 45px;
+
+        .vms-btn-return {
+            margin: 0;
+            width: 50%;
+            float: left;
+        }
+
+        .vms-btn-return:not(:last-child) {
+            border-right: 1px solid #d2cacd;
+        }
+    }
+}
+
+.vms-kiosk-table {
+    font-size: 13px;
+    cursor: pointer;
+    max-height: 400px;
+    overflow-y: auto;
+
+    table{
+        margin: 0;
+    }
+
+    th {
+        text-align: center;
+        background-color: #9f858f14;
+        color: #a08a95;
+    }
+}
+
+.row.vms-task-buttons-row {
+    > .col-sm-4{
+        padding: 4px 16px;
+    }
+
+    .btn-primary[disabled] {
+        background-color: #c7bfc3;
+        border-color: #d2cacd;
+    }
+
+    @media (min-width: @screen-xs-max) {
+        background-color: #e6dfe2;
+        padding: 8px;
+
+        > .col-sm-4 {
+            padding: 0 8px;
+        }
+    }
+}

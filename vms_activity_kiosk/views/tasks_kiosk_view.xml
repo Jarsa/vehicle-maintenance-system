@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="vms_activity_kiosk_action" model="ir.actions.client">
+        <field name="name">Mechanic Tasks Kiosk Mode</field>
+        <field name="tag">vms_kiosk_barcode_employee_entry</field>
+        <field name="target">fullscreen</field>
+    </record>
+    <menuitem 
+        id="menu_vms_activity_kiosk_mode"
+        name="Mechanic Tasks Kiosk Mode"
+        action="vms_activity_kiosk_action"
+        parent="vms.menu_vms_maintenance"
+        sequence="60"/>
+</odoo>

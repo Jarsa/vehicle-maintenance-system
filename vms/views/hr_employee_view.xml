@@ -8,7 +8,9 @@
             <notebook position="inside">
                 <page string="VMS">
                     <group>
-                        <field name="mechanic"/>
+                        <group>
+                            <field name="mechanic"/>
+                        </group>
                     </group>
                 </page>
             </notebook>

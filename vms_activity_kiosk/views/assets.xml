@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="assets_backend" name="vms_activity_kiosk_assets" inherit_id="web.assets_backend">
+        <xpath expr="." position="inside">
+            <script type="text/javascript" src="/vms_activity_kiosk/static/src/js/barcode_employee_entry.js"></script>
+            <script type="text/javascript" src="/vms_activity_kiosk/static/src/js/employee_kanban_view_handler.js"></script>
+            <script type="text/javascript" src="/vms_activity_kiosk/static/src/js/task_view_handler.js"></script>
+            <link rel="stylesheet" href="/vms_activity_kiosk/static/src/css/style.less"/>
+        </xpath>
+    </template>
+</odoo>
