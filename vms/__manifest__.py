@@ -30,6 +30,7 @@
         'views/vms_task_view.xml',
         'views/vms_order_line_view.xml',
         'views/vms_order_view.xml',
+        'views/vms_order_template.xml',
         'views/fleet_vehicle_view.xml',
         'views/operating_unit_view.xml',
         'wizards/vms_wizard_maintenance_order_view.xml',

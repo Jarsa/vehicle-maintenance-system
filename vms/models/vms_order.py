@@ -58,7 +58,6 @@ class VmsOrder(models.Model):
     program_id = fields.Many2one(
         'vms.program',
         string='Program')
-    sequence = fields.Integer()
     report_ids = fields.Many2many(
         'vms.report',
         string='Report(s)')
@@ -167,7 +166,6 @@ class VmsOrder(models.Model):
             if rec.type == 'preventive':
                 rec.program_id = rec.unit_id.program_id
                 rec.current_odometer = rec.unit_id.odometer
-                rec.sequence = rec.unit_id.sequence
                 rec.order_line_ids = False
             else:
                 rec.program_id = False
@@ -231,3 +229,7 @@ class VmsOrder(models.Model):
             'name': self.name,
             'move_type': 'direct',
         }
+
+    @api.multi
+    def print_mo(self):
+        return self.env['report'].get_action(self, 'vms.report_maintenance')

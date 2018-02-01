@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <template id="report_maintenance">
+        <t t-call="report.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="report.external_layout">
+                    <div class="page">
+                        <div class="row">
+                            <div class="col-xs-6">
+                                <strong>Base:</strong>
+                                <span t-field="o.operating_unit_id.name"/>
+                                <br/>
+                                <strong>Unit:</strong>
+                                <span t-field="o.unit_id.name"/>
+                                <br/>
+                                <strong>Maintenance Type</strong>
+                                <span t-field="o.type"/>
+                            </div>
+                            <div class="col-xs-5 col-xs-offset-1">
+                                <strong>Date:</strong>
+                                <span t-field="o.date"/>
+                                <br/>
+                                <strong>Warehouse:</strong>
+                                <span t-field="o.warehouse_id.name"/>
+                                <br/>
+                                <strong>Supervisor:</strong>
+                                <span t-field="o.supervisor_id.name"/>
+                                <br/>
+                            </div>
+                        </div>
+                        <h2 t-if="o.state != 'draft'">Maintenance Order Confirmation #
+                            <span t-field="o.name"/>
+                        </h2>
+                        <h2 t-if="o.state == 'draft'">Request for Maintenance Order #
+                            <span t-field="o.name"/>
+                        </h2>
+                        <div class="row">
+                            <div t-if="o.start_date" class="col-xs-6">
+                                <strong>Schedule Start</strong>
+                                <span t-esc="o.start_date"/>
+                            </div>
+                            <div t-if="o.end_date" class="col-xs-6">
+                                <strong>Schedule End</strong>
+                                <span t-esc="o.end_date"/>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <table class="table table-striped" style="font-size:9px;">
+                                    <tr>
+                                        <th width="6%" class="text-center" style="padding-top: 0.3em; padding-bottom: 0.3em;background-color: #848484;color: #ffffff;"><span>R</span></th>
+                                        <th width="16%" class="text-center" style="padding-top: 0.3em; padding-bottom: 0.3em;background-color: #848484;color: #ffffff;"><span>TASK</span></th>
+                                        <th width="12%" class="text-center" style="padding-top: 0.3em; padding-bottom: 0.3em;background-color: #848484;color: #ffffff;"><span>SPARE PARTS</span></th>
+                                        <th width="52%" class="text-center" style="padding-top: 0.3em; padding-bottom: 0.3em;background-color: #848484;color: #ffffff;"><span>QTY</span></th>
+                                        <th width="14%" class="text-center" style="padding-top: 0.3em; padding-bottom: 0.3em;background-color: #848484;color: #ffffff;"><span>UOM</span></th>
+                                    </tr>
+                                    <t t-set="row_count" t-value="1"/>
+                                    <t t-foreach="o.order_line_ids" t-as="concepts">
+                                        <tr class="text-center" t-foreach="concepts.spare_part_ids" t-as="concept">
+                                            <td style="padding-top: 0.3em; padding-bottom: 0.3em;" class="text-center"><span t-esc="row_count"></span></td>
+                                            <td style="padding-top: 0.3em; padding-bottom: 0.3em;" class="text-center"><span t-esc="concepts.task_id.name"></span></td>
+                                            <td style="padding-top: 0.3em; padding-bottom: 0.3em;" class="text-center"><span t-esc="concept.product_id.name"></span></td>
+                                            <td style="padding-top: 0.3em; padding-bottom: 0.3em;" class="text-center"><span t-esc="concept.product_qty"></span></td>
+                                            <td style="padding-top: 0.3em; padding-bottom: 0.3em;" class="text-center"><span t-esc="concept.product_uom_id.name"></span></td>
+                                            <t t-set="row_count" t-value="row_count+1"/>
+                                        </tr>
+                                    </t>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+
+    <report
+    id="report_maintenances"
+    model="vms.order"
+    string="Maintenance Order"
+    report_type="qweb-pdf"
+    name="vms.report_maintenance"
+    file="vms.report_maintenance"/>
+
+</odoo>
