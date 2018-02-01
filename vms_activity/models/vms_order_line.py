@@ -14,6 +14,11 @@ class VmsOrderLine(models.Model):
     activity_ids = fields.One2many(
         'vms.activity', 'order_line_id', string="Activities",
         readonly=True, ondelete='cascade')
+    priority = fields.Selection([
+        ('0', 'All'),
+        ('1', 'Low priority'),
+        ('2', 'High priority'),
+        ('3', 'Urgent')], default='0')
 
     @api.multi
     def action_process(self):
@@ -41,6 +46,7 @@ class VmsOrderLine(models.Model):
                             'responsible_id': mechanic.id,
                             'unit_id': rec.order_id.unit_id.id,
                             'state': 'pending',
+                            'priority': rec.priority,
                         })
         super(VmsOrderLine, self).action_process()
 

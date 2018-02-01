@@ -34,7 +34,7 @@ class VmsActivity(models.Model):
         ('0', 'All'),
         ('1', 'Low priority'),
         ('2', 'High priority'),
-        ('3', 'Urgent')], default='1')
+        ('3', 'Urgent')], readonly=True)
     state = fields.Selection([
         ('draft', 'Draft'),
         ('cancel', 'Cancel'),
@@ -57,70 +57,67 @@ class VmsActivity(models.Model):
                 sum_time += (end_date - start_date).total_seconds()/3600
             rec.total_hours = float("%.2f" % sum_time)
 
-    @api.multi
-    def start_end_activity_time(self, rec):
-        """ Toggle action to start or end an activity. """
-        act_in_process = self.end_activity_time(rec, throw_back_act=True)
-        if not act_in_process:
-            other_act = self.search([
-                ('id', '!=', rec.id),
-                ('responsible_id', '=', rec.responsible_id.id),
-                ('state', '=', 'process')], limit=1)
-            if other_act:
-                raise ValidationError(_('There is another task in process.'))
+    @staticmethod
+    def start_resume_activity_time(rec):
+        """ Starts or resumes the activity """
+        if rec.order_line_id.state != 'process':
+            raise ValidationError(_('The order line task must be open.'))
+        if rec.state in ['draft', 'end', 'cancel']:
+            raise ValidationError(_(
+                'The activity must be in Pending, Process or Pause'))
+        if rec.state in ['pending', 'pause']:
             rec.activity_time_ids.create({
                 'start_date': fields.Datetime.now(),
                 'activity_id': rec.id,
                 'state': 'process',
             })
             rec.state = 'process'
-        else:
-            rec.state = 'pause'
 
     @api.multi
-    def end_activity_time(self, rec, throw_back_act=False):
+    def end_activity_time(self, rec):
         """ End an activityin process. """
-        act_in_process = self.env['vms.activity.time'].search(
-            [('activity_id', '=', rec.id), ('state', '=', 'process')],
-            limit=1)
-        if act_in_process:
-            act_in_process.write({
-                'end_date': fields.Datetime.now(),
-                'state': 'end',
-            })
-        if throw_back_act:
-            return act_in_process
-
-    @api.multi
-    def process_validations(self):
-        """ Validations in case, order line or activity are not in process. """
-        for rec in self:
-            if rec.order_line_id.state != 'process':
-                raise ValidationError(_('The order line task must be open.'))
-            if rec.state in ['draft', 'end', 'cancel']:
-                raise ValidationError(_(
-                    'The activity must be in Pending, Process or Pause'))
+        if self.state == 'process':
+            act_in_process = self.env['vms.activity.time'].search(
+                [('activity_id', '=', rec.id), ('state', '=', 'process')],
+                limit=1)
+            if act_in_process:
+                act_in_process.write({
+                    'end_date': fields.Datetime.now(),
+                    'state': 'end',
+                })
 
     @api.multi
     def action_start(self):
         """ Change activity to process and start a new activity time. """
         for rec in self:
-            self.process_validations()
-            self.start_end_activity_time(rec)
+            self.start_resume_activity_time(rec)
             rec.start_date = fields.Datetime.now()
-
-    @api.multi
-    def action_pause(self):
-        """ Pause the current activity time in process. """
-        for rec in self:
-            self.start_end_activity_time(rec)
+            return rec.state
 
     @api.multi
     def action_resume(self):
         """ Resume the activity, creates a new activity time. """
         for rec in self:
-            self.process_validations()
-            self.start_end_activity_time(rec)
+            self.start_resume_activity_time(rec)
+            return rec.state
+
+    @api.multi
+    def action_pause(self):
+        """ Pause the current activity time in process. """
+        for rec in self:
+            self.end_activity_time(rec)
+            rec.state = 'pause'
+            return rec.state
+
+    @api.multi
+    def action_end(self):
+        """ Ends the activity and activity times. """
+        for rec in self:
+            if rec.state in ['process', 'pause']:
+                self.end_activity_time(rec)
+                rec.state = 'end'
+                rec.end_date = fields.Datetime.now()
+            return rec.state
 
     @api.multi
     def action_cancel(self):
@@ -128,14 +125,6 @@ class VmsActivity(models.Model):
         for rec in self:
             self.end_activity_time(rec)
             rec.state = 'cancel'
-
-    @api.multi
-    def action_end(self):
-        """ Ends the activity and activity times. """
-        for rec in self:
-            self.end_activity_time(rec)
-            rec.state = 'end'
-            rec.end_date = fields.Datetime.now()
 
     @api.multi
     def action_draft(self):
