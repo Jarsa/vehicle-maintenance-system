@@ -24,11 +24,19 @@
         <field name="padding">4</field>
         <field name="number_increment">1</field>
     </record>
-     <record model="ir.sequence" id="vms_out_sequence">
+    <record model="ir.sequence" id="vms_out_sequence">
         <field name="name">VMS OUT Sequence</field>
         <field name="implementation">no_gap</field>
         <field name="code">vms_out</field>
         <field name="prefix">WH/SP/OUT/</field>
+        <field name="padding">5</field>
+        <field name="number_increment">1</field>
+    </record>
+    <record model="ir.sequence" id="vms_in_sequence">
+        <field name="name">VMS IN Sequence</field>
+        <field name="implementation">no_gap</field>
+        <field name="code">vms_in</field>
+        <field name="prefix">WH/EM/IN/</field>
         <field name="padding">5</field>
         <field name="number_increment">1</field>
     </record>

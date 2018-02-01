@@ -7,5 +7,13 @@
         <field name="default_location_dest_id" ref="stock.location_production"/>
         <field name="sequence_id" ref="vms.vms_out_sequence"/>
         <field name="sequence" eval="12"/>
+    </record>
+    <record id="stock_picking_type_vms_in" model='stock.picking.type'>
+        <field name="name">External Maintenance</field>
+        <field name="code">incoming</field>
+        <field name="default_location_src_id" ref="stock.stock_location_suppliers"/>
+        <field name="default_location_dest_id" ref="stock.location_production"/>
+        <field name="sequence_id" ref="vms.vms_in_sequence"/>
+        <field name="sequence" eval="12"/>
      </record>
 </odoo>
