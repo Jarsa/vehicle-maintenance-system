@@ -5,7 +5,7 @@
         <field name="inherit_id" ref="vms.vms_order_line_form"/>
         <field name="arch" type="xml">
             <xpath expr="//field[@name='order_id']" position="after">
-                <field modifiers="{}" name="priority" widget="priority"/>
+                <field name="priority" widget="priority"/>
             </xpath>
             <xpath expr="//sheet" position="inside">
                 <group attrs="{'invisible':[('external','=',True)]}" string="Mechanics">
