@@ -57,21 +57,22 @@ class VmsActivity(models.Model):
                 sum_time += (end_date - start_date).total_seconds()/3600
             rec.total_hours = float("%.2f" % sum_time)
 
-    @staticmethod
-    def start_resume_activity_time(rec):
+    @api.multi
+    def start_resume_activity_time(self):
         """ Starts or resumes the activity """
-        if rec.order_line_id.state != 'process':
-            raise ValidationError(_('The order line task must be open.'))
-        if rec.state in ['draft', 'end', 'cancel']:
-            raise ValidationError(_(
-                'The activity must be in Pending, Process or Pause'))
-        if rec.state in ['pending', 'pause']:
-            rec.activity_time_ids.create({
-                'start_date': fields.Datetime.now(),
-                'activity_id': rec.id,
-                'state': 'process',
-            })
-            rec.state = 'process'
+        for rec in self:
+            if rec.order_line_id.state != 'process':
+                raise ValidationError(_('The order line task must be open.'))
+            if rec.state in ['draft', 'end', 'cancel']:
+                raise ValidationError(_(
+                    'The activity must be in Pending, Process or Pause'))
+            if rec.state in ['pending', 'pause']:
+                rec.activity_time_ids.create({
+                    'start_date': fields.Datetime.now(),
+                    'activity_id': rec.id,
+                    'state': 'process',
+                })
+                rec.state = 'process'
 
     @api.multi
     def end_activity_time(self, rec):
@@ -90,7 +91,7 @@ class VmsActivity(models.Model):
     def action_start(self):
         """ Change activity to process and start a new activity time. """
         for rec in self:
-            self.start_resume_activity_time(rec)
+            self.start_resume_activity_time()
             rec.start_date = fields.Datetime.now()
             return rec.state
 
@@ -98,7 +99,7 @@ class VmsActivity(models.Model):
     def action_resume(self):
         """ Resume the activity, creates a new activity time. """
         for rec in self:
-            self.start_resume_activity_time(rec)
+            self.start_resume_activity_time()
             return rec.state
 
     @api.multi
