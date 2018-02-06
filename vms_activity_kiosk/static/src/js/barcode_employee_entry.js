@@ -59,14 +59,18 @@ var VmsKioskBarcodeEntry = Widget.extend(BarcodeHandlerMixin, {
         hremployee_model.query(['id', 'name'])
             .filter([['vms_barcode', '=', barcode], ['mechanic', '=', 'True']])
             .limit(1).all().then(function(mechanic){
-                var action = {
-                    type: 'ir.actions.client',
-                    name: _t('Tasks'),
-                    tag: 'vms_kiosk_task_handler',
-                    mechanic_id: mechanic[0].id,
-                    mechanic_name: mechanic[0].name,
-                };
-                self.do_action(action);
+                if(mechanic.length > 0){
+                    var action = {
+                        type: 'ir.actions.client',
+                        name: _t('Tasks'),
+                        tag: 'vms_kiosk_task_handler',
+                        mechanic_id: mechanic[0].id,
+                        mechanic_name: mechanic[0].name,
+                    };
+                    self.do_action(action);
+                }else{
+                    self.do_warn('Barcode Error', _t('There is no a mechanic with this barcode.'));
+                }
             });
     },
 });
