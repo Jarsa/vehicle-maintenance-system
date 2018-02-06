@@ -3,8 +3,8 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
 {
-    "name": "Tasks Kiosk Mode",
-    "summary": "Tasks Kiosk Mode",
+    "name": "Activities Kiosk Mode",
+    "summary": "Activities Kiosk Mode",
     "version": "10.0.1.0.0",
     "category": "Maintenance",
     "author": "Jarsa Sistemas",

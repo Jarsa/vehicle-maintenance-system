@@ -20,6 +20,9 @@ var VmsKioskTaskHandler = Widget.extend({
         "click a#stop_task": 'on_stop_task',
         "click div#return_tasks": 'on_return',
         "click div#return_home": 'go_home',
+        // inactivity
+        "mousemove .o_vms_kiosk_mode_container": 'restart_inactivity_detection',
+        "click .o_vms_kiosk_mode_container": 'restart_inactivity_detection',
     },
     init: function (parent, action) {
         this._super.apply(this, arguments);
@@ -36,6 +39,8 @@ var VmsKioskTaskHandler = Widget.extend({
             activity_model.query(activity_fields)
                 .filter([['responsible_id', '=', self.mechanic_id], ['state', '=', 'process']])
                 .limit(1).all().then(function(current_activity){
+                    // Starts the inactivity
+                    self.restart_inactivity_detection();
                     // Check if there is a task in process.
                     if(current_activity.length > 0){
                         self.activity_selected = current_activity[0];
@@ -54,6 +59,7 @@ var VmsKioskTaskHandler = Widget.extend({
             tag: 'vms_kiosk_barcode_employee_entry',
         };
         this.stop_clock();
+        this.stop_inactivity_detection();
         this.do_action(action);
     },
     render_task: function() {
@@ -65,6 +71,7 @@ var VmsKioskTaskHandler = Widget.extend({
         }
     },
     get_activities: function() {
+        // Get and render mechanic's activity list
         var self = this;
         activity_model.query(activity_fields)
            .filter([['responsible_id', '=', self.mechanic_id], ['state', 'not in', ['end', 'cancel', 'draft']]])
@@ -115,8 +122,6 @@ var VmsKioskTaskHandler = Widget.extend({
             this.change_state(method).then(function(){
                 self.start_clock();
             });
-            // Go home after 15 seconds tap start task
-            setTimeout(function(){ self.go_home(); }, 15000);
         }
     },
     on_pause_task: function(e) {
@@ -137,6 +142,7 @@ var VmsKioskTaskHandler = Widget.extend({
     },
 
     get_time_activity: function() {
+        // Current elapsed time of activity, in format 0000:00:00
         var total_seconds = Math.round(Math.abs(this.activity_process_time - new Date)/1000) + this.total_time;
         var total_minutes = total_seconds/60;
         var total_hours = total_seconds/60/60;
@@ -146,10 +152,11 @@ var VmsKioskTaskHandler = Widget.extend({
         var hours = String(Math.floor(total_hours));
         return ("000" + hours).slice(-4) + ':' + ("0" + minutes).slice(-2) + ':' + ("0" + seconds).slice(-2); 
     },
-    get_total_time: function(activities) {
+    get_total_time: function(times) {
+        // Total raw seconds of all activity times
         var self = this;
         var time_sec = 0; 
-        $.each(activities, function(i, val){
+        $.each(times, function(i, val){
             if(val.state === 'end'){
                 var start_date = moment(val.start_date + ' 0000', 'YYYY-MM-DD HH:mm:ss ZZ').toDate();
                 var end_date = moment(val.end_date + ' 0000', 'YYYY-MM-DD HH:mm:ss ZZ').toDate();
@@ -162,25 +169,26 @@ var VmsKioskTaskHandler = Widget.extend({
         var self = this;
         activity_time_model.query(['start_date', 'end_date', 'state'])
            .filter([['activity_id', '=', self.activity_selected.id]])
-           .all().then(function(activities){
+           .all().then(function(times){
                 $.when(
-                    $.grep(activities ,function(dict, index){
+                    $.grep(times ,function(dict, index){
                         return dict.state === 'process';
                     })[0]
                 ).done(function(current_activity){
                     self.activity_process_time = moment(current_activity.start_date + ' 0000', 'YYYY-MM-DD HH:mm:ss ZZ').toDate();
 
                     $.when(
-                        self.get_total_time(activities)
+                        self.get_total_time(times)
                     ).done(function(total_time){
-                        self.total_time = self.get_total_time(activities);
-                        self.clock_start = setInterval(function () {this.$(".o_vms_kiosk_clock").text(self.get_time_activity());}, 500);
+                        self.total_time = total_time;
+                        self.clock_start = setInterval(function () {self.$(".o_vms_kiosk_clock").text(self.get_time_activity());}, 500);
+                        // To avoid the setInterval delay
+                        self.$(".o_vms_kiosk_clock").text(self.get_time_activity());
                         self.$el.find('.o_vms_kiosk_clock_content').show();
                     });  
 
                 });              
             });
-        this.$el.find('.o_vms_kiosk_clock').html('0000:00:00');
     },
     stop_clock: function () {
         clearInterval(this.clock_start);
@@ -188,7 +196,37 @@ var VmsKioskTaskHandler = Widget.extend({
     },
     destroy: function () {
         this.stop_clock();
+        this.stop_inactivity_detection();
         this._super.apply(this, arguments);
+    },
+
+    restart_inactivity_detection: function(e) {
+        // Avoid go home after press go home by inactivity
+        var homeid = ((e || {}).target || {}).id === 'return_home';
+        var homeparentid = (((e || {}).target || {}).parentElement || {}).id === 'return_home';
+        if( (e || {}).type === 'mousemove' || !(homeid || homeparentid)){
+            var self = this;
+            clearTimeout(this.inactivity_notice);
+            this.$el.find('.vms-alert').slideUp(500, function(){
+                $(this).remove();
+            });
+            // Show and alert after 15 second of inactivity
+            this.inactivity_notice = setTimeout( function(){
+                var message = _t('Inactivity was detected, the session will be closed in 5 seconds.');
+                var notice = $('<div class="vms-alert alert-warning">\
+                        <i class="fa fa-exclamation-triangle"></i> '+ message +'\
+                    </div>').hide();
+                self.$el.find('.o_vms_kiosk_mode').before(notice);
+                notice.slideDown(500);
+            }, 15000 );
+            clearTimeout(this.inactivity);
+            // Go home after 5 seconds the alert was shown
+            this.inactivity = setTimeout( function(){ self.go_home(); }, 20000 );
+        }
+    },
+    stop_inactivity_detection: function() {
+        clearTimeout(this.inactivity_notice);
+        clearTimeout(this.inactivity);
     },
 });
 
