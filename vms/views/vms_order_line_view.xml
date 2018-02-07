@@ -7,6 +7,7 @@
         <field name="arch" type="xml">
             <form string="Order lines">
                 <header>
+                    <button name="create_po" string="Create Purchase Order" type="object"/>
                     <button name="action_cancel_draft" states="cancel" string="Set to Draft" type="object"/>
                     <button name="action_process" class="oe_highlight" states="draft" string="Start" type="object"/>
                     <button name="action_cancel" states="draft,process" string="Cancel" type="object" confirm="Are you sure to cancel this task?"/>
@@ -26,8 +27,7 @@
                     <group>
                         <group string="External Service" attrs="{'invisible':[('external','=',False)]}">
                             <field name="supplier_id" attrs="{'required':[('external','=',True)], 'readonly':[('order_id', '=', False)]}"/>
-                            <field name="purchase_order_id" attrs="{'readonly':[('order_id', '=', False)]}"/>
-                            <field name="purchase_state" attrs="{'readonly':[('order_id', '=', False)]}"/>
+                            <field name="purchase_order_id" attrs="{'readonly':[('purchase_order_id', '=', False)]}"/>
                             <field name="product_id" attrs="{'required':[('external','=',True)], 'readonly':[('order_id', '=', False)]}"/>
                             <field name="qty_product" attrs="{'readonly':[('order_id', '=', False)]}"/>
                             <button name ="create_po" string="Create Purchase Order" class="oe_highlight" states="draft" attrs="{'readonly':[('order_id', '=', False)]}" type="object" help="You must save the order first to configure the purchase order."/>
@@ -45,7 +45,7 @@
                             <field name="real_duration" widget='float_time'/>
                         </group>
                     </group>
-                    <group string="Spare Parts" attrs="{'invisible':[('external','=',True)]}">
+                    <group string="Spare Parts">
                         <notebook>
                             <page string="Spare Parts">
                                 <field name="spare_part_ids" nolabel="1">
@@ -53,6 +53,7 @@
                                         <field name="product_id"/>
                                         <field name="product_qty"/>
                                         <field name="product_uom_id"/>
+                                        <field name="external_spare_parts"/>
                                     </tree>
                                 </field>
                             </page>

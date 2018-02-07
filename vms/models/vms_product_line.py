@@ -35,6 +35,9 @@ class VmsProductLine(models.Model):
         'procurement.order',
         'vms_product_line_id',
         string='Procurement Orders',)
+    external_spare_parts = fields.Boolean(
+        string='Is External Spare Part?',
+    )
 
     @api.onchange('product_id')
     def _onchange_product_id(self):

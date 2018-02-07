@@ -168,21 +168,57 @@ class VmsOrderLine(models.Model):
         for rec in self:
             rec.state = 'draft'
 
+    @api.model
+    def _prepare_item(self, line):
+        return {
+            'product_id': line.product_id.id,
+            'product_qty': line.product_qty,
+            'date_planned': fields.Datetime.now(),
+            'product_uom': line.product_id.uom_po_id.id,
+            'price_unit': line.product_id.standard_price,
+            'taxes_id': [(
+                6, 0,
+                [x.id for x in (
+                    line.product_id.supplier_taxes_id)]
+            )],
+            'name': line.product_id.name
+        }
+
     @api.multi
     def create_po(self):
+        items = []
+        items.append((0, 0, {
+            'product_id': self.product_id.id,
+            'product_qty': self.qty_product,
+            'date_planned': fields.Datetime.now(),
+            'product_uom': self.product_id.uom_po_id.id,
+            'price_unit': self.product_id.standard_price,
+            'taxes_id': [(
+                6, 0,
+                [x.id for x in (
+                    self.product_id.supplier_taxes_id)]
+            )],
+            'name': self.product_id.name
+        }))
+        lines = self.spare_part_ids.filtered(lambda r: r.external_spare_parts)
+        if lines:
+            for line in lines:
+                items.append((0, 0, self._prepare_item(line)))
         purchase_order_id = self.env['purchase.order'].create({
             'partner_id': self.supplier_id.id,
             'partner_ref': self.order_id.name,
-            'order_line': [(0, 0, {
-                'product_id': self.product_id.id,
-                'product_qty': self.qty_product,
-                'date_planned': fields.Datetime.now(),
-                'product_uom': self.product_id.uom_po_id.id,
-                'price_unit': self.product_id.standard_price,
-                'taxes_id': [(
-                    6, 0,
-                    [x.id for x in (
-                        self.product_id.supplier_taxes_id)]
-                )],
-                'name': self.product_id.name})]})
+            'order_line': items,
+            'picking_type_id': self.env.ref(
+                'vms.stock_picking_type_vms_in').id,
+        })
         self.write({'purchase_order_id': purchase_order_id.id})
+        return {
+            'name': 'Purchase Order',
+            'view_id': self.env.ref(
+                'purchase.purchase_order_form').id,
+            'view_type': 'form',
+            'view_mode': 'form',
+            'res_model': 'purchase.order',
+            'res_id': purchase_order_id.id,
+            'type': 'ir.actions.act_window'
+        }
