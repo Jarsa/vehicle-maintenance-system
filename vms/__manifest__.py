@@ -38,7 +38,6 @@
         'data/procurement_route_data.xml',
         'data/cron_vms_order.xml',
         'data/ir_config_parameter.xml',
-        'wizards/vms_order_line_po_view.xml',
     ],
     'demo': [
     ]
