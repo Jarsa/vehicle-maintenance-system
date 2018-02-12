@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="fleet_vehicle_model_brand_kenworth" model="fleet.vehicle.model.brand">
+        <field name="name">Kenworth</field>
+        <field name="image" type="base64" file="tms/static/src/img/brand_kenworth-image.png"/>
+    </record>
+    <record id="fleet_vehicle_model_brand_trailking" model="fleet.vehicle.model.brand">
+        <field name="name">Trail King</field>
+        <field name="image" type="base64" file="tms/static/src/img/brand_trailking-image.png"/>
+    </record>
+    <record id="fleet_vehicle_model_t800" model="fleet.vehicle.model">
+        <field name="name">T800</field>
+        <field name="brand_id" ref="fleet_vehicle_model_brand_kenworth"/>
+    </record>
+    <record id="fleet_vehicle_model_trailking_dolly" model="fleet.vehicle.model">
+        <field name="name">Dolly</field>
+        <field name="brand_id" ref="fleet_vehicle_model_brand_trailking"/>
+    </record>
+    <record id="fleet_vehicle_model_trailking_flatbed" model="fleet.vehicle.model">
+        <field name="name">53' Combo Flatbed</field>
+        <field name="brand_id" ref="fleet_vehicle_model_brand_trailking"/>
+    </record>
+</odoo>
