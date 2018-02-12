@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="vms_program_01" model="vms.program">
+        <field name="name">Programa A</field>
+        <field name="cycle_ids" eval="[(4, ref('vms.vms_cycle_02'))]"></field>
+    </record>
+    <record id="vms_program_03" model="vms.program">
+        <field name="name">Programa B</field>
+    </record>
+</odoo>
