@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="vms_fleet_vehicle_01" model="fleet.vehicle">
+        <field name="name">T1</field>
+        <field name="license_plate">0925</field>
+        <field name="odometer_unit">kilometers</field>
+        <field name="active" eval="True"/>
+        <field name="model_id" ref="fleet_vehicle_model_t800"/>
+    </record>
+    <record id="vms_fleet_vehicle_02" model="fleet.vehicle">
+        <field name="name">C1</field>
+        <field name="license_plate">0926</field>
+        <field name="odometer_unit">kilometers</field>
+        <field name="active" eval="True"/>
+        <field name="model_id" ref="fleet_vehicle_model_trailking_flatbed"/>
+    </record>
+    <record id="vms_fleet_vehicle_03" model="fleet.vehicle">
+        <field name="name">C2</field>
+        <field name="license_plate">0927</field>
+        <field name="odometer_unit">kilometers</field>
+        <field name="active" eval="True"/>
+        <field name="model_id" ref="fleet_vehicle_model_trailking_flatbed"/>
+    </record>
+    <record id="vms_fleet_vehicle_04" model="fleet.vehicle">
+        <field name="name">D1</field>
+        <field name="license_plate">0928</field>
+        <field name="odometer_unit">kilometers</field>
+        <field name="active" eval="True"/>
+        <field name="model_id" ref="fleet_vehicle_model_trailking_dolly"/>
+    </record>
+</odoo>
