@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="vms_hr_employee_01" model="hr.employee">
+        <field name="name">Ulises Cordova</field>
+        <field name="mechanic" eval="True"/>
+    </record>
+    <record id="vms_hr_employee_02" model="hr.employee">
+        <field name="name">Luis Ruiz</field>
+        <field name="mechanic" eval="True"/>
+    </record>
+    <record id="vms_hr_employee_03" model="hr.employee">
+        <field name="name">Martin Olea</field>
+        <field name="mechanic" eval="True"/>
+    </record>
+    <record id="vms_hr_employee_04" model="hr.employee">
+        <field name="name">Alexis Rodriguez</field>
+        <field name="mechanic" eval="True"/>
+    </record>
+</odoo>

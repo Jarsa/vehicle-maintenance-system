@@ -40,5 +40,10 @@
         'data/ir_config_parameter.xml',
     ],
     'demo': [
+        'demo/product_template.xml',
+        'demo/vms_task.xml',
+        'demo/hr_emplooye.xml',
+        'demo/vms_cycle.xml',
+        'demo/vms_program.xml',
     ]
 }

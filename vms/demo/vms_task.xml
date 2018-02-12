@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="vms_task_01" model="vms.task">
+        <field name="name">Oil Change</field>
+        <field name="duration">0.50</field>
+    </record>
+    <record id="vms_task_02" model="vms.task">
+        <field name="name">General Service</field>
+        <field name="duration">1.00</field>
+    </record>
+    <record id="vms_task_03" model="vms.task">
+        <field name="name">Wheel Change</field>
+        <field name="duration">1.50</field>
+    </record>
+    <record id="vms_task_04" model="vms.task">
+        <field name="name">Motor Service</field>
+        <field name="duration">2.00</field>
+    </record>
+
+    <record id="vms_product_line_01" model="vms.product.line">
+        <field name="product_id" ref="vms.product_product_vms_01"></field>
+        <field name="product_qty">10</field>
+        <field name="product_uom_id" ref="product.product_uom_unit"></field>
+        <field name="task_id" ref="vms_task_01"></field>
+    </record>
+    <record id="vms_product_line_02" model="vms.product.line">
+        <field name="product_id" ref="vms.product_product_vms_02"></field>
+        <field name="product_qty">10</field>
+        <field name="product_uom_id" ref="product.product_uom_unit"></field>
+        <field name="task_id" ref="vms_task_03"></field>
+    </record>
+    <record id="vms_product_line_03" model="vms.product.line">
+        <field name="product_id" ref="vms.product_product_vms_03"></field>
+        <field name="product_qty">10</field>
+        <field name="product_uom_id" ref="product.product_uom_unit"></field>
+        <field name="task_id" ref="vms_task_03"></field>
+    </record>
+</odoo>
