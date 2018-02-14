@@ -1,22 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <odoo>
     <record id="vms_cycle_01" model="vms.cycle">
-        <field name="name">Ciclo A</field>
+        <field name="name">Cycle A</field>
         <field name="frequency">500</field>
         <field name="task_ids" eval="[(4,ref('vms.vms_task_01'))]"></field>
     </record>
     <record id="vms_cycle_02" model="vms.cycle">
-        <field name="name">Ciclo B</field>
+        <field name="name">Cycle B</field>
         <field name="frequency">1000</field>
         <field name="task_ids" eval="[(4,ref('vms.vms_task_02'))]"></field>
         <field name="cycle_ids" eval="[(4, ref('vms.vms_cycle_01'))]"></field>
     </record>
     <record id="vms_cycle_03" model="vms.cycle">
-        <field name="name">Ciclo C</field>
+        <field name="name">Cycle C</field>
         <field name="frequency">1500</field>
     </record>
     <record id="vms_cycle_04" model="vms.cycle">
-        <field name="name">Ciclo D</field>
+        <field name="name">Cycle D</field>
         <field name="frequency">2000</field>
     </record>
 </odoo>
