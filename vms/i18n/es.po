@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 10.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-01-26 18:40+0000\n"
-"PO-Revision-Date: 2018-01-26 18:40+0000\n"
+"POT-Creation-Date: 2018-02-14 18:42+0000\n"
+"PO-Revision-Date: 2018-02-14 18:42+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -16,28 +16,10 @@ msgstr ""
 "Plural-Forms: \n"
 
 #. module: vms
-#: code:addons/vms/wizards/vms_wizard_maintenance_order.py:44
+#: code:addons/vms/wizards/vms_wizard_maintenance_order.py:34
 #, python-format
 msgid "<strong>Order of:</strong> %s </br>"
-msgstr "<strong>Order of:</strong> %s </br>"
-
-#. module: vms
-#: code:addons/vms/models/vms_report.py:60
-#, python-format
-msgid "<strong>Report Cancel.</strong><ul><li><strong>Cancel by: </strong>%s</li><li><strong>Cancel at: </strong>%s</li></ul>"
-msgstr "<strong>Reporte Cancelado.</strong><ul><li><strong>Cancelado por: </strong>%s</li><li><strong>Cancelado el: </strong>%s</li></ul>"
-
-#. module: vms
-#: code:addons/vms/models/vms_report.py:49
-#, python-format
-msgid "<strong>Report Closed.</strong><ul><li><strong>Closed by: </strong>%s</li><li><strong>Closed at: </strong>%s</li></ul>"
-msgstr "<strong>Reporte Cerrado.</strong><ul><li><strong>Cerrado por: </strong>%s</li><li><strong>Cerrado el: </strong>%s</li></ul>"
-
-#. module: vms
-#: code:addons/vms/models/vms_report.py:71
-#, python-format
-msgid "<strong>Report pending.</strong><ul><li><strong>Changed by: </strong>%s</li><li><strong>Changed at: </strong>%s</li></ul>"
-msgstr "<strong>Reporte pendiente.</strong><ul><li><strong>Cambiado por: </strong>%s</li><li><strong>Cambiado el: </strong>%s</li></ul>"
+msgstr "<strong>Orden de:</strong> %s </br>"
 
 #. module: vms
 #: model:ir.model.fields,field_description:vms.field_vms_cycle_active
@@ -50,6 +32,24 @@ msgstr "Activo"
 #: model:ir.model.fields,field_description:vms.field_vms_product_line_order_line_id
 msgid "Activity"
 msgstr "Actividad"
+
+#. module: vms
+#: code:addons/vms/wizards/vms_wizard_maintenance_order.py:59
+#, python-format
+msgid "Al least one record has an order assigned"
+msgstr "Al menos un registro tiene una orden asignada"
+
+#. module: vms
+#: code:addons/vms/wizards/vms_wizard_maintenance_order.py:56
+#, python-format
+msgid "All record must be of the same Unit"
+msgstr "Todos los registros deben ser de la misma Unidad"
+
+#. module: vms
+#: code:addons/vms/wizards/vms_wizard_maintenance_order.py:53
+#, python-format
+msgid "All reports must be in the same Operating Unit"
+msgstr "Todos los informes deben estar en la misma unidad operativa"
 
 #. module: vms
 #: model:ir.ui.view,arch_db:vms.vms_order_form_view
@@ -65,11 +65,6 @@ msgstr "¿Está seguro de cancelar esta tarea?"
 #: model:ir.ui.view,arch_db:vms.vms_report_form_view
 msgid "Are you sure to confirm this report?"
 msgstr "¿Estas seguro de confirmar este reporte?"
-
-#. module: vms
-#: model:ir.ui.view,arch_db:vms.vms_fleet_maintenance_form_view
-msgid "Are you sure you want to create Program Sequence for this record? All previous records will be deleted !!!"
-msgstr "¿Está seguro de crear una secuencia para el programa de mantenimiento? Si tiene otra secuencia del programa ésta será eliminada."
 
 #. module: vms
 #: model:ir.model.fields,field_description:vms.field_vms_order_operating_unit_id
@@ -132,7 +127,6 @@ msgstr "Crear Orden de Compra"
 #: model:ir.model.fields,field_description:vms.field_vms_program_create_uid
 #: model:ir.model.fields,field_description:vms.field_vms_report_create_uid
 #: model:ir.model.fields,field_description:vms.field_vms_task_create_uid
-#: model:ir.model.fields,field_description:vms.field_vms_vehicle_cycle_create_uid
 #: model:ir.model.fields,field_description:vms.field_vms_wizard_maintenance_order_create_uid
 msgid "Created by"
 msgstr "Creado por"
@@ -145,7 +139,6 @@ msgstr "Creado por"
 #: model:ir.model.fields,field_description:vms.field_vms_program_create_date
 #: model:ir.model.fields,field_description:vms.field_vms_report_create_date
 #: model:ir.model.fields,field_description:vms.field_vms_task_create_date
-#: model:ir.model.fields,field_description:vms.field_vms_vehicle_cycle_create_date
 #: model:ir.model.fields,field_description:vms.field_vms_wizard_maintenance_order_create_date
 msgid "Created on"
 msgstr "Creado el"
@@ -156,12 +149,6 @@ msgid "Current odometer"
 msgstr "Odómetro Actual"
 
 #. module: vms
-#: model:ir.model.fields,field_description:vms.field_vms_order_cycle_id
-#: model:ir.model.fields,field_description:vms.field_vms_vehicle_cycle_cycle_id
-msgid "Cycle"
-msgstr "Ciclo"
-
-#. module: vms
 #: model:ir.model.fields,field_description:vms.field_vms_program_cycle_ids
 #: model:ir.ui.view,arch_db:vms.view_vms_program_form
 msgid "Cycle(s)"
@@ -169,18 +156,15 @@ msgstr "Ciclo(s)"
 
 #. module: vms
 #: model:ir.actions.act_window,name:vms.vms_open_view_cycle_list
-#: model:ir.model.fields,field_description:vms.field_fleet_vehicle_cycle_ids
 #: model:ir.model.fields,field_description:vms.field_vms_cycle_cycle_ids
 #: model:ir.ui.menu,name:vms.cycle_menu
 #: model:ir.ui.view,arch_db:vms.view_vms_cycle_form
-#: model:ir.ui.view,arch_db:vms.vms_fleet_maintenance_form_view
 msgid "Cycles"
 msgstr "Ciclos"
 
 #. module: vms
 #: model:ir.model.fields,field_description:vms.field_vms_order_date
 #: model:ir.model.fields,field_description:vms.field_vms_report_date
-#: model:ir.model.fields,field_description:vms.field_vms_vehicle_cycle_date
 msgid "Date"
 msgstr "Fecha"
 
@@ -191,7 +175,6 @@ msgstr "Órdenes de entrega"
 
 #. module: vms
 #: model:ir.ui.view,arch_db:vms.vms_report_form_view
-#: model:ir.ui.view,arch_db:vms.vms_vehicle_cycle_form
 msgid "Details"
 msgstr "Detalles"
 
@@ -203,7 +186,6 @@ msgstr "Detalles"
 #: model:ir.model.fields,field_description:vms.field_vms_program_display_name
 #: model:ir.model.fields,field_description:vms.field_vms_report_display_name
 #: model:ir.model.fields,field_description:vms.field_vms_task_display_name
-#: model:ir.model.fields,field_description:vms.field_vms_vehicle_cycle_display_name
 #: model:ir.model.fields,field_description:vms.field_vms_wizard_maintenance_order_display_name
 msgid "Display Name"
 msgstr "Nombre a mostrar"
@@ -211,17 +193,7 @@ msgstr "Nombre a mostrar"
 #. module: vms
 #: model:ir.model.fields,field_description:vms.field_fleet_vehicle_distance
 msgid "Distance Average"
-msgstr "Distance Average"
-
-#. module: vms
-#: model:ir.model.fields,field_description:vms.field_vms_vehicle_cycle_distance
-msgid "Distance Real"
-msgstr "Distancia Real"
-
-#. module: vms
-#: model:ir.model.fields,field_description:vms.field_vms_vehicle_cycle_schedule
-msgid "Distance Schedule"
-msgstr "Distancia Programada"
+msgstr "Distancia Promedio"
 
 #. module: vms
 #: selection:vms.order.line,state:0
@@ -277,6 +249,11 @@ msgid "External"
 msgstr "Externo"
 
 #. module: vms
+#: model:stock.picking.type,name:vms.stock_picking_type_vms_in
+msgid "External Maintenance"
+msgstr "Mantenimiento Externo"
+
+#. module: vms
 #: model:ir.ui.view,arch_db:vms.vms_order_line_form
 msgid "External Service"
 msgstr "Servicio Externo"
@@ -287,9 +264,10 @@ msgid "Frequency"
 msgstr "Frecuencia"
 
 #. module: vms
-#: model:ir.ui.view,arch_db:vms.vms_vehicle_cycle_search
-msgid "Group by..."
-msgstr "Agrupar por..."
+#: model:product.product,name:vms.product_product_vms_03
+#: model:product.template,name:vms.product_product_vms_03_product_template
+msgid "Hydraulic Jack"
+msgstr "Gato hidraulico"
 
 #. module: vms
 #: model:ir.model.fields,field_description:vms.field_vms_cycle_id
@@ -299,15 +277,19 @@ msgstr "Agrupar por..."
 #: model:ir.model.fields,field_description:vms.field_vms_program_id
 #: model:ir.model.fields,field_description:vms.field_vms_report_id
 #: model:ir.model.fields,field_description:vms.field_vms_task_id
-#: model:ir.model.fields,field_description:vms.field_vms_vehicle_cycle_id
 #: model:ir.model.fields,field_description:vms.field_vms_wizard_maintenance_order_id
 msgid "ID"
 msgstr "ID"
 
 #. module: vms
-#: model:ir.model.fields,field_description:vms.field_fleet_vehicle_last_cycle_id
-msgid "Last Cycle"
-msgstr "Último Ciclo"
+#: model:ir.model,name:vms.model_fleet_vehicle
+msgid "Information on a vehicle"
+msgstr "Información sobre un vehículo"
+
+#. module: vms
+#: model:ir.model.fields,field_description:vms.field_vms_product_line_external_spare_parts
+msgid "Is External Spare Part?"
+msgstr "Es Refacción Externa?"
 
 #. module: vms
 #: model:ir.model.fields,field_description:vms.field_vms_cycle___last_update
@@ -317,15 +299,9 @@ msgstr "Último Ciclo"
 #: model:ir.model.fields,field_description:vms.field_vms_program___last_update
 #: model:ir.model.fields,field_description:vms.field_vms_report___last_update
 #: model:ir.model.fields,field_description:vms.field_vms_task___last_update
-#: model:ir.model.fields,field_description:vms.field_vms_vehicle_cycle___last_update
 #: model:ir.model.fields,field_description:vms.field_vms_wizard_maintenance_order___last_update
 msgid "Last Modified on"
 msgstr "Última modificación en"
-
-#. module: vms
-#: model:ir.model.fields,field_description:vms.field_fleet_vehicle_last_order_id
-msgid "Last Order"
-msgstr "Última Orden"
 
 #. module: vms
 #: model:ir.model.fields,field_description:vms.field_vms_cycle_write_uid
@@ -335,7 +311,6 @@ msgstr "Última Orden"
 #: model:ir.model.fields,field_description:vms.field_vms_program_write_uid
 #: model:ir.model.fields,field_description:vms.field_vms_report_write_uid
 #: model:ir.model.fields,field_description:vms.field_vms_task_write_uid
-#: model:ir.model.fields,field_description:vms.field_vms_vehicle_cycle_write_uid
 #: model:ir.model.fields,field_description:vms.field_vms_wizard_maintenance_order_write_uid
 msgid "Last Updated by"
 msgstr "Última actualización por"
@@ -348,7 +323,6 @@ msgstr "Última actualización por"
 #: model:ir.model.fields,field_description:vms.field_vms_program_write_date
 #: model:ir.model.fields,field_description:vms.field_vms_report_write_date
 #: model:ir.model.fields,field_description:vms.field_vms_task_write_date
-#: model:ir.model.fields,field_description:vms.field_vms_vehicle_cycle_write_date
 #: model:ir.model.fields,field_description:vms.field_vms_wizard_maintenance_order_write_date
 msgid "Last Updated on"
 msgstr "Última actualización el"
@@ -388,36 +362,8 @@ msgstr "Mecánicos "
 #: model:ir.model.fields,field_description:vms.field_vms_cycle_name
 #: model:ir.model.fields,field_description:vms.field_vms_program_name
 #: model:ir.model.fields,field_description:vms.field_vms_task_name
-#: model:ir.model.fields,field_description:vms.field_vms_vehicle_cycle_name
 msgid "Name"
 msgstr "Nombre"
-
-#. module: vms
-#: model:ir.model.fields,field_description:vms.field_fleet_vehicle_next_cycle_id
-msgid "Next Cycle"
-msgstr "Siguiente Ciclo"
-
-#. module: vms
-#: model:ir.ui.view,arch_db:vms.vms_vehicle_cycle_form
-#: model:ir.ui.view,arch_db:vms.vms_vehicle_cycle_tree
-msgid "Next Service Date"
-msgstr "Fecha Próximo Servicio"
-
-#. module: vms
-#: model:ir.model.fields,field_description:vms.field_fleet_vehicle_next_service_date
-#: model:ir.model.fields,field_description:vms.field_vms_vehicle_cycle_next_service_date
-msgid "Next service date"
-msgstr "Fecha Siguiente Servicio"
-
-#. module: vms
-#: model:ir.model.fields,field_description:vms.field_fleet_vehicle_next_service_odometer
-msgid "Next service odometer"
-msgstr "Odómetro Siguiente Servicio"
-
-#. module: vms
-#: model:ir.model.fields,field_description:vms.field_fleet_vehicle_next_service_sequence
-msgid "Next service sequence"
-msgstr "Secuencia Siguiente Servicio"
 
 #. module: vms
 #: model:ir.model.fields,field_description:vms.field_vms_report_notes
@@ -429,6 +375,12 @@ msgstr "Notas"
 #: model:ir.model.fields,field_description:vms.field_vms_report_name
 msgid "Number"
 msgstr "Número"
+
+#. module: vms
+#: model:product.product,name:vms.product_product_vms_01
+#: model:product.template,name:vms.product_product_vms_01_product_template
+msgid "Oil"
+msgstr "Aceite"
 
 #. module: vms
 #: model:ir.ui.view,arch_db:vms.vms_order_form_view
@@ -445,7 +397,6 @@ msgstr "Unidad Operativa"
 #: model:ir.actions.act_window,name:vms.action_vms_order
 #: model:ir.model.fields,field_description:vms.field_vms_order_line_order_id
 #: model:ir.model.fields,field_description:vms.field_vms_report_order_id
-#: model:ir.model.fields,field_description:vms.field_vms_vehicle_cycle_order_id
 #: model:ir.ui.menu,name:vms.vms_order_menu
 msgid "Order"
 msgstr "Orden"
@@ -463,12 +414,7 @@ msgstr "Número de Orden"
 #. module: vms
 #: model:ir.model.fields,field_description:vms.field_operating_unit_order_sequence_id
 msgid "Order Sequence"
-msgstr "Order Sequence"
-
-#. module: vms
-#: model:ir.ui.view,arch_db:vms.vms_vehicle_cycle_form
-msgid "Order State"
-msgstr "Estado de la Orden"
+msgstr "Sequencia de Orden"
 
 #. module: vms
 #: model:ir.ui.view,arch_db:vms.vms_order_line_form
@@ -549,16 +495,6 @@ msgstr "Líneas de Producto"
 #: model:ir.model.fields,field_description:vms.field_vms_order_program_id
 msgid "Program"
 msgstr "Programa"
-
-#. module: vms
-#: model:ir.ui.view,arch_db:vms.vms_fleet_maintenance_form_view
-msgid "Program Mtto"
-msgstr "Programa de Mantenimiento"
-
-#. module: vms
-#: model:ir.ui.menu,name:vms.menu_vms_vehicle_cycle
-msgid "Programmed Maintenance(s)"
-msgstr "Mantenimientos Programados"
 
 #. module: vms
 #: model:ir.model.fields,field_description:vms.field_vms_order_line_purchase_order_id
@@ -654,9 +590,7 @@ msgid "Schedule start"
 msgstr "Inicio Programado"
 
 #. module: vms
-#: model:ir.model.fields,field_description:vms.field_fleet_vehicle_sequence
 #: model:ir.model.fields,field_description:vms.field_vms_order_sequence
-#: model:ir.model.fields,field_description:vms.field_vms_vehicle_cycle_sequence
 msgid "Sequence"
 msgstr "Secuencia"
 
@@ -694,7 +628,6 @@ msgstr "Configuración"
 #. module: vms
 #: model:ir.ui.view,arch_db:vms.view_vms_program_form
 #: model:ir.ui.view,arch_db:vms.vms_report_form_view
-#: model:ir.ui.view,arch_db:vms.vms_vehicle_cycle_form
 msgid "Share a message..."
 msgstr "Comparte un Mensaje"
 
@@ -717,16 +650,9 @@ msgid "Start"
 msgstr "Iniciar"
 
 #. module: vms
-#: model:ir.ui.view,arch_db:vms.vms_vehicle_cycle_form
-#: model:ir.ui.view,arch_db:vms.vms_vehicle_cycle_tree
-msgid "Start Order"
-msgstr "Iniciar Orden"
-
-#. module: vms
 #: model:ir.model.fields,field_description:vms.field_vms_order_line_state
 #: model:ir.model.fields,field_description:vms.field_vms_order_state
 #: model:ir.model.fields,field_description:vms.field_vms_report_state
-#: model:ir.model.fields,field_description:vms.field_vms_vehicle_cycle_order_state
 msgid "State"
 msgstr "Estado"
 
@@ -741,11 +667,7 @@ msgid "Stock Pickings"
 msgstr "Entregas"
 
 #. module: vms
-#: model:ir.ui.view,arch_db:vms.vms_vehicle_cycle_search
-msgid "String"
-msgstr "String"
-
-#. module: vms
+#: model:ir.model.fields,field_description:vms.field_fleet_vehicle_supervisor_id
 #: model:ir.model.fields,field_description:vms.field_vms_order_supervisor_id
 msgid "Supervisor"
 msgstr "Supervisor"
@@ -778,34 +700,10 @@ msgid "The order must be open."
 msgstr "La orden debe estar abierta."
 
 #. module: vms
-#: code:addons/vms/models/vms_order.py:255
+#: code:addons/vms/models/vms_order.py:200
 #, python-format
 msgid "The order must have at least one task"
 msgstr "La orden debe tener al menos una tarea."
-
-#. module: vms
-#: code:addons/vms/wizards/vms_wizard_maintenance_order.py:26
-#, python-format
-msgid "The record already has an order assigned"
-msgstr "El registro ya tiene asignado una orden."
-
-#. module: vms
-#: code:addons/vms/wizards/vms_wizard_maintenance_order.py:33
-#, python-format
-msgid "The record must be the same base"
-msgstr "Los registros debe de ser de la misma unidad operativa."
-
-#. module: vms
-#: code:addons/vms/wizards/vms_wizard_maintenance_order.py:30
-#, python-format
-msgid "The records must be of the same unit."
-msgstr "Los registros debe de ser de la misma unidad."
-
-#. module: vms
-#: code:addons/vms/models/vms_vehicle_cycle.py:95
-#, python-format
-msgid "This cycle already has an active order."
-msgstr "Este ciclo ya tiene una orden activa."
 
 #. module: vms
 #: model:ir.ui.view,arch_db:vms.vms_order_form_view
@@ -820,12 +718,11 @@ msgstr "Tipo"
 #. module: vms
 #: model:ir.model.fields,field_description:vms.field_vms_order_unit_id
 #: model:ir.model.fields,field_description:vms.field_vms_report_unit_id
-#: model:ir.model.fields,field_description:vms.field_vms_vehicle_cycle_unit_id
 msgid "Unit"
 msgstr "Unidad"
 
 #. module: vms
-#: code:addons/vms/models/vms_order.py:251
+#: code:addons/vms/models/vms_order.py:196
 #, python-format
 msgid "Unit not available for maintenance because it has more open order(s)."
 msgstr "Unidad no disponible para mantenimiento porque ya tiene más ordenes abierta(s)."
@@ -889,25 +786,9 @@ msgid "VMS Task"
 msgstr "Tarea"
 
 #. module: vms
-#: model:ir.model,name:vms.model_vms_activity_time
-msgid "VMS Time Activities"
-msgstr "Tiempos de Actividades"
-
-#. module: vms
 #: model:ir.model.fields,help:vms.field_hr_employee_mechanic
 msgid "Validates if the employee is mechanic."
 msgstr "Valida si el empleado es un mecánico"
-
-#. module: vms
-#: model:ir.model,name:vms.model_fleet_vehicle
-#: model:ir.ui.view,arch_db:vms.vms_vehicle_cycle_search
-msgid "Vehicle"
-msgstr "Vehículo"
-
-#. module: vms
-#: model:ir.actions.act_window,name:vms.action_vms_vehicle_cycle
-msgid "Vehicle Cycle"
-msgstr "Ciclo"
 
 #. module: vms
 #: code:addons/vms/models/vms_order_line.py:143
@@ -916,15 +797,11 @@ msgid "Verify that purchase order are in done state to continue"
 msgstr "Verifique si la órden de compra se encuentre terminada para continuar."
 
 #. module: vms
-#: code:addons/vms/models/vms_order.py:140
+#: code:addons/vms/models/vms_order.py:135
+#: code:addons/vms/models/vms_report.py:45
 #, python-format
 msgid "Verify that the sequences in the base are assigned"
 msgstr "Verifique la configuración de las secuencias en la unidad operativa."
-
-#. module: vms
-#: model:ir.model,name:vms.model_vms_vehicle_cycle
-msgid "Vms Vehicle Cycle"
-msgstr "Ciclo de la Unidad"
 
 #. module: vms
 #: model:procurement.rule,name:vms.procurement_rule_vms_mto
@@ -938,10 +815,10 @@ msgid "Warehouse"
 msgstr "Almacén"
 
 #. module: vms
-#: code:addons/vms/models/vms_vehicle_cycle.py:87
-#, python-format
-msgid "You must complete the previous maintenance order."
-msgstr "Debe completar la orden de mantenimiento anterior."
+#: model:product.product,name:vms.product_product_vms_02
+#: model:product.template,name:vms.product_product_vms_02_product_template
+msgid "Wheel"
+msgstr "Llanta"
 
 #. module: vms
 #: model:ir.ui.view,arch_db:vms.vms_order_line_form
@@ -974,11 +851,6 @@ msgid "task"
 msgstr "Tarea"
 
 #. module: vms
-#: model:ir.model,name:vms.model_vms_activity
-msgid "vms.activity"
-msgstr "vms.activity"
-
-#. module: vms
 #: model:ir.model,name:vms.model_vms_cycle
 msgid "vms.cycle"
 msgstr "vms.cycle"
@@ -992,4 +864,3 @@ msgstr "vms.program"
 #: model:ir.model,name:vms.model_vms_wizard_maintenance_order
 msgid "vms.wizard.maintenance.order"
 msgstr "vms.wizard.maintenance.order"
-
