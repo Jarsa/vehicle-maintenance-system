@@ -45,5 +45,9 @@
         'demo/hr_emplooye.xml',
         'demo/vms_cycle.xml',
         'demo/vms_program.xml',
+        'demo/ir_sequence.xml',
+        'demo/operating_unit.xml',
+        'demo/fleet_vehicle_model_brand.xml',
+        'demo/fleet_vehicle.xml',
     ]
 }
