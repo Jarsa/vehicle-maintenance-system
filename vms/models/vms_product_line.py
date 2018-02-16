@@ -71,7 +71,7 @@ class VmsProductLine(models.Model):
     def procurement_create(self):
         new_procs = self.env['procurement.order']
         proc_group_obj = self.env["procurement.group"]
-        for line in self:
+        for line in self.filtered(lambda x: not x.external_spare_parts):
             if (line.order_line_id.state != 'process' or not
                     line.product_id._need_procurement()):
                 continue

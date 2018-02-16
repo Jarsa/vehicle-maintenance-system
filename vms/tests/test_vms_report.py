@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# Copyright 2017, Jarsa Sistemas, S.A. de C.V.
+# Copyright 2018, Jarsa Sistemas, S.A. de C.V.
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
 from odoo.exceptions import ValidationError
@@ -19,7 +19,7 @@ class TestVmsReport(TransactionCase):
             'employee_id': self.env.ref('hr.employee_al').id,
         })
 
-    def test_10_create(self):
+    def test_create(self):
         report = self.report
         self.assertEqual(report.name, 'R-MTY0001')
         with self.assertRaisesRegexp(

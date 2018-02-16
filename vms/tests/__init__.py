@@ -4,3 +4,4 @@
 
 from . import test_vms_report
 from . import test_vms_product_line
+from . import test_vms_order
