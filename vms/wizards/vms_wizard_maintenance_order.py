@@ -56,4 +56,4 @@ class VmsWizardMaintenanceOrder(models.TransientModel):
                 _('All record must be of the same Unit'))
         if reports.mapped('order_id'):
             raise ValidationError(
-                _('Al least one record has an order assigned'))
+                _('All least one record has an order assigned'))

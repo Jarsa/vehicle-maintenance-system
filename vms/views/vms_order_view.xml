@@ -70,7 +70,6 @@
                                 <newline/>
                                 <field name="program_id"/>
                                 <newline/>
-                                <field name="sequence"/>
                             </group>
                         </page>
                         <page string="Driver Reports Solved" attrs="{'invisible':[('type','in',(False,'preventive'))]}">

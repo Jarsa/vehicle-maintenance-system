@@ -1,33 +1,46 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <odoo>
-	<record id="product_product_vms_01" model="product.product">
-		<field name="name">Oil</field>
-		<field name="categ_id" ref="product.product_category_5"/>
-		<field name="standard_price">70.0</field>
-		<field name="list_price">79.0</field>
-		<field name="type">consu</field>
-		<field name="uom_id" ref="product.product_uom_litre"/>
-		<field name="uom_po_id" ref="product.product_uom_litre"/>
-		<field name="default_code">E-VMS01</field>
-	</record>
-	<record id="product_product_vms_02" model="product.product">
-		<field name="name">Wheel</field>
-		<field name="categ_id" ref="product.product_category_5"/>
-		<field name="standard_price">70.0</field>
-		<field name="list_price">79.0</field>
-		<field name="type">consu</field>
-		<field name="uom_id" ref="product.product_uom_unit"/>
-		<field name="uom_po_id" ref="product.product_uom_unit"/>
-		<field name="default_code">E-VMS02</field>
-	</record>
-	<record id="product_product_vms_03" model="product.product">
-		<field name="name">Hydraulic Jack</field>
-		<field name="categ_id" ref="product.product_category_5"/>
-		<field name="standard_price">70.0</field>
-		<field name="list_price">79.0</field>
-		<field name="type">consu</field>
-		<field name="uom_id" ref="product.product_uom_unit"/>
-		<field name="uom_po_id" ref="product.product_uom_unit"/>
-		<field name="default_code">E-VMS03</field>
-	</record>
+    <record id="product_product_vms_01" model="product.product">
+        <field name="name">Oil</field>
+        <field name="categ_id" ref="product.product_category_5"/>
+        <field name="standard_price">70.0</field>
+        <field name="list_price">79.0</field>
+        <field name="type">product</field>
+        <field name="uom_id" ref="product.product_uom_litre"/>
+        <field name="uom_po_id" ref="product.product_uom_litre"/>
+        <field name="route_ids" eval="[(4, ref('stock.route_warehouse0_mto'))]"/>
+        <field name="default_code">E-VMS01</field>
+    </record>
+    <record id="product_product_vms_02" model="product.product">
+        <field name="name">Wheel</field>
+        <field name="categ_id" ref="product.product_category_5"/>
+        <field name="standard_price">70.0</field>
+        <field name="list_price">79.0</field>
+        <field name="type">product</field>
+        <field name="uom_id" ref="product.product_uom_unit"/>
+        <field name="uom_po_id" ref="product.product_uom_unit"/>
+        <field name="route_ids" eval="[(4, ref('stock.route_warehouse0_mto'))]"/>
+        <field name="default_code">E-VMS02</field>
+    </record>
+    <record id="product_product_vms_03" model="product.product">
+        <field name="name">Hydraulic Jack</field>
+        <field name="categ_id" ref="product.product_category_5"/>
+        <field name="standard_price">70.0</field>
+        <field name="list_price">79.0</field>
+        <field name="type">product</field>
+        <field name="uom_id" ref="product.product_uom_unit"/>
+        <field name="uom_po_id" ref="product.product_uom_unit"/>
+        <field name="route_ids" eval="[(4, ref('stock.route_warehouse0_mto'))]"/>
+        <field name="default_code">E-VMS03</field>
+    </record>
+    <record id="product_product_vms_04" model="product.product">
+        <field name="name">External Service</field>
+        <field name="categ_id" ref="product.product_category_5"/>
+        <field name="standard_price">70.0</field>
+        <field name="list_price">79.0</field>
+        <field name="type">service</field>
+        <field name="uom_id" ref="product.product_uom_unit"/>
+        <field name="uom_po_id" ref="product.product_uom_unit"/>
+        <field name="default_code">EX-SERV-VMS04</field>
+    </record>
 </odoo>
