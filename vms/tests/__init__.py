@@ -5,3 +5,4 @@
 from . import test_vms_report
 from . import test_vms_product_line
 from . import test_vms_order
+from . import test_vms_wizard_maintenance_order

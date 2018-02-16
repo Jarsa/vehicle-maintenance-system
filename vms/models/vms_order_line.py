@@ -149,11 +149,14 @@ class VmsOrderLine(models.Model):
     def action_cancel(self):
         for rec in self:
             if not rec.external:
-                if self.mapped('spare_part_ids').filtered(
-                        lambda x: x.state == 'done'):
-                    raise ValidationError(
-                        _('Error, you cannot cancel a maintenance order'
-                            ' with done stock moves.'))
+                # That is intended to validate with this code,
+                # because vms.product.line has no status.
+                # ----------------------------------------------
+                # if self.mapped('spare_part_ids').filtered(
+                #         lambda x: x.state == 'done'):
+                #     raise ValidationError(
+                #         _('Error, you cannot cancel a maintenance order'
+                #             ' with done stock moves.'))
                 self.mapped('spare_part_ids').mapped(
                     'procurement_ids').cancel()
             rec.write({
