@@ -32,4 +32,20 @@
         <field name="padding">4</field>
         <field name="number_increment">1</field>
     </record>
+    <record model="ir.sequence" id="order_sequence_4">
+        <field name="name">Order Sequence Main</field>
+        <field name="implementation">no_gap</field>
+        <field name="code">O</field>
+        <field name="prefix">O-Main</field>
+        <field name="padding">4</field>
+        <field name="number_increment">1</field>
+    </record>
+    <record model="ir.sequence" id="report_sequence_4">
+        <field name="name">Report Sequence Main</field>
+        <field name="implementation">no_gap</field>
+        <field name="code">R</field>
+        <field name="prefix">R-Main</field>
+        <field name="padding">4</field>
+        <field name="number_increment">1</field>
+    </record>
 </odoo>

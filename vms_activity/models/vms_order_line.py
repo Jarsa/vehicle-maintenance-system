@@ -48,7 +48,7 @@ class VmsOrderLine(models.Model):
                             'state': 'pending',
                             'priority': rec.priority,
                         })
-        super(VmsOrderLine, self).action_process()
+        return super(VmsOrderLine, self).action_process()
 
     @api.multi
     def get_real_duration(self):
@@ -68,4 +68,4 @@ class VmsOrderLine(models.Model):
     def action_cancel(self):
         for rec in self.filtered(lambda r: not r.external):
             rec.activity_ids.write({'state': 'cancel'})
-        super(VmsOrderLine, self).action_cancel()
+        return super(VmsOrderLine, self).action_cancel()

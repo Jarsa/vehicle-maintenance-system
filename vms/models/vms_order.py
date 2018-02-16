@@ -2,7 +2,7 @@
 # Copyright 2016, Jarsa Sistemas, S.A. de C.V.
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
-from datetime import datetime, timedelta
+from datetime import timedelta
 from odoo import _, api, fields, models
 from odoo.exceptions import ValidationError
 
@@ -54,11 +54,11 @@ class VmsOrder(models.Model):
         'vms.order.line',
         'order_id',
         string='Order Lines',
+        ondelete="casacade",
     )
     program_id = fields.Many2one(
         'vms.program',
         string='Program')
-    sequence = fields.Integer()
     report_ids = fields.Many2many(
         'vms.report',
         string='Report(s)')
@@ -144,8 +144,7 @@ class VmsOrder(models.Model):
                 for line in rec.order_line_ids:
                     if line.state == 'done':
                         sum_time += line.real_duration
-                strp_date = datetime.strptime(
-                    rec.start_date_real, "%Y-%m-%d %H:%M:%S")
+                strp_date = fields.Datetime.from_string(rec.start_date_real)
                 rec.end_date_real = strp_date + timedelta(hours=sum_time)
 
     @api.multi
@@ -157,23 +156,52 @@ class VmsOrder(models.Model):
                 # Preguntar que tenemos que hacer ahora.
             if order.type == 'corrective':
                 for report in order.report_ids:
-                    report.state = 'close'
+                    report.state = 'closed'
             order.state = 'released'
 
     @api.multi
+    def get_tasks_from_cycle(self, cycle_id, order_id):
+        spares = []
+        for cycle in cycle_id:
+            for task in cycle.task_ids:
+                duration = task.duration
+                start_date = fields.Datetime.from_string(fields.Datetime.now())
+                end_date = start_date + timedelta(
+                    hours=duration)
+                for spare_part in task.spare_part_ids:
+                    spares.append((0, False, {
+                        'product_id': spare_part.product_id.id,
+                        'product_qty': spare_part.product_qty,
+                        'product_uom_id': (
+                            spare_part.product_uom_id.id),
+                        'state': 'draft'
+                    }))
+                order_id.order_line_ids += order_id.order_line_ids.new({
+                    'task_id': task.id,
+                    'start_date': start_date,
+                    'duration': duration,
+                    'end_date': end_date,
+                    'spare_part_ids': [line for line in spares],
+                    'order_id': order_id.id
+                })
+            if cycle.cycle_ids:
+                for sub_cycle in cycle.cycle_ids:
+                    order_id.get_tasks_from_cycle(
+                        sub_cycle, order_id)
+            else:
+                break
+
     @api.onchange('type', 'unit_id')
     def _onchange_type(self):
-        for rec in self:
-            if rec.type == 'preventive':
-                rec.program_id = rec.unit_id.program_id
-                rec.current_odometer = rec.unit_id.odometer
-                rec.sequence = rec.unit_id.sequence
-                rec.order_line_ids = False
-            else:
-                rec.program_id = False
-                rec.current_odometer = False
-                rec.sequence = False
-                rec.order_line_ids = False
+        if self.type == 'preventive':
+            self.program_id = self.unit_id.program_id
+            self.current_odometer = self.unit_id.odometer
+            for cycle in self.program_id.cycle_ids:
+                self.get_tasks_from_cycle(cycle, self)
+        else:
+            self.program_id = False
+            self.current_odometer = False
+            self.order_line_ids = False
 
     @api.depends('order_line_ids')
     def _compute_end_date(self):
@@ -182,8 +210,7 @@ class VmsOrder(models.Model):
             if rec.start_date:
                 for line in rec.order_line_ids:
                     sum_time += line.duration
-                strp_date = datetime.strptime(
-                    rec.start_date, "%Y-%m-%d %H:%M:%S")
+                strp_date = fields.Datetime.from_string(rec.start_date)
                 rec.end_date = strp_date + timedelta(hours=sum_time)
 
     @api.multi
@@ -195,7 +222,7 @@ class VmsOrder(models.Model):
             if orders > 0:
                 raise ValidationError(_(
                     'Unit not available for maintenance because it has more '
-                    'open order(s).'))
+                    'open order.'))
             if not rec.order_line_ids:
                 raise ValidationError(_(
                     'The order must have at least one task'))
@@ -210,8 +237,7 @@ class VmsOrder(models.Model):
         for rec in self:
             rec.order_line_ids.action_cancel()
             if rec.type == 'corrective':
-                for report in rec.report_ids:
-                    report.state = 'cancel'
+                rec.report_ids.write({'state': 'pending', })
             rec.state = 'cancel'
 
     @api.multi
@@ -219,12 +245,8 @@ class VmsOrder(models.Model):
         for rec in self:
             rec.state = 'draft'
             if rec.type == 'corrective':
-                for report in rec.report_ids:
-                    report.state = 'draft'
-            for line in rec.order_line_ids:
-                line.state = 'draft'
-                for spare in line.spare_part_ids:
-                    spare.state = 'draft'
+                rec.report_ids.write({'state': 'pending', })
+            rec.order_line_ids.write({'state': 'draft', })
 
     def _prepare_procurement_group(self):
         return {

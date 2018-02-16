@@ -54,7 +54,7 @@ class VmsActivity(models.Model):
                     lambda r: r.state == 'end'):
                 start_date = fields.Datetime.from_string(activity.start_date)
                 end_date = fields.Datetime.from_string(activity.end_date)
-                sum_time += (end_date - start_date).total_seconds()/3600
+                sum_time += (end_date - start_date).total_seconds() / 3600
             rec.total_hours = float("%.2f" % sum_time)
 
     @api.multi

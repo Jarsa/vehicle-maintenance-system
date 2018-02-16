@@ -16,4 +16,7 @@
         <field name="sequence_id" ref="vms.vms_in_sequence"/>
         <field name="sequence" eval="12"/>
      </record>
+     <record id='stock.warehouse0' model='stock.warehouse'>
+         <field name='wh_vms_out_picking_type_id' ref='vms.stock_picking_type_vms_out'/>
+     </record>
 </odoo>

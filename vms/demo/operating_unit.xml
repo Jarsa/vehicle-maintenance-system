@@ -4,8 +4,8 @@
         <field name="name">Guadalajara</field>
         <field name="code">GDL</field>
         <field name="partner_id" ref="base.main_partner"/>
-        <field name="order_sequence_id" ref="order_sequence_3"/>
-        <field name="report_sequence_id" ref="report_sequence_3"/>
+        <field name="order_sequence_id" ref="order_sequence_2"/>
+        <field name="report_sequence_id" ref="report_sequence_2"/>
     </record>
     <record id="operating_unit.b2c_operating_unit" model="operating.unit">
         <field name="name">Monterrey</field>
@@ -13,5 +13,9 @@
         <field name="partner_id" ref="base.main_partner"/>
         <field name="order_sequence_id" ref="order_sequence_3"/>
         <field name="report_sequence_id" ref="report_sequence_3"/>
+    </record>
+    <record id="operating_unit.main_operating_unit" model="operating.unit">
+        <field name="order_sequence_id" ref="order_sequence_4"/>
+        <field name="report_sequence_id" ref="report_sequence_4"/>
     </record>
 </odoo>
