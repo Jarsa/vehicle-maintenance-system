@@ -2,7 +2,7 @@
 # Copyright 2016, Jarsa Sistemas, S.A. de C.V.
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
-from datetime import datetime, timedelta
+from datetime import timedelta
 from odoo import _, api, fields, models
 from odoo.exceptions import ValidationError
 
@@ -58,7 +58,6 @@ class VmsOrder(models.Model):
     program_id = fields.Many2one(
         'vms.program',
         string='Program')
-    sequence = fields.Integer()
     report_ids = fields.Many2many(
         'vms.report',
         string='Report(s)')
@@ -144,8 +143,7 @@ class VmsOrder(models.Model):
                 for line in rec.order_line_ids:
                     if line.state == 'done':
                         sum_time += line.real_duration
-                strp_date = datetime.strptime(
-                    rec.start_date_real, "%Y-%m-%d %H:%M:%S")
+                strp_date = fields.Datetime.from_string(rec.start_date_real)
                 rec.end_date_real = strp_date + timedelta(hours=sum_time)
 
     @api.multi
@@ -167,12 +165,10 @@ class VmsOrder(models.Model):
             if rec.type == 'preventive':
                 rec.program_id = rec.unit_id.program_id
                 rec.current_odometer = rec.unit_id.odometer
-                rec.sequence = rec.unit_id.sequence
                 rec.order_line_ids = False
             else:
                 rec.program_id = False
                 rec.current_odometer = False
-                rec.sequence = False
                 rec.order_line_ids = False
 
     @api.depends('order_line_ids')
@@ -182,8 +178,7 @@ class VmsOrder(models.Model):
             if rec.start_date:
                 for line in rec.order_line_ids:
                     sum_time += line.duration
-                strp_date = datetime.strptime(
-                    rec.start_date, "%Y-%m-%d %H:%M:%S")
+                strp_date = fields.Datetime.from_string(rec.start_date)
                 rec.end_date = strp_date + timedelta(hours=sum_time)
 
     @api.multi
@@ -210,8 +205,7 @@ class VmsOrder(models.Model):
         for rec in self:
             rec.order_line_ids.action_cancel()
             if rec.type == 'corrective':
-                for report in rec.report_ids:
-                    report.state = 'cancel'
+                rec.report_ids.write({'state': 'cancel', })
             rec.state = 'cancel'
 
     @api.multi
@@ -219,12 +213,8 @@ class VmsOrder(models.Model):
         for rec in self:
             rec.state = 'draft'
             if rec.type == 'corrective':
-                for report in rec.report_ids:
-                    report.state = 'draft'
-            for line in rec.order_line_ids:
-                line.state = 'draft'
-                for spare in line.spare_part_ids:
-                    spare.state = 'draft'
+                rec.report_ids.write({'state': 'draft', })
+            rec.order_line_ids.write({'state': 'draft', })
 
     def _prepare_procurement_group(self):
         return {

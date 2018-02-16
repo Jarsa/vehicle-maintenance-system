@@ -2,7 +2,6 @@
 # Copyright 2016, Jarsa Sistemas, S.A. de C.V.
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
-from datetime import datetime
 from datetime import timedelta
 from odoo import _, api, fields, models
 from odoo.exceptions import ValidationError
@@ -83,8 +82,7 @@ class VmsOrderLine(models.Model):
         for rec in self:
             rec.duration = rec.task_id.duration
             if rec.start_date:
-                strp_date = datetime.strptime(
-                    rec.start_date, "%Y-%m-%d %H:%M:%S")
+                strp_date = fields.Datetime.from_string(rec.start_date)
                 rec.end_date = strp_date + timedelta(hours=rec.duration)
             for spare_part in rec.task_id.spare_part_ids:
                 spare = rec.spare_part_ids.new({
@@ -98,23 +96,23 @@ class VmsOrderLine(models.Model):
     def _onchange_duration(self):
         for rec in self:
             if rec.start_date:
-                strp_date = datetime.strptime(
-                    rec.start_date, "%Y-%m-%d %H:%M:%S")
+                strp_date = fields.Datetime.from_string(rec.start_date)
                 rec.end_date = strp_date + timedelta(hours=rec.duration)
 
     @api.depends('start_date_real', 'end_date_real')
     def _compute_real_time_total(self):
         for rec in self:
-            start_date = datetime.strptime(rec.start_date_real, '%Y-%m-%d')
-            end_date = datetime.strptime(rec.end_date_real, '%Y-%m-%d')
+            start_date = fields.Datetime.from_string(rec.start_date_real)
+            end_date = fields.Datetime.from_string(rec.end_date_real)
             total_days = start_date - end_date
             rec.real_time_total = total_days.days
 
     @api.depends('purchase_order_id')
     def _compute_purchase_state(self):
         for rec in self:
-            rec.purchase_state = (rec.purchase_order_id.id and
-                                  rec.purchase_order_id.state == 'done')
+            rec.purchase_state = (
+                rec.purchase_order_id.id and
+                rec.purchase_order_id.state == 'done')
 
     @api.multi
     def action_process(self):
