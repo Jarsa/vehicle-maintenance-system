@@ -23,6 +23,8 @@ class TestVmsOrder(TransactionCase):
             'unit_id': self.unit_id.id,
             'employee_id': self.env.ref('hr.employee_al').id
         })
+        self.service_product = self.env.ref(
+            'product.service_delivery_product_template')
 
     def create_order(self, order_type):
         order = self.env['vms.order'].create({
@@ -77,7 +79,7 @@ class TestVmsOrder(TransactionCase):
 
     def test_create(self):
         order = self.create_order('preventive')
-        self.assertEqual(order.name, 'O-MTY0001')
+        self.assertEqual(order.name, 'O-GDL0001')
         with self.assertRaisesRegexp(
             ValidationError,
                 'Verify that the sequences in the base are assigned'):
@@ -139,6 +141,12 @@ class TestVmsOrder(TransactionCase):
 
     def test_action_open_report(self):
         order_report = self.order_with_reports()
+        order_report.order_line_ids.spare_part_ids.create({
+            'product_id': self.service_product.id,
+            'product_qty': 2.0,
+            'product_uom_id': self.service_product.uom_id.id,
+            'order_line_id': order_report.order_line_ids.id,
+        })
         order_report.action_open()
         self.assertEqual(order_report.report_ids.state, 'pending')
 
@@ -162,3 +170,18 @@ class TestVmsOrder(TransactionCase):
         order.action_released()
         self.assertEqual(order.report_ids.state, 'closed')
         self.assertEqual(order.state, 'released')
+
+    def test_order_pickings(self):
+        order = self.create_order('preventive')
+        order.action_open()
+        order._compute_picking_ids()
+        self.assertTrue(order.picking_ids)
+        order._compute_pickings_count()
+        self.assertEqual(order.pickings_count, 1)
+        picking_action = order.action_view_pickings()
+        self.assertTrue(picking_action)
+        order.action_cancel()
+        order.action_cancel_draft()
+        order.action_open()
+        picking_action = order.action_view_pickings()
+        self.assertTrue(picking_action)

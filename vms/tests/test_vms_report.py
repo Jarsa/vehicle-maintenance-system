@@ -21,7 +21,7 @@ class TestVmsReport(TransactionCase):
 
     def test_create(self):
         report = self.report
-        self.assertEqual(report.name, 'R-MTY0001')
+        self.assertEqual(report.name, 'R-GDL0001')
         with self.assertRaisesRegexp(
             ValidationError,
                 'Verify that the sequences in the base are assigned'):
