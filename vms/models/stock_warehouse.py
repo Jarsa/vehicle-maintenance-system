@@ -21,10 +21,10 @@ class StockWarehouse(models.Model):
                 vals.update({
                     'wh_vms_out_picking_type_id': vms_out_operation_id.id,
                 })
-                res = super(StockWarehouse, self).write(vals)
-                self.get_routes_dict()
+                res = super(StockWarehouse, rec).write(vals)
+                rec.get_routes_dict()
                 return res
-            return super(StockWarehouse, self).write(vals)
+            return super(StockWarehouse, rec).write(vals)
 
     def get_routes_dict(self):
         res = super(StockWarehouse, self).get_routes_dict()

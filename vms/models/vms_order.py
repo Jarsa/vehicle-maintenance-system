@@ -54,6 +54,7 @@ class VmsOrder(models.Model):
         'vms.order.line',
         'order_id',
         string='Order Lines',
+        ondelete="casacade",
     )
     program_id = fields.Many2one(
         'vms.program',
