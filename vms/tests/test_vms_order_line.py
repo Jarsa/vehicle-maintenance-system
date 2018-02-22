@@ -2,46 +2,19 @@
 # Copyright 2018, Jarsa Sistemas, S.A. de C.V.
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
+from datetime import timedelta
+
 from odoo import fields
-from odoo.tests.common import TransactionCase
+from odoo.exceptions import ValidationError
+from .test_vms_order import TestVmsOrder
 
 
-class TestVmsOrderLine(TransactionCase):
+class TestVmsOrderLine(TestVmsOrder):
 
     def setUp(self):
         super(TestVmsOrderLine, self).setUp()
-        self.product = self.env.ref('vms.product_product_vms_02')
-        self.task = self.env.ref('vms.vms_task_01')
-        self.operating_unit = self.env.ref(
-            'operating_unit.b2b_operating_unit')
-        self.unit_id = self.env.ref('vms.vms_fleet_vehicle_01')
-
-    def create_order(self, order_type):
-        order = self.env['vms.order'].create({
-            'operating_unit_id': self.operating_unit.id,
-            'supervisor_id': self.env.ref('vms.vms_hr_employee_01').id,
-            'type': order_type,
-            'program_id': self.env.ref('vms.vms_program_01').id,
-            'unit_id': self.unit_id.id,
-        })
-        duration = self.task.duration
-        start_date = fields.Datetime.from_string(fields.Datetime.now())
-        spares = []
-        for spare_part in self.task.spare_part_ids:
-            spares.append((0, False, {
-                'product_id': spare_part.product_id.id,
-                'product_qty': spare_part.product_qty,
-                'product_uom_id': (
-                    spare_part.product_uom_id.id)
-            }))
-        order.order_line_ids.create({
-            'task_id': self.task.id,
-            'start_date': start_date,
-            'duration': duration,
-            'spare_part_ids': [line for line in spares],
-            'order_id': order.id
-        })
-        return order
+        self.external_service = self.env.ref('vms.product_product_vms_04')
+        self.supplier = self.env.ref('base.res_partner_address_3')
 
     def test_unlink(self):
         order = self.create_order('preventive')
@@ -58,3 +31,79 @@ class TestVmsOrderLine(TransactionCase):
         })
         order_line._onchange_external()
         self.assertFalse(order_line.spare_part_ids)
+
+    def test_onchange_task(self):
+        order = self.create_order('preventive')
+        order_line = order.order_line_ids
+        order_line._onchange_task()
+        self.assertEqual(order_line.duration, .5)
+        self.assertTrue(order_line.spare_part_ids)
+
+    def test_onchange_duration(self):
+        order = self.create_order('preventive')
+        order_line = order.order_line_ids
+        order_line._onchange_duration()
+        end_date = fields.Datetime.to_string(
+            fields.Datetime.from_string(
+                order_line.start_date) + timedelta(hours=self.task.duration))
+        self.assertEqual(order_line.end_date, end_date)
+
+    def test_compute_real_time_total(self):
+        order = self.create_order('preventive')
+        order.action_open()
+        order_line = order.order_line_ids
+        order_line.action_done()
+        order_line.end_date_real = fields.Datetime.to_string(
+            fields.Datetime.from_string(order_line.end_date_real) +
+            timedelta(days=2))
+        order_line._compute_real_time_total()
+        self.assertEqual(order_line.real_time_total, 2)
+
+    def test_create_po(self):
+        order = self.create_order('preventive')
+        order_line = order.order_line_ids
+        order_line.write({
+            'product_id': self.external_service.id,
+            'external': True,
+            'supplier_id': self.supplier.id,
+        })
+        order_line.spare_part_ids.write({
+            'external_spare_parts': True,
+        })
+        order.action_open()
+        order_line.create_po()
+        self.assertTrue(order_line.purchase_order_id)
+        order_line._compute_purchase_state()
+        self.assertFalse(order_line.purchase_state)
+
+    def test_action_process_raise(self):
+        order = self.create_order('preventive')
+        order_line = order.order_line_ids
+        with self.assertRaisesRegexp(
+                ValidationError, 'The order must be open.'):
+            order_line.action_process()
+        order_line.spare_part_ids.unlink()
+        order.action_open()
+        self.assertFalse(order_line.spare_part_ids)
+
+    def test_action_done_raise(self):
+        order = self.create_order('preventive')
+        order_line = order.order_line_ids
+        order_line.write({
+            'product_id': self.external_service.id,
+            'external': True,
+            'supplier_id': self.supplier.id,
+        })
+        order.action_open()
+        order_line.create_po()
+        with self.assertRaisesRegexp(
+                ValidationError,
+                'Verify that purchase order are in done state to continue'):
+            order_line.action_done()
+
+    def test_action_cancel_draft(self):
+        order = self.create_order('preventive')
+        order_line = order.order_line_ids
+        order_line.action_cancel()
+        order_line.action_cancel_draft()
+        self.assertEqual(order_line.state, 'draft')

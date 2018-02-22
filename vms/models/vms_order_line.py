@@ -47,7 +47,8 @@ class VmsOrderLine(models.Model):
         'vms.product.line',
         'order_line_id',
         string='Spare Parts',
-        help='You must save the order to select the mechanic(s).')
+        help='You must save the order to select the mechanic(s).',
+        ondelete="cascade",)
     purchase_order_id = fields.Many2one(
         'purchase.order',
         string='Purchase Order',
@@ -104,7 +105,7 @@ class VmsOrderLine(models.Model):
         for rec in self:
             start_date = fields.Datetime.from_string(rec.start_date_real)
             end_date = fields.Datetime.from_string(rec.end_date_real)
-            total_days = start_date - end_date
+            total_days = end_date - start_date
             rec.real_time_total = total_days.days
 
     @api.depends('purchase_order_id')
