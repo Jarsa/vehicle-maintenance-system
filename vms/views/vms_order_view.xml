@@ -9,6 +9,7 @@
                 <field name="name"/>
                 <field name="supervisor_id"/>
                 <field name="date"/>
+                <field name="unit_id"/>
                 <field name="current_odometer"/>
                 <field name="warehouse_id"/>
                 <field name="start_date"/>
