@@ -58,9 +58,12 @@ var VmsKioskTaskHandler = Widget.extend({
             name: _t('Mechanic Tasks Kiosk Mode'),
             tag: 'vms_kiosk_barcode_employee_entry',
         };
+        var options = {
+            clear_breadcrumbs: true,
+        }
         this.stop_clock();
         this.stop_inactivity_detection();
-        this.do_action(action);
+        this.do_action(action, options);
     },
     render_task: function() {
         this.$el.html(QWeb.render("VmsKioskTaskHandler", {

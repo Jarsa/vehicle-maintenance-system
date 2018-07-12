@@ -19,7 +19,8 @@ class FleetVehicle(models.Model):
         'Distance Average', required=True,
         compute="_compute_distance_averange",
     )
-    supervisor_id = fields.Many2one('hr.employee', 'Supervisor')
+    supervisor_id = fields.Many2one(
+        'hr.employee', 'Supervisor', domain=[('mechanic', '=', True)],)
 
     @api.model
     def cron_vehicle_maintenance(self):

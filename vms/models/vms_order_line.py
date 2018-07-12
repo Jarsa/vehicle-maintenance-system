@@ -82,6 +82,7 @@ class VmsOrderLine(models.Model):
     def _onchange_task(self):
         for rec in self:
             rec.duration = rec.task_id.duration
+            rec.spare_part_ids = {}
             if rec.start_date:
                 strp_date = fields.Datetime.from_string(rec.start_date)
                 rec.end_date = strp_date + timedelta(hours=rec.duration)

@@ -26,7 +26,8 @@ class VmsReport(models.Model):
     employee_id = fields.Many2one(
         'hr.employee',
         required=True,
-        string='Driver')
+        string='Driver',
+        domain=[('mechanic', '=', True)],)
     end_date = fields.Datetime()
     state = fields.Selection(
         [('pending', 'Pending'),
