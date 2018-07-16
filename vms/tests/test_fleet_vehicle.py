@@ -44,3 +44,10 @@ class TestFleetVehicle(TransactionCase):
         mail = self.env['mail.message'].search(
             [('res_id', '=', order.id)])
         self.assertTrue(mail)
+
+    def test_cron_vehicle_maintenance_raise(self):
+        self.unit_id._compute_distance_averange()
+        self.supervisor.address_home_id = False
+        self.unit_id.cron_vehicle_maintenance()
+        order = self.env['vms.order'].search([])
+        self.assertEqual(len(order.message_ids), 2, 'error in supervisor')

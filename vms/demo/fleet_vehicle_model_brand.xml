@@ -2,11 +2,11 @@
 <odoo>
     <record id="fleet_vehicle_model_brand_kenworth" model="fleet.vehicle.model.brand">
         <field name="name">Kenworth</field>
-        <field name="image" type="base64" file="tms/static/src/img/brand_kenworth-image.png"/>
+        <field name="image" type="base64" file="vms/static/src/img/brand_kenworth-image.png"/>
     </record>
     <record id="fleet_vehicle_model_brand_trailking" model="fleet.vehicle.model.brand">
         <field name="name">Trail King</field>
-        <field name="image" type="base64" file="tms/static/src/img/brand_trailking-image.png"/>
+        <field name="image" type="base64" file="vms/static/src/img/brand_trailking-image.png"/>
     </record>
     <record id="fleet_vehicle_model_t800" model="fleet.vehicle.model">
         <field name="name">T800</field>
