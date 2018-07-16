@@ -58,6 +58,8 @@ class VmsOrderLine(models.Model):
         compute='_compute_purchase_state')
     order_id = fields.Many2one('vms.order', string='Order', readonly=True)
     real_time_total = fields.Integer()
+    create_purchase_order = fields.Boolean(
+        compute='_compute_create_purchase_order')
 
     @api.multi
     def unlink(self):
@@ -115,6 +117,13 @@ class VmsOrderLine(models.Model):
                 rec.purchase_order_id.id and
                 rec.purchase_order_id.state == 'done')
 
+    @api.depends('spare_part_ids')
+    def _compute_create_purchase_order(self):
+        for rec in self:
+            rec.create_purchase_order = bool(
+                rec.spare_part_ids.filtered(
+                    lambda x: x.external_spare_parts))
+
     @api.multi
     def action_process(self):
         for rec in self:
@@ -128,6 +137,7 @@ class VmsOrderLine(models.Model):
                 if not rec.spare_part_ids:
                     return True
                 rec.spare_part_ids.procurement_create()
+        return True
 
     @api.multi
     def get_real_duration(self):

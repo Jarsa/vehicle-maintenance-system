@@ -5,8 +5,7 @@
 from __future__ import division
 
 from datetime import timedelta
-
-from odoo import api, fields, models
+from odoo import _, api, fields, models
 
 
 class FleetVehicle(models.Model):
@@ -48,15 +47,23 @@ class FleetVehicle(models.Model):
                             'program_id': vehicle.program_id.id,
 
                         })
-                        mail_invite = follower.with_context({
-                            'default_res_model': 'vms.order',
-                            'default_res_id': new_order.id
-                        }).create({
-                            'partner_ids': [(
-                                4, vehicle.supervisor_id.address_home_id.id)],
-                            'send_mail': True,
-                        })
-                        mail_invite.add_followers()
+                        new_order.get_tasks_from_cycle(cycle, new_order)
+                        if vehicle.supervisor_id.address_home_id.id:
+                            mail_invite = follower.with_context({
+                                'default_res_model': 'vms.order',
+                                'default_res_id': new_order.id
+                            }).create({
+                                'partner_ids': [(
+                                    4, vehicle.supervisor_id.address_home_id.id
+                                    )],
+                                'send_mail': True,
+                            })
+                            mail_invite.add_followers()
+                        else:
+                            msg = (_('The supervisor was not added as '
+                                     'a document follower because does '
+                                     'not have a home_address assigned'))
+                            new_order.message_post(body=msg)
                     else:
                         order_date = (
                             time.from_string(order.date) -

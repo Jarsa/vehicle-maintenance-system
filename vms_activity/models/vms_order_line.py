@@ -63,6 +63,7 @@ class VmsOrderLine(models.Model):
                     raise ValidationError(
                         _('All the activities must be finished.'))
             rec.real_duration = duration_sum
+        return True
 
     @api.multi
     def action_cancel(self):
