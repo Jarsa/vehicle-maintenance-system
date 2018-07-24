@@ -31,7 +31,6 @@ class VmsOrder(models.Model):
         'stock.warehouse',
         string='Warehouse',
         required=True,
-        readonly=True,
         default=lambda self: self._default_warehouse_id(),)
     start_date = fields.Datetime(
         required=True,
