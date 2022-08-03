@@ -1,24 +1,24 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8" ?>
 <odoo>
     <record id="vms_order_tree_view" model="ir.ui.view">
         <field name="name">vms.order.tree</field>
         <field name="priority">2</field>
         <field name="model">vms.order</field>
         <field name="arch" type="xml">
-            <tree string="order">
-                <field name="name"/>
-                <field name="supervisor_id"/>
-                <field name="date"/>
-                <field name="unit_id"/>
-                <field name="current_odometer"/>
-                <field name="warehouse_id"/>
-                <field name="start_date"/>
-                <field name="end_date"/>
-                <field name="start_date_real"/>
-                <field name="end_date_real"/>
-                <field name="program_id"/>
-                <field name="report_ids"/>
-                <field name="state"/>
+            <tree>
+                <field name="name" />
+                <field name="supervisor_id" />
+                <field name="date" />
+                <field name="unit_id" />
+                <field name="current_odometer" />
+                <field name="warehouse_id" />
+                <field name="start_date" />
+                <field name="end_date" />
+                <field name="start_date_real" />
+                <field name="end_date_real" />
+                <field name="program_id" />
+                <field name="report_ids" />
+                <field name="state" />
             </tree>
         </field>
     </record>
@@ -29,86 +29,169 @@
         <field name="arch" type="xml">
             <form string="Order of Maintenance">
                 <header>
-                    <button name="action_cancel_draft" states="cancel" string="Set to Draft" type="object"/>
-                    <button icon="fa-arrow-right" class="oe_highlight" name="action_open" states="draft" string="Open" type="object"/>
-                    <button icon="fa-check-square-o" class="oe_highlight" name="action_released" states="open" string="Released" type="object"/>
-                    <button icon="fa-times" name="action_cancel" states="draft,open" string="Cancel" type="object" confirm="Are you sure to cancel this order? All the task(s) will cancel too."/>
-                    <field name="state" statusbar_visible="draft,open,released" widget="statusbar"/>
+                    <button
+                        name="action_cancel_draft"
+                        states="cancel"
+                        string="Set to Draft"
+                        type="object"
+                    />
+                    <button
+                        icon="fa-arrow-right"
+                        class="oe_highlight"
+                        name="action_open"
+                        states="draft"
+                        string="Open"
+                        type="object"
+                    />
+                    <button
+                        icon="fa-check-square-o"
+                        class="oe_highlight"
+                        name="action_released"
+                        states="open"
+                        string="Released"
+                        type="object"
+                    />
+                    <button
+                        icon="fa-times"
+                        name="action_cancel"
+                        states="draft,open"
+                        string="Cancel"
+                        type="object"
+                        confirm="Are you sure to cancel this order? All the task(s) will cancel too."
+                    />
+                    <field
+                        name="state"
+                        statusbar_visible="draft,open,released"
+                        widget="statusbar"
+                    />
                 </header>
                 <sheet>
                     <div class="oe_button_box" name="button_box">
-                        <button name="action_view_pickings" type="object" class="oe_stat_button" icon="fa-truck" attrs="{'invisible': [('pickings_count', '=', 0)]}">
-                            <field name="pickings_count" widget="statinfo" string="Pickings"/>
+                        <button
+                            name="action_view_pickings"
+                            type="object"
+                            class="oe_stat_button"
+                            icon="fa-truck"
+                            attrs="{'invisible': [('pickings_count', '=', 0)]}"
+                        >
+                            <field
+                                name="pickings_count"
+                                widget="statinfo"
+                                string="Pickings"
+                            />
                         </button>
                     </div>
                     <h1 class="oe_title">
-                        <label attrs="{'invisible':[('name','=', False)]}" class="oe_inline" string="Service Order - " style="font-size:30px;"/>
-                        <field name="name" readonly="1"/>
+                        <label
+                            attrs="{'invisible':[('name', '=',  False)]}"
+                            class="oe_inline"
+                            string="Service Order - "
+                            style="font-size:30px;"
+                            for="name"
+                        />
+                        <field name="name" readonly="1" />
                     </h1>
-                    <group col="4">
-                        <field name='operating_unit_id'/>
-                        <field name="date"/>
-                        <field name="unit_id"/>
-                        <field name="warehouse_id"/>
-                        <field name="type"/>
-                        <field name="supervisor_id" required="1" options="{'no_quick_create': True, 'no_create_edit' : True}"/>
+                    <group col="4" name="details">
+                        <field name="date" />
+                        <field name="unit_id" />
+                        <field name="warehouse_id" />
+                        <field name="type" />
+                        <field
+                            name="supervisor_id"
+                            required="1"
+                            options="{'no_quick_create': True, 'no_create_edit' : True}"
+                        />
                     </group>
                     <notebook>
                         <page string="Service Order Detail">
                             <group col="4" string="Times">
-                                <field name="start_date"/>
-                                <field attrs="{'invisible': [('start_date_real', '=', False)]}" name="start_date_real"/>
-                                <field name="end_date"/>
-                                <field attrs="{'invisible': [('start_date_real', '=', False)]}" name="end_date_real"/>
+                                <field name="start_date" />
+                                <field
+                                    attrs="{'invisible': [('start_date_real', '=', False)]}"
+                                    name="start_date_real"
+                                />
+                                <field name="end_date" />
+                                <field
+                                    attrs="{'invisible': [('start_date_real', '=', False)]}"
+                                    name="end_date_real"
+                                />
                             </group>
-                            <group string="Tasks" attrs="{'invisible':[('name', '=', False)]}">
-                                <field context="{'default_order_id': active_id}" name="order_line_ids" nolabel="1"/>
+                            <group
+                                string="Tasks"
+                                attrs="{'invisible':[('name', '=', False)]}"
+                            >
+                                <field
+                                    context="{'default_order_id': active_id}"
+                                    name="order_line_ids"
+                                    nolabel="1"
+                                />
                             </group>
                         </page>
-                        <page string="MRO Program Details" attrs="{'invisible':[('type','in',(False,'corrective'))]}">
+                        <page
+                            string="MRO Program Details"
+                            attrs="{'invisible':[('type','in',(False,'corrective'))]}"
+                        >
                             <group>
-                                <field name="current_odometer"/>
-                                <newline/>
-                                <field name="program_id"/>
-                                <newline/>
+                                <field name="current_odometer" />
+                                <newline />
+                                <field name="program_id" />
+                                <newline />
                             </group>
                         </page>
-                        <page string="Driver Reports Solved" attrs="{'invisible':[('type','in',(False,'preventive'))]}">
-                            <field name="report_ids" nolabel="1" domain="[('state','=','confirmed')]">
-                                <tree string='description'>
-                                    <field name="name"/>
-                                    <field name="unit_id"/>
-                                    <field name="date"/>
-                                    <field name="employee_id"/>
-                                    <field name="state"/>
+                        <page
+                            string="Driver Reports Solved"
+                            attrs="{'invisible':[('type','in',(False,'preventive'))]}"
+                        >
+                            <field
+                                name="report_ids"
+                                nolabel="1"
+                                domain="[('state', '=', 'confirmed')]"
+                            >
+                                <tree>
+                                    <field name="name" />
+                                    <field name="unit_id" />
+                                    <field name="date" />
+                                    <field name="employee_id" />
+                                    <field name="state" />
                                 </tree>
                             </field>
                         </page>
                     </notebook>
                 </sheet>
                 <div class="oe_chatter">
-                    <field name="message_follower_ids" widget="mail_followers"/>
-                    <field name="message_ids" widget="mail_thread"/>
+                    <field name="message_follower_ids" widget="mail_followers" />
+                    <field name="message_ids" widget="mail_thread" />
                 </div>
             </form>
         </field>
     </record>
-    <record model='ir.ui.view' id='vms_order_calendar_view'>
-        <field name='name'>VMS Order Calendar View</field>
-        <field name='model'>vms.order</field>
-        <field name='arch' type='xml'>
-            <calendar string="Orders Calendar" date_start="start_date" date_stop="end_date" color="unit_id">
-                <field name="name"/>
-                <field name="unit_id"/>
+    <record model="ir.ui.view" id="vms_order_calendar_view">
+        <field name="name">VMS Order Calendar View</field>
+        <field name="model">vms.order</field>
+        <field name="arch" type="xml">
+            <calendar
+                string="Orders Calendar"
+                date_start="start_date"
+                date_stop="end_date"
+                color="unit_id"
+            >
+                <field name="name" />
+                <field name="unit_id" />
             </calendar>
         </field>
     </record>
-    <record model='ir.ui.view' id='vms_order_gantt_view'>
-        <field name='name'>VMS Order Gantt View</field>
-        <field name='model'>vms.order</field>
-        <field name='arch' type='xml'>
-            <gantt string="Orders Gantt" date_start="start_date" date_stop="end_date" color="unit_id" default_group_by="unit_id">
-                <field name="name"/>
+    <record model="ir.ui.view" id="vms_order_gantt_view">
+        <field name="name">VMS Order Gantt View</field>
+        <field name="model">vms.order</field>
+        <field name="arch" type="xml">
+            <gantt
+                string="Orders Gantt"
+                date_start="start_date"
+                date_stop="end_date"
+                color="unit_id"
+                default_group_by="unit_id"
+            >
+                <field name="name" />
             </gantt>
         </field>
     </record>
@@ -116,8 +199,12 @@
         <field name="name">Order</field>
         <field name="type">ir.actions.act_window</field>
         <field name="res_model">vms.order</field>
-        <field name="view_type">form</field>
         <field name="view_mode">tree,form,calendar,gantt</field>
     </record>
-    <menuitem action="action_vms_order" id="vms_order_menu" parent="menu_vms_maintenance" sequence="10"/>
+    <menuitem
+        action="action_vms_order"
+        id="vms_order_menu"
+        parent="menu_vms_maintenance"
+        sequence="10"
+    />
 </odoo>

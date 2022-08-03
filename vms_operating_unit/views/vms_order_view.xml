@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="vms_order_view_form" model="ir.ui.view">
+        <field name="name">vms.order.view.form</field>
+        <field name="model">vms.order</field>
+        <field name="inherit_id" ref="vms.vms_order_form_view" />
+        <field name="arch" type="xml">
+            <xpath
+                expr="//group[@name='details']/field[@name='date']"
+                position="before"
+            >
+                <field
+                    name="operating_unit_id"
+                    groups="operating_unit.group_multi_operating_unit"
+                />
+            </xpath>
+        </field>
+    </record>
+</odoo>

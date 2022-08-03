@@ -1,19 +1,27 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8" ?>
 <odoo>
     <record id="vms_fleet_maintenance_form_view" model="ir.ui.view">
         <field name="name">VMS Fleet Maintenance Form View</field>
         <field name="model">fleet.vehicle</field>
         <field name="type">form</field>
-        <field name="inherit_id" ref="fleet.fleet_vehicle_view_form"/>
+        <field name="inherit_id" ref="fleet.fleet_vehicle_view_form" />
         <field name="arch" type="xml">
-            <xpath expr="//sheet/group[2]" position="after">
-                <group coslpan="2" string="Maintenance Program">
-                    <field name="program_id"/>
-                    <field name="distance"/>
-                    <field name="supervisor_id"></field>
-                </group>
+            <xpath expr="//notebook" position="inside">
+                <page string="Maintenance Program" name="maintenance">
+                    <group>
+                        <field name="program_id" />
+                        <field name="distance" />
+                        <field name="supervisor_id" />
+                    </group>
+                </page>
             </xpath>
         </field>
     </record>
-    <menuitem action="fleet.fleet_vehicle_action" id="vms_fleet_vehicle_menu" name="Units" parent="menu_vms_settings" sequence="10"/>
+    <menuitem
+        action="fleet.fleet_vehicle_action"
+        id="vms_fleet_vehicle_menu"
+        name="Units"
+        parent="menu_vms_settings"
+        sequence="10"
+    />
 </odoo>

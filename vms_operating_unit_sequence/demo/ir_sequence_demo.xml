@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <record id="main_ou_order_sequence" model="ir.sequence">
+        <field name="name">Main OU Order Sequence</field>
+        <field name="prefix">MO-OU1-</field>
+        <field eval="1" name="number_next" />
+        <field eval="1" name="number_increment" />
+        <field name="padding">5</field>
+    </record>
+    <record id="main_ou_report_sequence" model="ir.sequence">
+        <field name="name">Main OU Report Sequence</field>
+        <field name="prefix">R-OU1-</field>
+        <field eval="1" name="number_next" />
+        <field eval="1" name="number_increment" />
+        <field name="padding">5</field>
+    </record>
+    <record id="b2b_order_sequence" model="ir.sequence">
+        <field name="name">B2B Order Sequence</field>
+        <field name="prefix">MO-B2B-</field>
+        <field eval="1" name="number_next" />
+        <field eval="1" name="number_increment" />
+        <field name="padding">5</field>
+    </record>
+    <record id="b2b_report_sequence" model="ir.sequence">
+        <field name="name">B2B Report Sequence</field>
+        <field name="prefix">R-B2B-</field>
+        <field eval="1" name="number_next" />
+        <field eval="1" name="number_increment" />
+        <field name="padding">5</field>
+    </record>
+    <record id="b2c_order_sequence" model="ir.sequence">
+        <field name="name">B2C Order Sequence</field>
+        <field name="prefix">MO-B2C-</field>
+        <field eval="1" name="number_next" />
+        <field eval="1" name="number_increment" />
+        <field name="padding">5</field>
+    </record>
+    <record id="b2c_report_sequence" model="ir.sequence">
+        <field name="name">B2C Report Sequence</field>
+        <field name="prefix">R-B2C-</field>
+        <field eval="1" name="number_next" />
+        <field eval="1" name="number_increment" />
+        <field name="padding">5</field>
+    </record>
+</odoo>

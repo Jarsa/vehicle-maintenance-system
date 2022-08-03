@@ -1,17 +1,17 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8" ?>
 <odoo>
     <record model="ir.sequence" id="order_sequence">
         <field name="name">Order Sequence</field>
-        <field name="implementation">no_gap</field>
-        <field name="code">O</field>
+        <field name="implementation">standard</field>
+        <field name="code">vms.order</field>
         <field name="prefix">O</field>
         <field name="padding">4</field>
         <field name="number_increment">1</field>
     </record>
     <record model="ir.sequence" id="report_sequence">
         <field name="name">Report Sequence</field>
-        <field name="implementation">no_gap</field>
-        <field name="code">R</field>
+        <field name="implementation">standard</field>
+        <field name="code">vms.report</field>
         <field name="prefix">R</field>
         <field name="padding">4</field>
         <field name="number_increment">1</field>

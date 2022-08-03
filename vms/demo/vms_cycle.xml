@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8" ?>
 <odoo>
     <record id="vms_cycle_03" model="vms.cycle">
         <field name="name">Cycle C</field>
@@ -7,14 +7,14 @@
     <record id="vms_cycle_01" model="vms.cycle">
         <field name="name">Cycle A</field>
         <field name="frequency">500</field>
-        <field name="task_ids" eval="[(4,ref('vms.vms_task_01'))]"></field>
-        <field name="cycle_ids" eval="[(4, ref('vms_cycle_03'))]"></field>
+        <field name="task_ids" eval="[(4,ref('vms.vms_task_01'))]" />
+        <field name="cycle_ids" eval="[(4, ref('vms_cycle_03'))]" />
     </record>
     <record id="vms_cycle_02" model="vms.cycle">
         <field name="name">Cycle B</field>
         <field name="frequency">1000</field>
-        <field name="task_ids" eval="[(4,ref('vms.vms_task_02'))]"></field>
-        <field name="cycle_ids" eval="[(4, ref('vms_cycle_01'))]"></field>
+        <field name="task_ids" eval="[(4,ref('vms.vms_task_02'))]" />
+        <field name="cycle_ids" eval="[(4, ref('vms_cycle_01'))]" />
     </record>
     <record id="vms_cycle_04" model="vms.cycle">
         <field name="name">Cycle D</field>
