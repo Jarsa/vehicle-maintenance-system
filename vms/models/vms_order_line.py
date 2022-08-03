@@ -56,7 +56,7 @@ class VmsOrderLine(models.Model):
 
     def unlink(self):
         self.spare_part_ids.unlink()
-        return super(VmsOrderLine, self).unlink()
+        return super().unlink()
 
     @api.onchange("external")
     def _onchange_external(self):

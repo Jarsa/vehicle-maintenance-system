@@ -55,12 +55,12 @@ class VmsOrderLine(models.Model):
                                 "priority": rec.priority,
                             }
                         )
-        return super(VmsOrderLine, self).action_process()
+        return super().action_process()
 
     def get_real_duration(self):
         for rec in self:
             if not rec.activity_ids:
-                return super(VmsOrderLine, self).get_real_duration()
+                return super().get_real_duration()
             duration_sum = 0.0
             for activity in rec.activity_ids:
                 if activity.state == "end":
@@ -73,4 +73,4 @@ class VmsOrderLine(models.Model):
     def action_cancel(self):
         for rec in self.filtered(lambda r: not r.external):
             rec.activity_ids.write({"state": "cancel"})
-        return super(VmsOrderLine, self).action_cancel()
+        return super().action_cancel()

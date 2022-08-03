@@ -10,7 +10,7 @@ from odoo.tests.common import TransactionCase
 
 class TestVmsActivity(TransactionCase):
     def setUp(self):
-        super(TestVmsActivity, self).setUp()
+        super().setUp()
         self.operating_unit = self.env.ref("operating_unit.b2b_operating_unit")
         self.unit_id = self.env.ref("vms.vms_fleet_vehicle_01")
         self.program = self.env.ref("vms.vms_program_01")

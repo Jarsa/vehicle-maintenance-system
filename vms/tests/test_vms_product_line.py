@@ -6,7 +6,7 @@ from odoo.tests.common import TransactionCase
 
 class TestVmsProductLine(TransactionCase):
     def setUp(self):
-        super(TestVmsProductLine, self).setUp()
+        super().setUp()
         self.product = self.env.ref("vms.product_product_vms_02")
         self.vms_prod_line = self.env.ref("vms.vms_product_line_01")
 

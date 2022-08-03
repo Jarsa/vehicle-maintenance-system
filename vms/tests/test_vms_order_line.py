@@ -11,7 +11,7 @@ from .test_vms_order import TestVmsOrder
 
 class TestVmsOrderLine(TestVmsOrder):
     def setUp(self):
-        super(TestVmsOrderLine, self).setUp()
+        super().setUp()
         self.external_service = self.env.ref("vms.product_product_vms_04")
         self.supplier = self.env.ref("base.res_partner_address_3")
 

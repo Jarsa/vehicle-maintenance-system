@@ -11,7 +11,7 @@ class VmsWizardMaintenanceOrder(models.TransientModel):
 
     @api.model
     def default_get(self, default_fields):
-        res = super(VmsWizardMaintenanceOrder, self).default_get(default_fields)
+        res = super().default_get(default_fields)
         report_ids = self._context.get("active_ids")
         reports = self.env["vms.report"].browse(report_ids)
         self.validate(reports)

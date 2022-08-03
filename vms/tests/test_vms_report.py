@@ -6,7 +6,7 @@ from odoo.tests.common import TransactionCase
 
 class TestVmsReport(TransactionCase):
     def setUp(self):
-        super(TestVmsReport, self).setUp()
+        super().setUp()
 
         self.report = self.env["vms.report"].create(
             {
