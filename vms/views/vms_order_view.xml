@@ -67,6 +67,19 @@
                 <sheet>
                     <div class="oe_button_box" name="button_box">
                         <button
+                            name="action_view_purchase_orders"
+                            type="object"
+                            class="oe_stat_button"
+                            icon="fa-credit-card"
+                            attrs="{'invisible': [('purchase_count', '=', 0)]}"
+                        >
+                            <field
+                                name="purchase_count"
+                                widget="statinfo"
+                                string="Purchase Order(s)"
+                            />
+                        </button>
+                        <button
                             name="action_view_pickings"
                             type="object"
                             class="oe_stat_button"

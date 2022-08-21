@@ -33,6 +33,7 @@ class VmsOrderLine(models.Model):
         "order_line_id",
         string="Spare Parts",
         help="You must save the order to select the mechanic(s).",
+        copy=True,
     )
     order_id = fields.Many2one("vms.order", readonly=True, ondelete="cascade")
     company_id = fields.Many2one(related="order_id.company_id", store=True)
@@ -41,6 +42,7 @@ class VmsOrderLine(models.Model):
     def _prepare_spare_part_ids(self, spare_part):
         return {
             "product_id": spare_part.product_id.id,
+            "name": spare_part.product_id.display_name,
             "product_qty": spare_part.product_qty,
             "product_uom_id": spare_part.product_uom_id.id,
         }
@@ -53,7 +55,7 @@ class VmsOrderLine(models.Model):
             if self.start_date
             else False
         )
-        spare_part_ids = []
+        spare_part_ids = [(5, 0, 0)]
         for spare_part in self.task_id.spare_part_ids:
             spare_part_ids.append((0, 0, self._prepare_spare_part_ids(spare_part)))
         self.update(

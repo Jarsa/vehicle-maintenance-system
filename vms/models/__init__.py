@@ -10,3 +10,8 @@ from . import vms_product_line
 from . import vms_program
 from . import vms_task
 from . import stock_picking
+from . import stock_move
+from . import procurement_group
+from . import stock_location_route
+from . import stock_rule
+from . import purchase_order

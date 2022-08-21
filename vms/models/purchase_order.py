@@ -5,8 +5,8 @@ from odoo import fields, models
 from odoo.tools.sql import column_exists, create_column
 
 
-class StockPicking(models.Model):
-    _inherit = "stock.picking"
+class PurchaseOrder(models.Model):
+    _inherit = "purchase.order"
 
     vms_order_id = fields.Many2one(
         related="group_id.vms_order_id",
@@ -23,6 +23,6 @@ class StockPicking(models.Model):
         Since group_id.vms_order_id is created in this module,
         no need for an UPDATE statement.
         """
-        if not column_exists(self.env.cr, "stock_picking", "vms_order_id"):
-            create_column(self.env.cr, "stock_picking", "vms_order_id", "int4")
+        if not column_exists(self.env.cr, "purchase_order", "vms_order_id"):
+            create_column(self.env.cr, "purchase_order", "vms_order_id", "int4")
         return super()._auto_init()

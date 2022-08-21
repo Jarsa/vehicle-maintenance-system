@@ -75,7 +75,9 @@
                                 <field name="spare_part_ids" nolabel="1">
                                     <tree editable="bottom">
                                         <field name="product_id" />
+                                        <field name="name" />
                                         <field name="product_qty" />
+                                        <field name="route_id" optional="hide" />
                                         <field name="product_uom_id" />
                                     </tree>
                                 </field>

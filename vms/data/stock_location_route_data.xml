@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo noupdate="1">
+    <record id="route_vms" model="stock.location.route">
+        <field name="name">VMS: Production Request from Stock</field>
+        <field name="company_id" ref="base.main_company" />
+        <field name="warehouse_selectable" eval="True" />
+        <field name="product_selectable" eval="False" />
+        <field name="warehouse_ids" eval="[(4, ref('stock.warehouse0'))]" />
+        <field name="sequence">100</field>
+    </record>
+</odoo>

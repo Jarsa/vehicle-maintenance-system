@@ -12,7 +12,7 @@ class VmsOrder(models.Model):
     _inherit = ["mail.thread", "mail.activity.mixin"]
     _name = "vms.order"
 
-    name = fields.Char(string="Order Number", readonly=True)
+    name = fields.Char(string="Order Number", readonly=True, copy=False)
     supervisor_id = fields.Many2one(
         "hr.employee",
         string="Supervisor",
@@ -52,6 +52,7 @@ class VmsOrder(models.Model):
         "vms.order.line",
         "order_id",
         string="Order Lines",
+        copy=True,
     )
     program_id = fields.Many2one("vms.program")
     state = fields.Selection(
@@ -64,6 +65,7 @@ class VmsOrder(models.Model):
         readonly=True,
         default="draft",
         tracking=True,
+        copy=False,
     )
     unit_id = fields.Many2one("fleet.vehicle", required=True)
     picking_ids = fields.One2many(
@@ -73,8 +75,18 @@ class VmsOrder(models.Model):
         copy=False,
     )
     picking_count = fields.Integer(
-        string="Delivery Orders",
+        string="Delivery Order Count",
         compute="_compute_picking_count",
+    )
+    purchase_ids = fields.One2many(
+        "purchase.order",
+        "vms_order_id",
+        string="Purchase Order(s)",
+        copy=False,
+    )
+    purchase_count = fields.Integer(
+        string="Purchase Order Count",
+        compute="_compute_purchase_count",
     )
     procurement_group_id = fields.Many2one(
         "procurement.group",
@@ -114,6 +126,23 @@ class VmsOrder(models.Model):
         elif pickings:
             action["views"] = [(self.env.ref("stock.view_picking_form").id, "form")]
             action["res_id"] = pickings.id
+        return action
+
+    @api.depends("purchase_ids")
+    def _compute_purchase_count(self):
+        for rec in self:
+            rec.purchase_count = len(rec.purchase_ids)
+
+    def action_view_purchase_orders(self):
+        action = self.env["ir.actions.actions"]._for_xml_id("purchase.purchase_rfq")
+        purchase_orders = self.mapped("purchase_ids")
+        if len(purchase_orders) > 1:
+            action["domain"] = [("id", "in", purchase_orders.ids)]
+        elif purchase_orders:
+            action["views"] = [
+                (self.env.ref("purchase.purchase_order_form").id, "form")
+            ]
+            action["res_id"] = purchase_orders.id
         return action
 
     @api.model
