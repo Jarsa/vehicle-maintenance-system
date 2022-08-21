@@ -77,7 +77,7 @@ class VmsOrder(models.Model):
     )
     picking_count = fields.Integer(
         string="Delivery Orders",
-        compute="_compute_pickings_count",
+        compute="_compute_picking_count",
     )
     procurement_group_id = fields.Many2one(
         "procurement.group",

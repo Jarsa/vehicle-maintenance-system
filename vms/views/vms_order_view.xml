@@ -91,40 +91,48 @@
                         />
                         <field name="name" readonly="1" />
                     </h1>
-                    <group col="4" name="details">
-                        <field name="date" />
-                        <field name="unit_id" />
-                        <field name="warehouse_id" />
-                        <field name="type" />
-                        <field
-                            name="supervisor_id"
-                            required="1"
-                            options="{'no_quick_create': True, 'no_create_edit' : True}"
-                        />
+                    <group name="details">
+                        <group>
+                            <field name="unit_id" />
+                            <field name="type" />
+                        </group>
+                        <group>
+                            <field name="date" />
+                            <field
+                                name="supervisor_id"
+                                required="1"
+                                options="{'no_quick_create': True, 'no_create_edit' : True}"
+                            />
+                            <field
+                                name="warehouse_id"
+                                required="1"
+                                options="{'no_quick_create': True, 'no_create_edit' : True}"
+                            />
+                        </group>
                     </group>
                     <notebook>
                         <page string="Service Order Detail">
-                            <group col="4" string="Times">
-                                <field name="start_date" />
-                                <field
-                                    attrs="{'invisible': [('start_date_real', '=', False)]}"
-                                    name="start_date_real"
-                                />
-                                <field name="end_date" />
-                                <field
-                                    attrs="{'invisible': [('start_date_real', '=', False)]}"
-                                    name="end_date_real"
-                                />
+                            <group string="Times">
+                                <group>
+                                    <field name="start_date" />
+                                    <field
+                                        attrs="{'invisible': [('start_date_real', '=', False)]}"
+                                        name="start_date_real"
+                                    />
+                                </group>
+                                <group>
+                                    <field name="end_date" />
+                                    <field
+                                        attrs="{'invisible': [('start_date_real', '=', False)]}"
+                                        name="end_date_real"
+                                    />
+                                </group>
                             </group>
                             <group
                                 string="Tasks"
                                 attrs="{'invisible':[('name', '=', False)]}"
                             >
-                                <field
-                                    context="{'default_order_id': active_id}"
-                                    name="order_line_ids"
-                                    nolabel="1"
-                                />
+                                <field name="order_line_ids" nolabel="1" />
                             </group>
                         </page>
                         <page

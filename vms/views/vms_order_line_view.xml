@@ -7,13 +7,6 @@
         <field name="arch" type="xml">
             <form string="Order lines">
                 <header>
-                    <field name="create_purchase_order" invisible="1" />
-                    <button
-                        name="create_po"
-                        string="Create Purchase Order"
-                        type="object"
-                        attrs="{'invisible':[('create_purchase_order', '=', False)]}"
-                    />
                     <button
                         name="action_cancel_draft"
                         states="cancel"
@@ -49,57 +42,13 @@
                 </header>
                 <sheet>
                     <group string="Order line">
-                        <group>
-                            <field
-                                name="task_id"
-                                attrs="{'readonly':[('order_id', '=', False)]}"
-                            />
+                        <group name="general_info">
+                            <field name="task_id" />
                             <field name="order_id" />
                         </group>
-                        <group>
-                            <field
-                                name="external"
-                                attrs="{'readonly':[('order_id', '=', False)]}"
-                            />
-                        </group>
                     </group>
                     <group>
-                        <group
-                            string="External Service"
-                            attrs="{'invisible':[('external', '=', False)]}"
-                        >
-                            <field
-                                name="supplier_id"
-                                attrs="{'required':[('external', '=', True)], 'readonly':[('order_id', '=', False)]}"
-                            />
-                            <field
-                                name="purchase_order_id"
-                                attrs="{'readonly':[('purchase_order_id', '=', False)]}"
-                            />
-                            <field
-                                name="product_id"
-                                attrs="{'required':[('external', '=', True)], 'readonly':[('order_id', '=', False)]}"
-                            />
-                            <field
-                                name="qty_product"
-                                attrs="{'readonly':[('order_id', '=', False)]}"
-                            />
-                            <button
-                                name="create_po"
-                                string="Create Purchase Order"
-                                class="oe_highlight"
-                                states="draft"
-                                attrs="{'readonly':[('order_id', '=', False)]}"
-                                type="object"
-                                help="You must save the order first to configure the purchase order."
-                            />
-                        </group>
-                    </group>
-                    <group>
-                        <group
-                            string="Schedule"
-                            attrs="{'invisible':[('external', '=', True)]}"
-                        >
+                        <group string="Schedule" name="schedule">
                             <field
                                 name="start_date"
                                 attrs="{'readonly':[('order_id', '=', False)]}"
@@ -114,10 +63,7 @@
                                 widget="float_time"
                             />
                         </group>
-                        <group
-                            string="Real"
-                            attrs="{'invisible':[('external', '=', True)]}"
-                        >
+                        <group string="Real" name="real">
                             <field name="start_date_real" />
                             <field name="end_date_real" />
                             <field name="real_duration" widget="float_time" />
@@ -131,7 +77,6 @@
                                         <field name="product_id" />
                                         <field name="product_qty" />
                                         <field name="product_uom_id" />
-                                        <field name="external_spare_parts" />
                                     </tree>
                                 </field>
                             </page>

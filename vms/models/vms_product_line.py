@@ -19,7 +19,7 @@ class VmsProductLine(models.Model):
     )
     product_qty = fields.Float(
         required=True,
-        default=0.0,
+        default=1.0,
         string="Quantity",
     )
     product_uom_id = fields.Many2one(
@@ -27,17 +27,13 @@ class VmsProductLine(models.Model):
         string="Unit of Measure",
         required=True,
     )
-    task_id = fields.Many2one(
-        "vms.task",
-        string="Task",
-    )
+    task_id = fields.Many2one("vms.task")
     order_line_id = fields.Many2one(
-        "vms.order.line", string="Activity", ondelete="cascade"
+        "vms.order.line",
+        string="Activity",
+        ondelete="cascade",
     )
     order_id = fields.Many2one(related="order_line_id.order_id")
-    external_spare_parts = fields.Boolean(
-        string="Is External Spare Part?",
-    )
 
     @api.onchange("product_id")
     def _onchange_product_id(self):
@@ -68,7 +64,7 @@ class VmsProductLine(models.Model):
     def procurement_create(self):
         new_procs = self.env["procurement.order"]
         proc_group_obj = self.env["procurement.group"]
-        for line in self.filtered(lambda x: not x.external_spare_parts):
+        for line in self:
             if (
                 line.order_line_id.state != "process"
                 or not line.product_id._need_procurement()
