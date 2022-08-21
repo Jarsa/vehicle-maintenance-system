@@ -24,7 +24,6 @@
         "views/vms_program.xml",
         "views/vms_cycle_view.xml",
         "views/vms_product_line_view.xml",
-        "views/vms_report_view.xml",
         "views/vms_task_view.xml",
         "views/vms_order_line_view.xml",
         "views/vms_order_view.xml",

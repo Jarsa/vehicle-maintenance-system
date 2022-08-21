@@ -8,14 +8,6 @@
         <field name="padding">4</field>
         <field name="number_increment">1</field>
     </record>
-    <record model="ir.sequence" id="report_sequence">
-        <field name="name">Report Sequence</field>
-        <field name="implementation">standard</field>
-        <field name="code">vms.report</field>
-        <field name="prefix">R</field>
-        <field name="padding">4</field>
-        <field name="number_increment">1</field>
-    </record>
     <record model="ir.sequence" id="cycle_sequence">
         <field name="name">Cycle Sequence</field>
         <field name="implementation">no_gap</field>

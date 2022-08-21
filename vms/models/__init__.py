@@ -8,6 +8,5 @@ from . import vms_order
 from . import vms_order_line
 from . import vms_product_line
 from . import vms_program
-from . import vms_report
 from . import vms_task
 from . import stock_picking

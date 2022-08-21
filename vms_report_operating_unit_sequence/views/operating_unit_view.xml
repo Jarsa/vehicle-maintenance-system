@@ -5,10 +5,8 @@
         <field name="model">operating.unit</field>
         <field name="inherit_id" ref="operating_unit.view_operating_unit_form" />
         <field name="arch" type="xml">
-            <xpath expr="//gruoup[@name='main_group']" position="after">
-                <group name="vms" string="VMS Sequences">
-                    <field name="order_sequence_id" />
-                </group>
+            <xpath expr="//gruoup[@name='vms']" position="inside">
+                <field name="report_sequence_id" />
             </xpath>
         </field>
     </record>

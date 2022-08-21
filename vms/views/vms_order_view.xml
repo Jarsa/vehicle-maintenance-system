@@ -17,7 +17,6 @@
                 <field name="start_date_real" />
                 <field name="end_date_real" />
                 <field name="program_id" />
-                <field name="report_ids" />
                 <field name="state" />
             </tree>
         </field>
@@ -77,7 +76,7 @@
                             <field
                                 name="picking_count"
                                 widget="statinfo"
-                                string="Pickings"
+                                string="Picking(s)"
                             />
                         </button>
                     </div>
@@ -145,24 +144,6 @@
                                 <field name="program_id" />
                                 <newline />
                             </group>
-                        </page>
-                        <page
-                            string="Driver Reports Solved"
-                            attrs="{'invisible':[('type','in',(False,'preventive'))]}"
-                        >
-                            <field
-                                name="report_ids"
-                                nolabel="1"
-                                domain="[('state', '=', 'confirmed')]"
-                            >
-                                <tree>
-                                    <field name="name" />
-                                    <field name="unit_id" />
-                                    <field name="date" />
-                                    <field name="employee_id" />
-                                    <field name="state" />
-                                </tree>
-                            </field>
                         </page>
                     </notebook>
                 </sheet>

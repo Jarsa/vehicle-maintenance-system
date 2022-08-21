@@ -51,12 +51,6 @@ class VmsOrder(models.Model):
         string="Order Lines",
     )
     program_id = fields.Many2one("vms.program")
-    report_ids = fields.Many2many("vms.report", string="Report(s)")
-    report_count = fields.Integer(
-        string="Reports",
-        compute="_compute_report_count",
-        copy=False,
-    )
     state = fields.Selection(
         [
             ("draft", "Draft"),
@@ -91,11 +85,6 @@ class VmsOrder(models.Model):
         default=lambda self: self.env.company,
     )
 
-    @api.depends("report_ids")
-    def _compute_report_count(self):
-        for rec in self:
-            rec.report_count = len(rec.report_ids)
-
     @api.depends("picking_ids")
     def _compute_picking_count(self):
         for rec in self:
@@ -105,7 +94,6 @@ class VmsOrder(models.Model):
         action = self.env["ir.actions.actions"]._for_xml_id(
             "stock.action_picking_tree_all"
         )
-
         pickings = self.mapped("picking_ids")
         if len(pickings) > 1:
             action["domain"] = [("id", "in", pickings.ids)]
@@ -145,8 +133,6 @@ class VmsOrder(models.Model):
     def action_released(self):
         for order in self:
             order.order_line_ids.action_done()
-            if order.type == "corrective":
-                order.report_ids.write({"state": "closed"})
             order.write(
                 {
                     "state": "released",
@@ -234,31 +220,16 @@ class VmsOrder(models.Model):
                     "start_date_real": fields.Datetime.now(),
                 }
             )
-            rec.state = "open"
-            if rec.type == "corrective":
-                rec.report_ids.write({"state": "pending"})
             rec.order_line_ids.action_process()
 
     def action_cancel(self):
         for rec in self:
             rec.order_line_ids.action_cancel()
-            if rec.type == "corrective":
-                rec.report_ids.write(
-                    {
-                        "state": "pending",
-                    }
-                )
             rec.state = "cancel"
 
     def action_cancel_draft(self):
         for rec in self:
             rec.state = "draft"
-            if rec.type == "corrective":
-                rec.report_ids.write(
-                    {
-                        "state": "pending",
-                    }
-                )
             rec.order_line_ids.write(
                 {
                     "state": "draft",

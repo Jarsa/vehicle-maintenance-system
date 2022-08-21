@@ -1,8 +1,8 @@
 # Copyright 2016-2022, Jarsa
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 {
-    "name": "Vehicle Maintenance System Operating Unit Sequence",
-    "summary": "Module to add sequence by operating unit to orders",
+    "name": "Vehicle Maintenance System Operating Unit Sequence for Reports",
+    "summary": "Module to add sequence by operating unit to reports",
     "version": "15.0.1.0.0",
     "category": "Maintenance",
     "website": "https://git.vauxoo.com/jarsa/jarsa",
@@ -10,7 +10,7 @@
     "license": "AGPL-3",
     "installable": True,
     "depends": [
-        "vms_operating_unit",
+        "vms_report",
     ],
     "data": [
         "views/operating_unit_view.xml",

@@ -21,7 +21,12 @@ class VmsReport(models.Model):
     )
     end_date = fields.Datetime()
     state = fields.Selection(
-        [("pending", "Pending"), ("closed", "Closed"), ("cancel", "Cancel")],
+        selection=[
+            ("pending", "Pending"),
+            ("in_progress", "In Progress"),
+            ("closed", "Closed"),
+            ("cancel", "Cancel"),
+        ],
         default="pending",
     )
     notes = fields.Html()

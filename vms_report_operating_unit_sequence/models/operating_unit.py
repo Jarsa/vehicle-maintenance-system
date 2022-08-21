@@ -7,4 +7,4 @@ from odoo import fields, models
 class OperatingUnit(models.Model):
     _inherit = "operating.unit"
 
-    vms_order_sequence_id = fields.Many2one("ir.sequence", string="Order Sequence")
+    vms_report_sequence_id = fields.Many2one("ir.sequence", string="Report Sequence")
