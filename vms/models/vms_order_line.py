@@ -19,15 +19,6 @@ class VmsOrderLine(models.Model):
     start_date_real = fields.Datetime(string="Real start date", readonly=True)
     end_date_real = fields.Datetime(string="Real Finishing", readonly=True)
     duration = fields.Float(store=True)
-    supplier_id = fields.Many2one(
-        "res.partner", string="Supplier", domain=[("supplier", "=", True)]
-    )
-    product_id = fields.Many2one(
-        "product.product",
-        string="Product",
-        domain=[("type", "=", "service"), ("purchase_ok", "=", True)],
-    )
-    qty_product = fields.Float(string="Quantity", default="1.0")
     state = fields.Selection(
         [
             ("draft", "Draft"),
@@ -44,11 +35,8 @@ class VmsOrderLine(models.Model):
         help="You must save the order to select the mechanic(s).",
     )
     order_id = fields.Many2one("vms.order", readonly=True, ondelete="cascade")
+    company_id = fields.Many2one(related="order_id.company_id", store=True)
     real_time_total = fields.Integer()
-
-    def unlink(self):
-        self.spare_part_ids.unlink()
-        return super().unlink()
 
     def _prepare_spare_part_ids(self, spare_part):
         return {
@@ -93,7 +81,7 @@ class VmsOrderLine(models.Model):
         for rec in self:
             if rec.order_id.state != "open":
                 raise ValidationError(_("The order must be open."))
-            rec.spare_part_ids.procurement_create()
+            rec.spare_part_ids._action_launch_stock_rule()
             rec.write(
                 {
                     "state": "process",
@@ -103,7 +91,6 @@ class VmsOrderLine(models.Model):
 
     def action_done(self):
         for rec in self:
-            rec.get_real_duration()
             rec.write(
                 {
                     "state": "done",

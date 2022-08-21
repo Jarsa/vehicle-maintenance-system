@@ -23,6 +23,9 @@ class VmsOrder(models.Model):
     type = fields.Selection(
         [("preventive", "Preventive"), ("corrective", "Corrective")], required=True
     )
+    partner_id = fields.Many2one(
+        "res.partner",
+    )
     warehouse_id = fields.Many2one(
         "stock.warehouse",
         required=True,
@@ -78,6 +81,17 @@ class VmsOrder(models.Model):
         string="Procurement Group",
         readonly=True,
         copy=False,
+    )
+    picking_policy = fields.Selection(
+        [("direct", "As soon as possible"), ("one", "When all products are ready")],
+        string="Shipping Policy",
+        required=True,
+        readonly=True,
+        default="direct",
+        states={"draft": [("readonly", False)]},
+        help="If you deliver all products at once, the delivery order will be scheduled"
+        " based on the greatest product lead time. Otherwise, it will be based on the "
+        "shortest.",
     )
     company_id = fields.Many2one(
         "res.company",

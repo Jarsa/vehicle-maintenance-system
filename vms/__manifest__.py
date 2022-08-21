@@ -28,7 +28,6 @@
         "views/vms_order_line_view.xml",
         "views/vms_order_view.xml",
         "views/fleet_vehicle_view.xml",
-        "wizards/vms_wizard_maintenance_order_view.xml",
         "data/ir_sequence_data.xml",
         "data/ir_config_parameter.xml",
     ],

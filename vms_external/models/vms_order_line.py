@@ -13,6 +13,15 @@ class VmsOrderLine(models.Model):
         "purchase.order", string="Purchase Order", readonly=True
     )
     create_purchase_order = fields.Boolean(compute="_compute_create_purchase_order")
+    supplier_id = fields.Many2one(
+        "res.partner", string="Supplier", domain=[("supplier", "=", True)]
+    )
+    product_id = fields.Many2one(
+        "product.product",
+        string="Product",
+        domain=[("type", "=", "service"), ("purchase_ok", "=", True)],
+    )
+    qty_product = fields.Float(string="Quantity", default="1.0")
 
     @api.depends("purchase_order_id")
     def _compute_purchase_state(self):

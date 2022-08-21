@@ -14,8 +14,10 @@
         "vms",
     ],
     "data": [
+        "security/ir.model.access.csv",
         "views/vms_order_view.xml",
         "views/vms_report_view.xml",
         "data/ir_sequence_data.xml",
+        "wizards/vms_wizard_maintenance_order_view.xml",
     ],
 }
