@@ -72,10 +72,10 @@
                             type="object"
                             class="oe_stat_button"
                             icon="fa-truck"
-                            attrs="{'invisible': [('pickings_count', '=', 0)]}"
+                            attrs="{'invisible': [('picking_count', '=', 0)]}"
                         >
                             <field
-                                name="pickings_count"
+                                name="picking_count"
                                 widget="statinfo"
                                 string="Pickings"
                             />

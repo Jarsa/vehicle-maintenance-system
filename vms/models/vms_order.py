@@ -53,7 +53,7 @@ class VmsOrder(models.Model):
     program_id = fields.Many2one("vms.program")
     report_ids = fields.Many2many("vms.report", string="Report(s)")
     report_count = fields.Integer(
-        string="Delivery Orders",
+        string="Reports",
         compute="_compute_report_count",
         copy=False,
     )
