@@ -11,6 +11,7 @@
     "installable": True,
     "depends": [
         "vms_operating_unit",
+        "sale_operating_unit",
     ],
     "data": [
         "views/operating_unit_view.xml",

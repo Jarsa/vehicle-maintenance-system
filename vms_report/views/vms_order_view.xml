@@ -4,7 +4,7 @@
     <record id="vms_order_view_form" model="ir.ui.view">
         <field name="name">vms.order.view.form</field>
         <field name="model">vms.order</field>
-        <field name="inherit_id" ref="vms.vms_order_view_form" />
+        <field name="inherit_id" ref="vms.vms_order_form_view" />
         <field name="arch" type="xml">
             <xpath expr="//button[@name='action_view_pickings']" position="after">
                 <button

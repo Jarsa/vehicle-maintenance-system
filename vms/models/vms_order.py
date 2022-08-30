@@ -74,7 +74,7 @@ class VmsOrder(models.Model):
         string="Stock Pickings",
         copy=False,
     )
-    picking_count = fields.Integer(
+    pickings_count = fields.Integer(
         string="Delivery Order Count",
         compute="_compute_picking_count",
     )
@@ -114,7 +114,7 @@ class VmsOrder(models.Model):
     @api.depends("picking_ids")
     def _compute_picking_count(self):
         for rec in self:
-            rec.picking_count = len(rec.picking_ids)
+            rec.pickings_count = len(rec.picking_ids)
 
     def action_view_pickings(self):
         action = self.env["ir.actions.actions"]._for_xml_id(
