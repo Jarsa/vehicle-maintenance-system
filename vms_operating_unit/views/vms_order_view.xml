@@ -5,10 +5,7 @@
         <field name="model">vms.order</field>
         <field name="inherit_id" ref="vms.vms_order_form_view" />
         <field name="arch" type="xml">
-            <xpath
-                expr="//group[@name='details']/field[@name='date']"
-                position="before"
-            >
+            <xpath expr="//group/group/field[@name='date']" position="before">
                 <field
                     name="operating_unit_id"
                     groups="operating_unit.group_multi_operating_unit"

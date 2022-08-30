@@ -10,7 +10,7 @@ from odoo.exceptions import ValidationError
 class VmsActivity(models.Model):
     _name = "vms.activity"
     _description = "Mechanic Activity"
-    _inherit = ["mail.thread", "ir.needaction_mixin"]
+    _inherit = ["mail.thread", "mail.activity.mixin"]
     _order = "priority desc"
 
     name = fields.Char(required=True)

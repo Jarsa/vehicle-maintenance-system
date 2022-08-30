@@ -96,7 +96,7 @@
     <menuitem
         action="action_vms_report"
         id="vms_report_menu"
-        parent="menu_vms_maintenance"
+        parent="vms.menu_vms_maintenance"
         sequence="40"
     />
 </odoo>

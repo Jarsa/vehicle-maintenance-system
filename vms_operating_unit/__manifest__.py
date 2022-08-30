@@ -14,6 +14,5 @@
     ],
     "data": [
         "views/vms_order_view.xml",
-        "views/vms_report_view.xml",
     ],
 }
