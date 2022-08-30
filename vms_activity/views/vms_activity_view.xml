@@ -1,50 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <odoo>
-    <record id="view_vms_activity_search" model="ir.ui.view">
-        <field name="name">vms.activity.search</field>
-        <field name="model">vms.activity</field>
-        <field name="arch" type="xml">
-            <search string="Search Activities">
-                <filter
-                    domain="[('state', '=', 'draft')]"
-                    name="state_draft"
-                    string="Draft"
-                />
-                <filter
-                    domain="[('state', '=', 'process')]"
-                    name="state_process"
-                    string="Process"
-                />
-                <filter
-                    domain="[('state', '=', 'pause')]"
-                    name="state_pause"
-                    string="Paused"
-                />
-                <filter domain="[('state', '=', 'end')]" string="Ended" />
-                <filter domain="[('state', '=', 'cancel')]" string="Cancel" />
-                <filter
-                    context="{'group_by':'order_id'}"
-                    name="groupby_order_id"
-                    string="Service Order"
-                />
-                <filter
-                    context="{'group_by':'unit_id'}"
-                    name="groupby_unit_id"
-                    string="Vehicle"
-                />
-                <filter
-                    context="{'group_by':'responsible_id'}"
-                    name="groupby_employee_id"
-                    string="Mechanic"
-                />
-                <field name="responsible_id" />
-                <field name="order_id" />
-                <field name="unit_id" />
-                <filter context="{'group_by':'state'}" string="State" />
-                <filter context="{'group_by':'date'}" string="Period" />
-            </search>
-        </field>
-    </record>
     <record id="view_vms_activity_tree" model="ir.ui.view">
         <field name="name">vms.activity.tree</field>
         <field name="model">vms.activity</field>
@@ -163,11 +118,63 @@
             </form>
         </field>
     </record>
+    <record id="view_vms_activity_search" model="ir.ui.view">
+        <field name="name">vms.activity.search</field>
+        <field name="model">vms.activity</field>
+        <field name="arch" type="xml">
+            <search string="Search Activities">
+                <filter
+                    domain="[('state', '=', 'draft')]"
+                    name="state_draft"
+                    string="Draft"
+                />
+                <filter
+                    domain="[('state', '=', 'draft')]"
+                    name="state_draft"
+                    string="Draft"
+                />
+                <filter
+                    domain="[('state', '=', 'process')]"
+                    name="state_process"
+                    string="Process"
+                />
+                <filter
+                    domain="[('state', '=', 'pause')]"
+                    name="state_pause"
+                    string="Paused"
+                />
+                <!-- aqui van los filtros que marca -->
+                <filter
+                    context="{'group_by':'order_id'}"
+                    name="groupby_order_id"
+                    string="Service Order"
+                />
+                <filter
+                    context="{'group_by':'unit_id'}"
+                    name="groupby_unit_id"
+                    string="Vehicle"
+                />
+                <filter
+                    context="{'group_by':'responsible_id'}"
+                    name="groupby_employee_id"
+                    string="Mechanic"
+                />
+                <field name="responsible_id" />
+                <field name="order_id" />
+                <field name="unit_id" />
+                <!-- aqui van los ultimos filtros que marca error 
+                <filter domain="[('state', '=', 'end')]" string="Ended" /> marca error con este filtro
+                <filter domain="[('state', '=', 'cancel')]" string="Cancel" /> marca error con este filtro
+                <filter context="{'group_by':'state'}" string="State" />
+                <filter context="{'group_by':'start_date'}" string="Period" />  -->
+            </search>
+        </field>
+    </record>
     <record id="action_vms_activity_form" model="ir.actions.act_window">
         <field name="name">Mechanic's Tasks</field>
         <field name="res_model">vms.activity</field>
-        <field name="view_type">form</field>
-        <field name="view_mode">tree,form</field>
+        <field name="view_id" ref="view_vms_activity_form"/>
+        <field name="search_view_id" ref="view_vms_activity_search"/>
     </record>
     <menuitem
         action="action_vms_activity_form"

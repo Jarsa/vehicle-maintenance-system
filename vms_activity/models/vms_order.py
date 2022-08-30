@@ -7,6 +7,6 @@ from odoo import fields, models
 class VmsOrder(models.Model):
     _inherit = "vms.order"
 
-    activity_ids = fields.One2many(
+    vms_activity_ids = fields.One2many(
         "vms.activity", "order_id", string="Activities", ondelete="cascade"
     )

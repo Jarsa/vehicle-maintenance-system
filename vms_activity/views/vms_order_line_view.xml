@@ -12,6 +12,7 @@
                     attrs="{'invisible':[('external', '=', True)]}"
                     string="Mechanics"
                 >
+                <field name="external"/>
                     <field
                         attrs="{'readonly':[('order_id', '=', False)]}"
                         name="responsible_ids"

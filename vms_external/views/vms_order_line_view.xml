@@ -17,7 +17,7 @@
             </xpath>
             <xpath expr="//group[@name='general_info']" position="after">
                 <group>
-                    <field name="external" />
+                    <field name="external"/>
                 </group>
             </xpath>
             <xpath expr="//group[@name='real']" position="attributes">

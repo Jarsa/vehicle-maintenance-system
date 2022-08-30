@@ -11,7 +11,7 @@ class VmsOrderLine(models.Model):
     responsible_ids = fields.Many2many(
         "hr.employee", string="Mechanics", domain=[("mechanic", "=", True)]
     )
-    activity_ids = fields.One2many(
+    vms_activity_ids = fields.One2many(
         "vms.activity",
         "order_line_id",
         string="Activities",
@@ -22,7 +22,10 @@ class VmsOrderLine(models.Model):
         [("0", "All"), ("1", "Low priority"), ("2", "High priority"), ("3", "Urgent")],
         default="0",
     )
-
+    external = fields.Boolean(
+        comodel="vms.activity",
+        #related="order_line_id.external",
+    )
     def action_process(self):
         """Creates the activities by mechanic when open the Order"""
         activity_obj = self.env["vms.activity"]
@@ -59,10 +62,10 @@ class VmsOrderLine(models.Model):
 
     def get_real_duration(self):
         for rec in self:
-            if not rec.activity_ids:
+            if not rec.vms_activity_ids:
                 return super().get_real_duration()
             duration_sum = 0.0
-            for activity in rec.activity_ids:
+            for activity in rec.vms_activity_ids:
                 if activity.state == "end":
                     duration_sum += activity.total_hours
                 else:
@@ -72,5 +75,5 @@ class VmsOrderLine(models.Model):
 
     def action_cancel(self):
         for rec in self.filtered(lambda r: not r.external):
-            rec.activity_ids.write({"state": "cancel"})
+            rec.vms_activity_ids.write({"state": "cancel"})
         return super().action_cancel()

@@ -38,9 +38,9 @@
                                 <li t-if="record.job_id.raw_value"><field
                                             name="job_id"
                                         /></li>
-                                <li t-if="record.work_location.raw_value"><field
+                                <!-- <li t-if="record.work_location.raw_value"><field
                                             name="work_location"
-                                        /></li>
+                                        /></li> -->
                             </ul>
                         </div>
                     </div>

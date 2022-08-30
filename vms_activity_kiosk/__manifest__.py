@@ -11,7 +11,7 @@
     "depends": ["vms_activity"],
     "license": "AGPL-3",
     "data": [
-        "views/assets.xml",
+        #"views/assets.xml",
         "views/hr_employee_view.xml",
         "views/tasks_kiosk_view.xml",
     ],
