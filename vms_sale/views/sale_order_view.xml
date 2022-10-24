@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+
+    <record id="sale_order_view_form" model="ir.ui.view">
+        <field name="name">sale.order.view.form</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form" />
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='partner_shipping_id']" position="after">
+                <field
+                    name="vehicle_id"
+                    context="{'default_driver_id': partner_id}"
+                    domain="[('driver_id', '=', partner_id)]"
+                />
+            </xpath>
+        </field>
+    </record>
+
+</odoo>
