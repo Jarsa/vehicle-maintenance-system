@@ -15,7 +15,7 @@ class VmsProductLine(models.Model):
         required=True,
         string="Spare Part",
     )
-    name = fields.Char(string="Description", required=True)
+    name = fields.Char(string="Description")
     product_qty = fields.Float(
         required=True,
         default=1.0,

@@ -105,6 +105,7 @@ class FleetVehicle(models.Model):
                     ("date", "<=", time.to_string(date_end)),
                 ]
             )
+            distance = 0
             if odometers:
                 distance = sum(x.value for x in odometers) / frequency
-                rec.distance = distance
+            rec.distance = distance
