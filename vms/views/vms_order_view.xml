@@ -9,7 +9,7 @@
                 <field name="name" />
                 <field name="supervisor_id" />
                 <field name="date" />
-                <field name="unit_id" />
+                <field name="vehicle_id" />
                 <field name="current_odometer" />
                 <field name="warehouse_id" />
                 <field name="start_date" />
@@ -106,7 +106,7 @@
                     <group name="details">
                         <group>
                             <field name="partner_id" />
-                            <field name="unit_id" />
+                            <field name="vehicle_id" />
                             <field name="type" />
                         </group>
                         <group>
@@ -177,10 +177,10 @@
                 string="Orders Calendar"
                 date_start="start_date"
                 date_stop="end_date"
-                color="unit_id"
+                color="vehicle_id"
             >
                 <field name="name" />
-                <field name="unit_id" />
+                <field name="vehicle_id" />
             </calendar>
         </field>
     </record>
@@ -192,8 +192,8 @@
                 string="Orders Gantt"
                 date_start="start_date"
                 date_stop="end_date"
-                color="unit_id"
-                default_group_by="unit_id"
+                color="vehicle_id"
+                default_group_by="vehicle_id"
             >
                 <field name="name" />
             </gantt>

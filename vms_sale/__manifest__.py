@@ -16,5 +16,7 @@
     ],
     "data": [
         "views/sale_order_view.xml",
+        "views/product_template_view.xml",
+        "views/vms_order_view.xml",
     ],
 }

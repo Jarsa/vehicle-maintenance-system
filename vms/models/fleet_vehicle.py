@@ -24,7 +24,7 @@ class FleetVehicle(models.Model):
     def _prepare_order(self, cycle):
         self.ensure_one()
         return {
-            "unit_id": self.id,
+            "vehicle_id": self.id,
             "type": "preventive",
             "date": fields.Date.today()
             + timedelta(days=round(cycle.frequency / self.distance)),
@@ -45,7 +45,7 @@ class FleetVehicle(models.Model):
                 continue
             for cycle in rec.program_id.cycle_ids:
                 order = order_obj.search(
-                    [("unit_id", "=", rec.id), ("state", "=", "draft")]
+                    [("vehicle_id", "=", rec.id), ("state", "=", "draft")]
                 )
                 if not order:
                     new_order = order_obj.create(self._prepare_order(cycle))

@@ -7,11 +7,44 @@
         <field name="inherit_id" ref="sale.view_order_form" />
         <field name="arch" type="xml">
             <xpath expr="//field[@name='partner_shipping_id']" position="after">
+                <field name="vehicle_id" />
+            </xpath>
+            <xpath
+                expr="//field[@name='order_line']/tree/field[@name='product_uom_qty']"
+                position="before"
+            >
+                <field name="cycle_ids" invisible="1" />
+                <field name="vms_service_tracking" invisible="1" />
                 <field
-                    name="vehicle_id"
-                    context="{'default_driver_id': partner_id}"
-                    domain="[('driver_id', '=', partner_id)]"
+                    name="cycle_id"
+                    domain="[
+                        ('id', 'in', cycle_ids),
+                    ]"
+                    attrs="{
+                        'readonly': [
+                            ('vms_service_tracking', '!=', 'preventive'),
+                        ],
+                        'required': [
+                            ('vms_service_tracking', '=', 'preventive'),
+                        ],
+                    }"
                 />
+            </xpath>
+            <xpath expr="//div[@name='button_box']" position="inside">
+                <button
+                    type="object"
+                    name="action_view_vms_orders"
+                    class="oe_stat_button"
+                    icon="fa-wrench"
+                    attrs="{'invisible': [('vms_order_count', '=', 0)]}"
+                >
+                    <field
+                        name="vms_order_count"
+                        widget="statinfo"
+                        string="Service Orders"
+                    />
+                    <field name='vms_order_ids' invisible="1" />
+                </button>
             </xpath>
         </field>
     </record>

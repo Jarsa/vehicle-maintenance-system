@@ -10,7 +10,7 @@ class TestVmsReport(TransactionCase):
 
         self.report = self.env["vms.report"].create(
             {
-                "unit_id": self.env.ref("vms.vms_fleet_vehicle_01").id,
+                "vehicle_id": self.env.ref("vms.vms_fleet_vehicle_01").id,
                 "employee_id": self.env.ref("hr.employee_al").id,
             }
         )

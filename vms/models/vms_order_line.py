@@ -103,7 +103,7 @@ class VmsOrderLine(models.Model):
 
     def action_cancel(self):
         for rec in self:
-            self.mapped("spare_part_ids.procurement_ids").cancel()
+            self.mapped("spare_part_ids.move_ids")._action_cancel()
             rec.write(
                 {
                     "state": "cancel",

@@ -67,7 +67,7 @@ class VmsOrder(models.Model):
         tracking=True,
         copy=False,
     )
-    unit_id = fields.Many2one("fleet.vehicle", required=True)
+    vehicle_id = fields.Many2one("fleet.vehicle", required=True)
     picking_ids = fields.One2many(
         "stock.picking",
         "vms_order_id",
@@ -217,11 +217,11 @@ class VmsOrder(models.Model):
             else:
                 break
 
-    @api.onchange("type", "unit_id")
+    @api.onchange("type", "vehicle_id")
     def _onchange_type(self):
         if self.type == "preventive":
-            self.program_id = self.unit_id.program_id
-            self.current_odometer = self.unit_id.odometer
+            self.program_id = self.vehicle_id.program_id
+            self.current_odometer = self.vehicle_id.odometer
             for cycle in self.program_id.cycle_ids:
                 self.get_tasks_from_cycle(cycle, self)
         else:
@@ -243,7 +243,7 @@ class VmsOrder(models.Model):
         for rec in self:
             orders = self.search_count(
                 [
-                    ("unit_id", "=", rec.unit_id.id),
+                    ("vehicle_id", "=", rec.vehicle_id.id),
                     ("state", "=", "open"),
                     ("id", "!=", rec.id),
                 ]
