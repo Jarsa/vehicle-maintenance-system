@@ -11,12 +11,12 @@ from odoo.tests.common import TransactionCase
 class TestVmsOrder(TransactionCase):
     def setUp(self):
         super().setUp()
-        self.unit_id = self.env.ref("vms.vms_fleet_vehicle_01")
+        self.vehicle_id = self.env.ref("vms.vms_fleet_vehicle_01")
         self.program = self.env.ref("vms.vms_program_03")
         self.task = self.env.ref("vms.vms_task_01")
         self.report = self.env["vms.report"].create(
             {
-                "unit_id": self.unit_id.id,
+                "vehicle_id": self.vehicle_id.id,
                 "employee_id": self.env.ref("hr.employee_al").id,
             }
         )
@@ -28,7 +28,7 @@ class TestVmsOrder(TransactionCase):
                 "supervisor_id": self.env.ref("vms.vms_hr_employee_01").id,
                 "type": order_type,
                 "program_id": self.env.ref("vms.vms_program_01").id,
-                "unit_id": self.unit_id.id,
+                "vehicle_id": self.vehicle_id.id,
             }
         )
         duration = self.task.duration
@@ -104,8 +104,8 @@ class TestVmsOrder(TransactionCase):
         self.assertFalse(order.program_id)
         self.assertFalse(order.current_odometer)
         self.assertFalse(order.order_line_ids)
-        self.unit_id.program_id = self.program.id
-        self.unit_id.odometer = 100
+        self.vehicle_id.program_id = self.program.id
+        self.vehicle_id.odometer = 100
         order.type = "preventive"
         order._onchange_type()
         self.assertEqual(order.program_id, self.program)

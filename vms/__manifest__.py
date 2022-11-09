@@ -29,6 +29,7 @@
         "views/vms_order_view.xml",
         "views/fleet_vehicle_view.xml",
         "views/stock_location_route_view.xml",
+        "views/fleet_vehicle_model_view.xml",
         "data/ir_sequence_data.xml",
         "data/stock_picking_type_data.xml",
         "data/stock_location_route_data.xml",
