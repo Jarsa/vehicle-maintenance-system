@@ -1,1 +1,1 @@
-operating-unit https://github.com/OCA/operating-unit.git 10.0
+operating-unit https://github.com/OCA/operating-unit.git 15.0
