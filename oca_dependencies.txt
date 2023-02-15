@@ -1,1 +1,5 @@
+<<<<<<< HEAD
 operating-unit https://github.com/Jarsa/operating-unit.git 15.0
+=======
+operating-unit https://github.com/OCA/operating-unit.git 10.0
+>>>>>>> parent of 82db14a (Merge branch '15.0-JorgeOlvera_task#fix' into '15.0')
