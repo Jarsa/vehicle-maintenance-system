@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8" ?>
 <odoo>
     <record id="vms_order_line_form" model="ir.ui.view">
         <field name="name">VMS Order Line Form</field>
@@ -7,43 +7,66 @@
         <field name="arch" type="xml">
             <form string="Order lines">
                 <header>
-                    <field name="create_purchase_order" invisible="1"/>
-                    <button name="create_po" string="Create Purchase Order" type="object" attrs="{'invisible':[('create_purchase_order','=',False)]}"/>
-                    <button name="action_cancel_draft" states="cancel" string="Set to Draft" type="object"/>
-                    <button name="action_process" class="oe_highlight" states="draft" string="Start" type="object"/>
-                    <button name="action_cancel" states="draft,process" string="Cancel" type="object" confirm="Are you sure to cancel this task?"/>
-                    <button name="action_done" class="oe_highlight" states="process" string="End" type="object"/>
-                    <field name="state" statusbar_visible="pending,process,done,cancel" widget="statusbar"/>
+                    <button
+                        name="action_cancel_draft"
+                        states="cancel"
+                        string="Set to Draft"
+                        type="object"
+                    />
+                    <button
+                        name="action_process"
+                        class="oe_highlight"
+                        states="draft"
+                        string="Start"
+                        type="object"
+                    />
+                    <button
+                        name="action_cancel"
+                        states="draft,process"
+                        string="Cancel"
+                        type="object"
+                        confirm="Are you sure to cancel this task?"
+                    />
+                    <button
+                        name="action_done"
+                        class="oe_highlight"
+                        states="process"
+                        string="End"
+                        type="object"
+                    />
+                    <field
+                        name="state"
+                        statusbar_visible="pending,process,done,cancel"
+                        widget="statusbar"
+                    />
                 </header>
                 <sheet>
                     <group string="Order line">
-                        <group>
-                            <field name="task_id" attrs="{'readonly':[('order_id', '=', False)]}"/>
-                            <field name="order_id"/>
-                        </group>
-                        <group>
-                            <field name="external" attrs="{'readonly':[('order_id', '=', False)]}"/>
+                        <group name="general_info">
+                            <field name="task_id" />
+                            <field name="order_id" />
                         </group>
                     </group>
                     <group>
-                        <group string="External Service" attrs="{'invisible':[('external','=',False)]}">
-                            <field name="supplier_id" attrs="{'required':[('external','=',True)], 'readonly':[('order_id', '=', False)]}"/>
-                            <field name="purchase_order_id" attrs="{'readonly':[('purchase_order_id', '=', False)]}"/>
-                            <field name="product_id" attrs="{'required':[('external','=',True)], 'readonly':[('order_id', '=', False)]}"/>
-                            <field name="qty_product" attrs="{'readonly':[('order_id', '=', False)]}"/>
-                            <button name ="create_po" string="Create Purchase Order" class="oe_highlight" states="draft" attrs="{'readonly':[('order_id', '=', False)]}" type="object" help="You must save the order first to configure the purchase order."/>
+                        <group string="Schedule" name="schedule">
+                            <field
+                                name="start_date"
+                                attrs="{'readonly':[('order_id', '=', False)]}"
+                            />
+                            <field
+                                name="end_date"
+                                attrs="{'readonly':[('order_id', '=', False)]}"
+                            />
+                            <field
+                                name="duration"
+                                attrs="{'readonly':[('order_id', '=', False)]}"
+                                widget="float_time"
+                            />
                         </group>
-                    </group>
-                    <group>
-                        <group string="Schedule" attrs="{'invisible':[('external','=',True)]}">
-                            <field name="start_date" attrs="{'readonly':[('order_id', '=', False)]}"/>
-                            <field name="end_date" attrs="{'readonly':[('order_id', '=', False)]}"/>
-                            <field name="duration" attrs="{'readonly':[('order_id', '=', False)]}" widget='float_time'/>
-                        </group>
-                        <group string="Real" attrs="{'invisible':[('external','=',True)]}">
-                            <field name="start_date_real"/>
-                            <field name="end_date_real"/>
-                            <field name="real_duration" widget='float_time'/>
+                        <group string="Real" name="real">
+                            <field name="start_date_real" />
+                            <field name="end_date_real" />
+                            <field name="real_duration" widget="float_time" />
                         </group>
                     </group>
                     <group string="Spare Parts">
@@ -51,10 +74,11 @@
                             <page string="Spare Parts">
                                 <field name="spare_part_ids" nolabel="1">
                                     <tree editable="bottom">
-                                        <field name="product_id"/>
-                                        <field name="product_qty"/>
-                                        <field name="product_uom_id"/>
-                                        <field name="external_spare_parts"/>
+                                        <field name="product_id" />
+                                        <field name="name" />
+                                        <field name="product_qty" />
+                                        <field name="route_id" optional="hide" />
+                                        <field name="product_uom_id" />
                                     </tree>
                                 </field>
                             </page>
@@ -64,15 +88,15 @@
             </form>
         </field>
     </record>
-    <record model='ir.ui.view' id='vms_order_line_tree'>
-        <field name='name'>VMS Order Line Tree View</field>
-        <field name='model'>vms.order.line</field>
-        <field name='arch' type='xml'>
+    <record model="ir.ui.view" id="vms_order_line_tree">
+        <field name="name">VMS Order Line Tree View</field>
+        <field name="model">vms.order.line</field>
+        <field name="arch" type="xml">
             <tree>
-                <field name='task_id'/>
-                <field name='duration' widget='float_time'/>
-                <field name='real_duration' widget='float_time'/>
-                <field name='state'/>
+                <field name="task_id" />
+                <field name="duration" widget="float_time" />
+                <field name="real_duration" widget="float_time" />
+                <field name="state" />
             </tree>
         </field>
     </record>

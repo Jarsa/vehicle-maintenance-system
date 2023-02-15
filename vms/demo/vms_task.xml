@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8" ?>
 <odoo>
     <record id="vms_task_01" model="vms.task">
         <field name="name">Oil Change</field>
@@ -18,21 +18,21 @@
     </record>
 
     <record id="vms_product_line_01" model="vms.product.line">
-        <field name="product_id" ref="vms.product_product_vms_01"></field>
+        <field name="product_id" ref="vms.product_product_vms_01" />
         <field name="product_qty">10</field>
-        <field name="product_uom_id" ref="product.product_uom_litre"></field>
-        <field name="task_id" ref="vms_task_01"></field>
+        <field name="product_uom_id" ref="uom.product_uom_litre" />
+        <field name="task_id" ref="vms_task_01" />
     </record>
     <record id="vms_product_line_02" model="vms.product.line">
-        <field name="product_id" ref="vms.product_product_vms_02"></field>
+        <field name="product_id" ref="vms.product_product_vms_02" />
         <field name="product_qty">10</field>
-        <field name="product_uom_id" ref="product.product_uom_unit"></field>
-        <field name="task_id" ref="vms_task_03"></field>
+        <field name="product_uom_id" ref="uom.product_uom_unit" />
+        <field name="task_id" ref="vms_task_03" />
     </record>
     <record id="vms_product_line_03" model="vms.product.line">
-        <field name="product_id" ref="vms.product_product_vms_03"></field>
+        <field name="product_id" ref="vms.product_product_vms_03" />
         <field name="product_qty">10</field>
-        <field name="product_uom_id" ref="product.product_uom_unit"></field>
-        <field name="task_id" ref="vms_task_03"></field>
+        <field name="product_uom_id" ref="uom.product_uom_unit" />
+        <field name="task_id" ref="vms_task_03" />
     </record>
 </odoo>

@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+
+    <record id="vms_order_line_view_form" model="ir.ui.view">
+        <field name="name">vms.order.line.view.form</field>
+        <field name="model">vms.order.line</field>
+        <field name="inherit_id" ref="vms.vms_order_line_form" />
+        <field name="arch" type="xml">
+            <xpath expr="//button[@name='action_cancel_draft']" position="before">
+                <field name="create_purchase_order" invisible="1" />
+                <button
+                    name="action_create_purchase_order"
+                    string="Create Purchase Order"
+                    type="object"
+                    attrs="{'invisible':[('create_purchase_order', '=', False)]}"
+                />
+            </xpath>
+            <xpath expr="//group[@name='general_info']" position="after">
+                <group>
+                    <field name="external" />
+                </group>
+            </xpath>
+            <xpath expr="//group[@name='real']" position="attributes">
+                <attribute
+                    name="attrs"
+                >{'invisible':[('external', '=', True)]}</attribute>
+            </xpath>
+            <xpath expr="//group[@name='schedule']" position="attributes">
+                <attribute
+                    name="attrs"
+                >{'invisible':[('external', '=', True)]}</attribute>
+            </xpath>
+            <xpath expr="//group[@name='schedule']" position="before">
+                <group
+                    string="External Service"
+                    attrs="{'invisible':[('external', '=', False)]}"
+                >
+                    <field
+                        name="supplier_id"
+                        attrs="{'required':[('external', '=', True)]}"
+                    />
+                    <field
+                        name="purchase_order_id"
+                        attrs="{'readonly':[('purchase_order_id', '=', False)]}"
+                    />
+                    <field
+                        name="product_id"
+                        attrs="{'required':[('external', '=', True)]}"
+                    />
+                    <field name="qty_product" />
+                    <button
+                        name="action_create_purchase_order"
+                        string="Create Purchase Order"
+                        class="oe_highlight"
+                        states="draft"
+                        type="object"
+                        help="You must save the order first to configure the purchase order."
+                    />
+                </group>
+            </xpath>
+            <xpath expr="//field[@name='product_uom_id']" position="after">
+                <field name="external_spare_parts" />
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

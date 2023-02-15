@@ -1,15 +1,15 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8" ?>
 <odoo>
     <record id="view_employee_form_vms" model="ir.ui.view">
         <field name="model">hr.employee</field>
         <field name="priority">50</field>
-        <field name="inherit_id" ref="hr.view_employee_form"/>
+        <field name="inherit_id" ref="hr.view_employee_form" />
         <field name="arch" type="xml">
             <notebook position="inside">
                 <page string="VMS">
                     <group>
                         <group>
-                            <field name="mechanic"/>
+                            <field name="mechanic" />
                         </group>
                     </group>
                 </page>
@@ -19,11 +19,15 @@
     <record id="vms_open_view_employee_list" model="ir.actions.act_window">
         <field name="name">Mechanics</field>
         <field name="res_model">hr.employee</field>
-        <field name="view_type">form</field>
         <field name="view_mode">kanban,tree,form</field>
-        <field name="domain">[('mechanic','=', True)]</field>
-        <field eval="False" name="view_id"/>
-        <field name="search_view_id" ref="hr.view_employee_filter"/>
+        <field name="domain">[('mechanic', '=', True)]</field>
+        <field eval="False" name="view_id" />
+        <field name="search_view_id" ref="hr.view_employee_filter" />
     </record>
-    <menuitem action="vms_open_view_employee_list" id="mechanic_menu" name="Mechanics" parent="menu_vms_settings"/>
+    <menuitem
+        action="vms_open_view_employee_list"
+        id="mechanic_menu"
+        name="Mechanics"
+        parent="menu_vms_settings"
+    />
 </odoo>

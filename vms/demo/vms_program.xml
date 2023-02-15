@@ -1,11 +1,11 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8" ?>
 <odoo>
     <record id="vms_program_01" model="vms.program">
         <field name="name">Program A</field>
-        <field name="cycle_ids" eval="[(4, ref('vms.vms_cycle_02'))]"></field>
+        <field name="cycle_ids" eval="[(4, ref('vms.vms_cycle_02'))]" />
     </record>
     <record id="vms_program_03" model="vms.program">
         <field name="name">Program B</field>
-        <field name="cycle_ids" eval="[(4, ref('vms.vms_cycle_01'))]"></field>
+        <field name="cycle_ids" eval="[(4, ref('vms.vms_cycle_01'))]" />
     </record>
 </odoo>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo noupdate="1">
+    <record id="stock_rule_stock_production" model="stock.rule">
+        <field name="name">Stock -> Production</field>
+        <field name="action">pull</field>
+        <field name="picking_type_id" ref="vms.vms_picking_type" />
+        <field name="location_src_id" ref="stock.stock_location_stock" />
+        <field name="location_id" search="[('usage', '=', 'production')]" />
+        <field name="route_id" ref="vms.route_vms" />
+        <field name="procure_method">make_to_stock</field>
+        <field name="company_id" ref="base.main_company" />
+        <field name="group_propagation_option">propagate</field>
+        <field name="propagate_cancel" eval="True" />
+    </record>
+</odoo>

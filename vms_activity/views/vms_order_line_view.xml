@@ -1,19 +1,26 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8" ?>
 <odoo>
     <record id="view_vms_order_line_form_vms_activity" model="ir.ui.view">
         <field name="model">vms.order.line</field>
-        <field name="inherit_id" ref="vms.vms_order_line_form"/>
+        <field name="inherit_id" ref="vms.vms_order_line_form" />
         <field name="arch" type="xml">
             <xpath expr="//field[@name='order_id']" position="after">
-                <field name="priority" widget="priority"/>
+                <field name="priority" widget="priority" />
             </xpath>
             <xpath expr="//sheet" position="inside">
-                <group attrs="{'invisible':[('external','=',True)]}" string="Mechanics">
-                    <field attrs="{'readonly':[('order_id', '=', False)]}" name="responsible_ids" nolabel="1">
+                <group
+                    attrs="{'invisible':[('external', '=', True)]}"
+                    string="Mechanics"
+                >
+                    <field
+                        attrs="{'readonly':[('order_id', '=', False)]}"
+                        name="responsible_ids"
+                        nolabel="1"
+                    >
                         <tree>
-                            <field name="name"/>
-                            <field name="job_id"/>
-                            <field name="parent_id"/>
+                            <field name="name" />
+                            <field name="job_id" />
+                            <field name="parent_id" />
                         </tree>
                     </field>
                 </group>
